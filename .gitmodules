@@ -1,0 +1,3 @@
+[submodule "Broccoli/vendor/spdlog"]
+	path = Broccoli/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

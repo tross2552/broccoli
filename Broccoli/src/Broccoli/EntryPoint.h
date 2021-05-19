@@ -6,7 +6,12 @@ extern brcl::Application* brcl::CreateApplication();
 
 int main(int argc, char** argv)
 {
-	printf("Welcome to Broccoli Engine!\n");
+	
+	brcl::Log::Init();
+	BRCL_CORE_WARN("Initialized log!");
+	int a = 5;
+	BRCL_INFO("Hello! a={0}", a);
+
 	auto app = brcl::CreateApplication();
 	app->Run();
 	delete app;
