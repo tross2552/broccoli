@@ -4,6 +4,9 @@
     <Filter Include="Broccoli">
       <UniqueIdentifier>{B2813FB6-9E4E-9AC1-C767-8869B393CF4F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Broccoli\Events">
+      <UniqueIdentifier>{5611E096-C29C-4D5B-CBAD-D04F37B8A95B}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Broccoli.h" />
@@ -15,6 +18,18 @@
     </ClInclude>
     <ClInclude Include="src\Broccoli\EntryPoint.h">
       <Filter>Broccoli</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Broccoli\Events\ApplicationEvent.h">
+      <Filter>Broccoli\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Broccoli\Events\Event.h">
+      <Filter>Broccoli\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Broccoli\Events\KeyEvent.h">
+      <Filter>Broccoli\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Broccoli\Events\MouseEvent.h">
+      <Filter>Broccoli\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Broccoli\Log.h">
       <Filter>Broccoli</Filter>

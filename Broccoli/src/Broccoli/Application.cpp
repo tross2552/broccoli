@@ -1,4 +1,6 @@
 #include "Application.h"
+#include "Broccoli/Events/ApplicationEvent.h"
+#include "Broccoli/Log.h"
 
 namespace brcl
 {
@@ -11,6 +13,12 @@ namespace brcl
 
 	void Application::Run()
 	{
+		WindowResizedEvent e(1280, 720);
+		if (e.IsInCategory(EventCategoryApplication))
+		{
+			BRCL_TRACE("e is application event");
+		}
+		BRCL_TRACE(e);
 		while (true);
 	}
 }
