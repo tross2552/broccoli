@@ -1,3 +1,4 @@
+#include "brclpch.h"
 #include "Application.h"
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Log.h"

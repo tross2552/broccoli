@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace brcl
 {
 	class BRCL_API MouseMovedEvent : public Event

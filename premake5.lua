@@ -24,6 +24,9 @@ project "Broccoli"
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "brclpch.h"
+	pchsource "Broccoli/src/brclpch.cpp"
 	
 	files
 	{
