@@ -14,7 +14,7 @@ workspace "Broccoli"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-
+include "Broccoli/vendor/glfw"
 
 project "Broccoli"
 
@@ -37,8 +37,16 @@ project "Broccoli"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{prj.name}/vendor/glfw/include"
 	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
+	}
+
 	
 	filter "system:windows"
 		cppdialect "C++17"

@@ -1,3 +1,6 @@
 [submodule "Broccoli/vendor/spdlog"]
 	path = Broccoli/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Broccoli/vendor/glfw"]
+	path = Broccoli/vendor/glfw
+	url = https://github.com/tross2552/glfw.git
