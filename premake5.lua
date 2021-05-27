@@ -14,6 +14,9 @@ workspace "Broccoli"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+
 include "Broccoli/vendor/glfw"
 
 project "Broccoli"

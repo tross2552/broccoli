@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Core.h""
+#include "Core.h"
+#include "Window.h"
 
 namespace brcl
 {
@@ -11,6 +12,9 @@ namespace brcl
 		virtual ~Application();
 
 		void Run();
+
+	private:
+		Window* m_Window;
 	};
 
 	//To be defined in CLIENT

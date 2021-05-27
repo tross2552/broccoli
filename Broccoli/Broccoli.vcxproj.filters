@@ -7,6 +7,12 @@
     <Filter Include="Broccoli\Events">
       <UniqueIdentifier>{5611E096-C29C-4D5B-CBAD-D04F37B8A95B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Broccoli.h" />
@@ -34,6 +40,12 @@
     <ClInclude Include="src\Broccoli\Log.h">
       <Filter>Broccoli</Filter>
     </ClInclude>
+    <ClInclude Include="src\Broccoli\Window.h">
+      <Filter>Broccoli</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\brclpch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +54,9 @@
     </ClCompile>
     <ClCompile Include="src\Broccoli\Log.cpp">
       <Filter>Broccoli</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\brclpch.cpp" />
   </ItemGroup>
