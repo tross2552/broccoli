@@ -39,6 +39,8 @@ namespace brcl
 
 	public:
 
+		WindowMovedEvent() {}
+
 		EVENT_CLASS_TYPE(WindowMoved)
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
@@ -48,6 +50,8 @@ namespace brcl
 
 	public:
 
+		WindowClosedEvent() {}
+
 		EVENT_CLASS_TYPE(WindowClosed)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
@@ -56,6 +60,8 @@ namespace brcl
 	{
 
 	public:
+
+		WindowFocusedEvent() {}
 
 		EVENT_CLASS_TYPE(WindowFocused)
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)

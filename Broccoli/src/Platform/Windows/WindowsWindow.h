@@ -15,15 +15,24 @@ namespace brcl
 
 		WindowsWindow(const WindowProps& props);
 
-		inline int GetWidth() const override { return m_Width; } //temp
-		inline int GetHeight() const override { return m_Height; }
+		inline int GetWidth() const override { return m_Data.Width; } //temp
+		inline int GetHeight() const override { return m_Data.Height; }
 
 		inline bool IsVSync() const override { return m_VSync; }
 		void SetVSync(bool enabled) override;
 
-		inline void SetEventCallback(const EventCallbackFn& func) { m_Callback = func; };
+		inline void SetEventCallback(const EventCallbackFn& func) { m_Data.EventCallback = func; };
 
 	private:
+
+		struct WindowData
+		{
+			int Width;
+			int Height;
+			std::string Title;
+
+			EventCallbackFn EventCallback;
+		};
 
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
@@ -32,10 +41,7 @@ namespace brcl
 
 		GLFWwindow* m_Window;
 
-		std::string m_Title;
-		int m_Width;
-		int m_Height;
-		EventCallbackFn m_Callback;
+		WindowData m_Data;
 		bool m_VSync;
 
 	};

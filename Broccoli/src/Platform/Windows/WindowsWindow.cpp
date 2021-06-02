@@ -1,6 +1,10 @@
 #include "brclpch.h"
 #include "WindowsWindow.h"
 
+#include "Broccoli/Events/ApplicationEvent.h"
+#include "Broccoli/Events/MouseEvent.h"
+#include "Broccoli/Events/KeyEvent.h"
+
 namespace brcl
 {
 	static bool s_GLFWInitialized = false;
@@ -15,6 +19,11 @@ namespace brcl
 
 		/* Poll for and process events */
 		glfwPollEvents();
+	}
+
+	static void ErrorCallback(int error, const char* desc)
+	{
+		BRCL_CORE_ERROR("GLFW Error ({0}): {1}", error, desc);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -36,15 +45,114 @@ namespace brcl
 			s_GLFWInitialized = true;
 		}
 
-		m_Title = props.Title;
-		m_Height = props.Height;
-		m_Width = props.Width;
+		m_Data.Title = props.Title;
+		m_Data.Height = props.Height;
+		m_Data.Width = props.Width;
 
-		const char* title = &m_Title[0];
+
+		//create window and set params
+
+		const char* title = &m_Data.Title[0];
 		
-		m_Window = glfwCreateWindow(m_Width, m_Height, title, NULL, NULL);
-
+		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, title, NULL, NULL);
+		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
+
+		//set callbacks
+
+		glfwSetErrorCallback(ErrorCallback);
+		
+		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			WindowClosedEvent event;
+			data.EventCallback(event);
+			BRCL_CORE_TRACE("close callback completed");
+
+		});
+		
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			data.Width = width;
+			data.Height = height;
+
+			WindowResizedEvent event(width, height);
+			data.EventCallback(event);
+			
+		});
+
+		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int bitfield)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			
+			static int repeatcount = 0;
+
+			switch (action)
+			{
+			case GLFW_PRESS:
+			{
+				repeatcount = 0;
+				KeyPressedEvent event(key, repeatcount);
+				data.EventCallback(event);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				repeatcount = 0;
+				KeyReleasedEvent event(key);
+				data.EventCallback(event);
+				break;
+			}
+			case GLFW_REPEAT:
+			{
+				repeatcount++;
+				KeyPressedEvent event(key, repeatcount);
+				data.EventCallback(event);
+				break;
+			}
+			}
+		});
+
+		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int bitfield)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			switch (action)
+			{
+			case GLFW_PRESS:
+			{
+				MouseButtonPressedEvent event(button);
+				data.EventCallback(event);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				MouseButtonReleasedEvent event(button);
+				data.EventCallback(event);
+				break;
+			}
+			}
+		});
+
+		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double x, double y)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			MouseScrolledEvent event(x, y);
+			data.EventCallback(event);
+		});
+		
+		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x, double y)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			MouseMovedEvent event((float)x, (float)y);
+			data.EventCallback(event);
+		});
+
+		//misc glfw func calls
 
 		glfwMakeContextCurrent(m_Window);
 		glClear(GL_COLOR_BUFFER_BIT);

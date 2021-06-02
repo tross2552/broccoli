@@ -13,8 +13,13 @@ namespace brcl
 
 		void Run();
 
+		void OnEvent(Event& e);
+
+		bool OnWindowClosed(WindowClosedEvent& event);
+
 	private:
-		Window* m_Window;
+		std::unique_ptr<Window> m_Window;
+		bool m_Running = true;
 	};
 
 	//To be defined in CLIENT

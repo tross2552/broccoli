@@ -4,11 +4,14 @@
 #include "Broccoli/Log.h"
 #include "Platform/Windows/WindowsWindow.h"
 
+#include <GLFW/glfw3.h>
+
 namespace brcl
 {
 	Application::Application()
 	{
-		m_Window = Window::Create();
+		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 	}
 	Application::~Application()
 	{
@@ -17,12 +20,19 @@ namespace brcl
 	void Application::Run()
 	{
 		
-		WindowResizedEvent e(1280, 720);
-		if (e.IsInCategory(EventCategoryApplication))
-		{
-			BRCL_TRACE("e is application event");
-		}
-		BRCL_TRACE(e);
-		while (true) { m_Window->OnUpdate(); }
+		while (m_Running) { m_Window->OnUpdate(); }
+	}
+
+	void Application::OnEvent(Event& event)
+	{
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<WindowClosedEvent>(std::bind(&Application::OnWindowClosed, this, std::placeholders::_1));
+		BRCL_CORE_TRACE(event.ToString());
+	}
+
+	bool Application::OnWindowClosed(WindowClosedEvent& e)
+	{
+		m_Running = false;
+		return true;
 	}
 }
