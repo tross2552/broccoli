@@ -1,4 +1,5 @@
 #pragma once
+#include "brclpch.h"
 
 #include "Broccoli/Core.h"
 
@@ -50,7 +51,12 @@ namespace brcl
 
 		virtual std::string ToString() const { return GetEventName(); };
 
-		inline bool IsInCategory(EventCategory category)
+		inline bool GetHandled() const
+		{
+			return m_Handled;
+		}
+
+		inline bool IsInCategory(EventCategory category) const
 		{
 			return category & GetCategoryFlags();
 		}

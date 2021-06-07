@@ -1,11 +1,21 @@
 #include <Broccoli.h>
+#include "ExampleLayer.h"
 
-class Sandbox : public brcl::Application
+namespace Sandbox
 {
+	class Sandbox : public brcl::Application
+	{
+	public:
+		Sandbox()
+		{
+			PushLayer(new ExampleLayer());
+		}
+	};
 
-};
+	
+}
 
 brcl::Application* brcl::CreateApplication()
 {
-	return new Sandbox();
+	return new Sandbox::Sandbox();
 }

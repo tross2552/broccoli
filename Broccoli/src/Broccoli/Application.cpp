@@ -20,7 +20,25 @@ namespace brcl
 	void Application::Run()
 	{
 		
-		while (m_Running) { m_Window->OnUpdate(); }
+		while (m_Running) { 
+			
+			for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); it++)
+			{
+				(*it)->OnUpdate();
+			}
+
+			m_Window->OnUpdate();
+		}
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
 	}
 
 	void Application::OnEvent(Event& event)
@@ -28,6 +46,13 @@ namespace brcl
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowClosedEvent>(std::bind(&Application::OnWindowClosed, this, std::placeholders::_1));
 		BRCL_CORE_TRACE(event.ToString());
+
+		for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); it++)
+		{
+			(*it)->OnEvent(event);
+			if (event.GetHandled()) break;
+		}
+
 	}
 
 	bool Application::OnWindowClosed(WindowClosedEvent& e)

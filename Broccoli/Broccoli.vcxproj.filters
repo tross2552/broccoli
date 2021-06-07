@@ -37,6 +37,12 @@
     <ClInclude Include="src\Broccoli\Events\MouseEvent.h">
       <Filter>Broccoli\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Broccoli\Layer.h">
+      <Filter>Broccoli</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Broccoli\LayerStack.h">
+      <Filter>Broccoli</Filter>
+    </ClInclude>
     <ClInclude Include="src\Broccoli\Log.h">
       <Filter>Broccoli</Filter>
     </ClInclude>
@@ -50,6 +56,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Broccoli\Application.cpp">
+      <Filter>Broccoli</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Broccoli\Layer.cpp">
+      <Filter>Broccoli</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Broccoli\LayerStack.cpp">
       <Filter>Broccoli</Filter>
     </ClCompile>
     <ClCompile Include="src\Broccoli\Log.cpp">

@@ -70,14 +70,17 @@ project "Broccoli"
 	
 	filter "configurations:Debug"
 		defines "BRCL_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "BRCL_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 		
 	filter "configurations:Dist"
 		defines "BRCL_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 
@@ -122,12 +125,15 @@ project "Sandbox"
 	
 	filter "configurations:Debug"
 		defines "BRCL_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 		
 	filter "configurations:Release"
 		defines "BRCL_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 		
 	filter "configurations:Dist"
 		defines "BRCL_DIST"
+		buildoptions "/MD"
 		optimize "On"
