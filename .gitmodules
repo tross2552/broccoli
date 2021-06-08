@@ -4,3 +4,6 @@
 [submodule "Broccoli/vendor/glfw"]
 	path = Broccoli/vendor/glfw
 	url = https://github.com/tross2552/glfw.git
+[submodule "Broccoli/vendor/imgui"]
+	path = Broccoli/vendor/imgui
+	url = https://github.com/tross2552/imgui.git
