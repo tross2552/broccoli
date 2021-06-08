@@ -15,9 +15,11 @@ workspace "Broccoli"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
-IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+IncludeDir["GLFW"] = "Broccoli/vendor/glfw/include"
+IncludeDir["Glad"] = "Broccoli/vendor/glad/include"
 
 include "Broccoli/vendor/glfw"
+include "Broccoli/vendor/glad"
 
 project "Broccoli"
 
@@ -41,11 +43,13 @@ project "Broccoli"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{prj.name}/vendor/glfw/include"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.GLFW}"
 	}
 
 	links
 	{
+		"Glad",
 		"GLFW",
 		"opengl32.lib"
 	}
@@ -58,6 +62,7 @@ project "Broccoli"
 		
 		defines
 		{
+			"GLFW_INCLUDE_NONE",
 			"BRCL_PLATFORM_WINDOWS",
 			"BRCL_BUILD_DLL"
 		}

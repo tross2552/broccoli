@@ -4,6 +4,8 @@
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Events/MouseEvent.h"
 #include "Broccoli/Events/KeyEvent.h"
+#include "glad/glad.h"
+
 
 namespace brcl
 {
@@ -152,9 +154,11 @@ namespace brcl
 			data.EventCallback(event);
 		});
 
-		//misc glfw func calls
 
 		glfwMakeContextCurrent(m_Window);
+		//load opengl
+		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
