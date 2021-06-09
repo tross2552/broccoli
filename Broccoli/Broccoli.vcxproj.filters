@@ -53,6 +53,8 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\brclpch.h" />
+    <ClInclude Include="src\Broccoli\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Platform\OpenGL\imgui_impl_opengl3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Broccoli\Application.cpp">
@@ -71,5 +73,7 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\brclpch.cpp" />
+    <ClCompile Include="src\Broccoli\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\imgui_impl_opengl3.cpp" />
   </ItemGroup>
 </Project>

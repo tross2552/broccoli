@@ -1,5 +1,6 @@
 #include <Broccoli.h>
 #include "ExampleLayer.h"
+#include <Broccoli/ImGui/ImGuiLayer.h>
 
 namespace Sandbox
 {
@@ -9,6 +10,7 @@ namespace Sandbox
 		Sandbox()
 		{
 			PushLayer(new ExampleLayer());
+			PushLayer(new brcl::ImGuiLayer());
 		}
 	};
 

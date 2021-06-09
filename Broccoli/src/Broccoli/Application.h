@@ -25,11 +25,16 @@ namespace brcl
 
 		bool OnWindowClosed(WindowClosedEvent& event);
 
-	private:
+		static inline Application& Get() { return *s_Instance; }
 
+		inline Window& GetWindow() { return *m_Window; }
+
+	private:
 		std::unique_ptr<Window> m_Window;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
+
+		static Application* s_Instance;
 	};
 
 	//To be defined in CLIENT

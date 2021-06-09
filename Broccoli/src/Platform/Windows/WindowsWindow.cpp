@@ -14,7 +14,7 @@ namespace brcl
 	void WindowsWindow::OnUpdate()
 	{
 		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(m_Window);

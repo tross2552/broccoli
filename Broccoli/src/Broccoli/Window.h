@@ -34,6 +34,7 @@ namespace brcl
 
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
+		virtual void GetSize(int& width, int& height) const = 0;
 
 		virtual void SetEventCallback(const EventCallbackFn& func) = 0;
 		virtual void SetVSync(bool enabled) = 0;
