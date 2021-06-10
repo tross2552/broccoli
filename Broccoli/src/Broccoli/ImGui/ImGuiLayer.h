@@ -16,6 +16,7 @@ namespace brcl
 		void OnEvent(Event& event) override;
 
 	private:
+		float m_ReleaseMouse = false;
 		float m_Time = 0;
 	};
 

@@ -4,6 +4,8 @@
 #include "Platform/OpenGL/imgui_impl_opengl3.h"
 #include "GLFW/glfw3.h"
 #include "Broccoli/Events/MouseEvent.h"
+#include "Broccoli/Events/KeyEvent.h"
+#include "glad/glad.h"
 
 namespace brcl
 {
@@ -75,29 +77,73 @@ namespace brcl
 		ImGui::NewFrame();
 
 		static bool show_demo = false;
-		ImGui::ShowDemoWindow(&show_demo);
+		if(show_demo)
+			ImGui::ShowDemoWindow(&show_demo);
 		ImGui::Begin("Another Window");
 		ImGui::Checkbox("Demo Window", &show_demo);      // Edit bools storing our window open/close state
 		ImGui::End();
 
+		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		io->MouseDown[0] = false;
+		if (m_ReleaseMouse)
+		{
+			io->MouseDown[0] = false;
+			m_ReleaseMouse = false;
+		}
 	}
 
 	void ImGuiLayer::OnEvent(Event& event)
 	{
 		//TEMPORARY, TODO: REIMPLEMENT ALL OF THIS
-		if (dynamic_cast<MouseButtonPressedEvent*>(&event))
+		if (dynamic_cast<MouseMovedEvent*>(&event))
+		{
+		auto& mme = *(MouseMovedEvent*)&event;
+		io->MousePos = ImVec2(mme.GetX(), mme.GetY());
+		}
+		else if (dynamic_cast<MouseButtonPressedEvent*>(&event))
 		{
 			io->MouseDown[0] = true;
 		}
-		else if (dynamic_cast<MouseMovedEvent*>(&event))
+		else if (dynamic_cast<MouseButtonReleasedEvent*>(&event))
 		{
-			auto mme = (MouseMovedEvent*)&event;
-			io->MousePos = ImVec2(mme->GetX(), mme->GetY());
+			m_ReleaseMouse = true; //set mouse down at the end of the frame, for mouse clicks shorter than 1 frame;
 		}
+		else if (dynamic_cast<MouseScrolledEvent*>(&event))
+		{
+			auto& mse = *(MouseScrolledEvent*)&event;
+
+			io->MouseWheelH += (float)mse.GetXOffset();
+			io->MouseWheel  += (float)mse.GetYOffset();
+		}
+		else if (dynamic_cast<KeyPressedEvent*>(&event))
+		{
+			auto& kde = *(KeyPressedEvent*)&event;
+			int key = kde.GetKeyCode();
+			if (key >= 0 && key < IM_ARRAYSIZE(io->KeysDown))
+				io->KeysDown[key] = true;
+			else
+				BRCL_CORE_ERROR("ImGui: {0} is not a valid keycode.", key);
+
+			io->KeyCtrl  = io->KeysDown[GLFW_KEY_LEFT_CONTROL] || io->KeysDown[GLFW_KEY_RIGHT_CONTROL];
+			io->KeyShift = io->KeysDown[GLFW_KEY_LEFT_SHIFT]   || io->KeysDown[GLFW_KEY_RIGHT_SHIFT];
+			io->KeyAlt   = io->KeysDown[GLFW_KEY_LEFT_ALT]     || io->KeysDown[GLFW_KEY_RIGHT_ALT];
+		}
+		else if (dynamic_cast<KeyReleasedEvent*>(&event))
+		{
+			auto& kre = *(KeyReleasedEvent*)&event;
+			int key = kre.GetKeyCode();
+			if (key >= 0 && key < IM_ARRAYSIZE(io->KeysDown))
+				io->KeysDown[key] = false;
+			else
+				BRCL_CORE_ERROR("ImGui: {0} is not a valid keycode.", key);
+
+			io->KeyCtrl  = io->KeysDown[GLFW_KEY_LEFT_CONTROL] || io->KeysDown[GLFW_KEY_RIGHT_CONTROL];
+			io->KeyShift = io->KeysDown[GLFW_KEY_LEFT_SHIFT]   || io->KeysDown[GLFW_KEY_RIGHT_SHIFT];
+			io->KeyAlt   = io->KeysDown[GLFW_KEY_LEFT_ALT]     || io->KeysDown[GLFW_KEY_RIGHT_ALT];
+		}
+		
 
 	}
 
