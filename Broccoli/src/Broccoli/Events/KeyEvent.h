@@ -71,4 +71,31 @@ namespace brcl
 		EVENT_CLASS_TYPE(KeyReleased)
 
 	};
+
+	class BRCL_API TextInputEvent : public Event
+	{
+	public:
+
+		TextInputEvent(unsigned int unicode)
+			: m_Unicode(unicode) {}
+
+		inline unsigned int GetChar() const { return m_Unicode; }
+
+		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+		EVENT_CLASS_TYPE(TextInput)
+
+		std::string ToString() const override
+		{
+			//give the event type, offsets
+
+			std::stringstream ss;
+			ss << GetEventName() << " Event: " << (char)m_Unicode;
+			return ss.str();
+		}
+
+	private:
+
+		unsigned int m_Unicode;
+
+	};
 }

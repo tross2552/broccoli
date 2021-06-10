@@ -117,6 +117,14 @@ namespace brcl
 			}
 		});
 
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int unicode)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			TextInputEvent event(unicode);
+			data.EventCallback(event);
+		});
+
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int bitfield)
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

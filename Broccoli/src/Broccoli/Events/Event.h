@@ -21,7 +21,7 @@ namespace brcl
 
 		AppTick, AppUpdate, AppRender,
 
-		KeyPressed, KeyReleased,
+		KeyPressed, KeyReleased, TextInput,
 
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 
