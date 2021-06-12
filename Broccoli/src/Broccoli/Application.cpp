@@ -3,6 +3,7 @@
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Log.h"
 #include "Platform/Windows/WindowsWindow.h"
+#include "Platform/Windows/WindowsInput.h"
 
 #include <GLFW/glfw3.h>
 
@@ -28,6 +29,8 @@ namespace brcl
 		
 		while (m_Running) { 
 			
+			BRCL_CORE_TRACE("Mouse Pos: {0}, {1}", Input::GetMouseX(), Input::GetMouseY());
+
 			for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); it++)
 			{
 				(*it)->OnUpdate();

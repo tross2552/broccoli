@@ -5,9 +5,10 @@
 #include "Broccoli/Events/Event.h"
 #include "Broccoli/Events/ApplicationEvent.h"
 
+
 namespace brcl
 {
-	//want a struct that represents the properties of a window (dimensions, title)
+	//struct that represents the properties of a window (dimensions, title)
 	struct WindowProps
 	{
 		std::string Title;
@@ -35,6 +36,8 @@ namespace brcl
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
 		virtual void GetSize(int& width, int& height) const = 0;
+
+		virtual void* GetNativeWindow() const = 0;
 
 		virtual void SetEventCallback(const EventCallbackFn& func) = 0;
 		virtual void SetVSync(bool enabled) = 0;

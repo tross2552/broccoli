@@ -19,6 +19,8 @@ namespace brcl
 		inline int GetHeight() const override { return m_Data.Height; }
 		inline void GetSize(int& width, int& height) const override { width = m_Data.Width; height = m_Data.Height; }
 
+		void* GetNativeWindow() const override;
+
 		inline bool IsVSync() const override { return m_VSync; }
 		void SetVSync(bool enabled) override;
 

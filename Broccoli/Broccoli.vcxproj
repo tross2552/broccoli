@@ -161,13 +161,16 @@
     <ClInclude Include="src\Broccoli\Events\Event.h" />
     <ClInclude Include="src\Broccoli\Events\KeyEvent.h" />
     <ClInclude Include="src\Broccoli\Events\MouseEvent.h" />
+    <ClInclude Include="src\Broccoli\Input.h" />
     <ClInclude Include="src\Broccoli\Layer.h" />
     <ClInclude Include="src\Broccoli\LayerStack.h" />
     <ClInclude Include="src\Broccoli\Log.h" />
     <ClInclude Include="src\Broccoli\Window.h" />
+    <ClInclude Include="src\KeyCodes.h" />
     <ClInclude Include="src\Platform\OpenGL\imgui_impl_opengl3.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\brclpch.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Broccoli\ImGui\ImGuiLayer.cpp" />
@@ -180,6 +183,7 @@
     <ClCompile Include="src\brclpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\glad\Glad.vcxproj">

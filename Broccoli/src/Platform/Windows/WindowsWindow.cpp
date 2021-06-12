@@ -80,7 +80,7 @@ namespace brcl
 			data.Width = width;
 			data.Height = height;
 
-			WindowResizedEvent event(width, height);
+			WindowResizedEvent event((float)width, (float)height);
 			data.EventCallback(event);
 			
 		});
@@ -150,7 +150,7 @@ namespace brcl
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			MouseScrolledEvent event(x, y);
+			MouseScrolledEvent event((float)x, (float)y);
 			data.EventCallback(event);
 		});
 		
@@ -168,6 +168,11 @@ namespace brcl
 		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
 		glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+	void* WindowsWindow::GetNativeWindow() const
+	{
+		return m_Window;
 	}
 
 	WindowsWindow::~WindowsWindow()

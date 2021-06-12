@@ -55,6 +55,9 @@
     <ClInclude Include="src\brclpch.h" />
     <ClInclude Include="src\Broccoli\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Platform\OpenGL\imgui_impl_opengl3.h" />
+    <ClInclude Include="src\Broccoli\Input.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
+    <ClInclude Include="src\KeyCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Broccoli\Application.cpp">
@@ -75,5 +78,6 @@
     <ClCompile Include="src\brclpch.cpp" />
     <ClCompile Include="src\Broccoli\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
 </Project>
