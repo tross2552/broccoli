@@ -7,3 +7,6 @@
 [submodule "Broccoli/vendor/imgui"]
 	path = Broccoli/vendor/imgui
 	url = https://github.com/tross2552/imgui.git
+[submodule "Broccoli/vendor/blaze"]
+	path = Broccoli/vendor/blaze
+	url = https://bitbucket.org/blaze-lib/blaze.git
