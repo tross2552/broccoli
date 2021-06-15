@@ -43,16 +43,6 @@ namespace brcl
 	void ImGuiLayer::OnUpdate()
 	{
 
-		// Setup time step
-		double current_time = glfwGetTime();
-		io->DeltaTime = m_Time > 0.0 ? (float)(current_time - m_Time) : (float)(1.0f / 60.0f);
-		m_Time = current_time;
-
-		//setup display size
-		int w, h;
-		Application::Get().GetWindow().GetSize(w, h);
-		io->DisplaySize = ImVec2((float)w, (float)h);
-
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -79,7 +69,8 @@ namespace brcl
 
 	void ImGuiLayer::OnEvent(Event& event)
 	{
-		
+
+		//imgui backend installs its own callbacks, so we don't need to handle events
 
 	}
 
