@@ -160,13 +160,13 @@
     <ClInclude Include="src\Broccoli\Events\Event.h" />
     <ClInclude Include="src\Broccoli\Events\KeyEvent.h" />
     <ClInclude Include="src\Broccoli\Events\MouseEvent.h" />
+    <ClInclude Include="src\Broccoli\ImGui\ImGuiBackend.h" />
     <ClInclude Include="src\Broccoli\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Broccoli\Input.h" />
     <ClInclude Include="src\Broccoli\Layer.h" />
     <ClInclude Include="src\Broccoli\LayerStack.h" />
     <ClInclude Include="src\Broccoli\Log.h" />
     <ClInclude Include="src\Broccoli\Window.h" />
-    <ClInclude Include="src\Platform\OpenGL\imgui_impl_opengl3.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\brclpch.h" />
@@ -2937,11 +2937,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Broccoli\Application.cpp" />
+    <ClCompile Include="src\Broccoli\ImGui\ImGuiBackend.cpp" />
     <ClCompile Include="src\Broccoli\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Broccoli\Layer.cpp" />
     <ClCompile Include="src\Broccoli\LayerStack.cpp" />
     <ClCompile Include="src\Broccoli\Log.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\brclpch.cpp">

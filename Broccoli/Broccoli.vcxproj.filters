@@ -882,9 +882,6 @@
     <ClInclude Include="src\Broccoli\Window.h">
       <Filter>src\Broccoli</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\imgui_impl_opengl3.h">
-      <Filter>src\Platform\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>src\Platform\Windows</Filter>
     </ClInclude>
@@ -9186,6 +9183,7 @@
     <ClInclude Include="vendor\blaze\blazetest\blazetest\utiltest\valuetraits\OperationTest.h">
       <Filter>vendor\blaze\blazetest\blazetest\utiltest\valuetraits</Filter>
     </ClInclude>
+    <ClInclude Include="src\Broccoli\ImGui\ImGuiBackend.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Broccoli\Application.cpp">
@@ -9203,9 +9201,6 @@
     <ClCompile Include="src\Broccoli\Log.cpp">
       <Filter>src\Broccoli</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\imgui_impl_opengl3.cpp">
-      <Filter>src\Platform\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
@@ -9215,5 +9210,6 @@
     <ClCompile Include="src\brclpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Broccoli\ImGui\ImGuiBackend.cpp" />
   </ItemGroup>
 </Project>
