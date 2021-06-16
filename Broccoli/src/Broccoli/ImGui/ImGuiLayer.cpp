@@ -53,8 +53,7 @@ namespace brcl
 		ImGui::Begin("Another Window");
 		ImGui::Checkbox("Demo Window", &show_demo);      // Edit bools storing our window open/close state
 		ImGui::End();
-
-		glClear(GL_COLOR_BUFFER_BIT);
+		
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
