@@ -5,7 +5,7 @@
 #include "Platform/Windows/WindowsWindow.h"
 #include "Platform/Windows/WindowsInput.h"
 
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
 
 namespace brcl
 {
@@ -31,7 +31,7 @@ namespace brcl
 			
 			BRCL_CORE_TRACE("Mouse Pos: {0}, {1}", Input::GetMouseX(), Input::GetMouseY());
 
-			for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); it++)
+			for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); ++it)
 			{
 				(*it)->OnUpdate();
 			}
@@ -56,7 +56,7 @@ namespace brcl
 		dispatcher.Dispatch<WindowClosedEvent>(std::bind(&Application::OnWindowClosed, this, std::placeholders::_1));
 		BRCL_CORE_TRACE(event.ToString());
 
-		for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); it++)
+		for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); ++it)
 		{
 			(*it)->OnEvent(event);
 			if (event.GetHandled()) break;

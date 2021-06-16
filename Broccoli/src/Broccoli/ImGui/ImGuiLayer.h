@@ -10,20 +10,12 @@ namespace brcl
 	{
 	public:
 		ImGuiLayer();
-		~ImGuiLayer();
+		~ImGuiLayer() override;
 
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate() override;
 		void OnEvent(Event& event) override;
-
-		bool OnMouseMovedEvent(MouseMovedEvent& event);
-		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& event); 
-		bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& event);
-		bool OnMouseScrolledEvent(MouseScrolledEvent& event);
-		bool OnKeyPressedEvent(KeyPressedEvent& event);
-		bool OnKeyReleasedEvent(KeyReleasedEvent& event);
-		bool OnTextInputEvent(TextInputEvent& event);
 
 	private:
 		bool m_ReleaseMouse = false;

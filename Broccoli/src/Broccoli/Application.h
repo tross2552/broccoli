@@ -27,7 +27,7 @@ namespace brcl
 
 		static inline Application& Get() { return *s_Instance; }
 
-		inline Window& GetWindow() { return *m_Window; }
+		inline Window& GetWindow() const { return *m_Window; }
 
 	private:
 		std::unique_ptr<Window> m_Window;

@@ -55,7 +55,7 @@ namespace brcl
 
 		const char* title = &m_Data.Title[0];
 		
-		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, title, NULL, NULL);
+		m_Window = glfwCreateWindow(m_Data.Width, m_Data.Height, title, nullptr, nullptr);
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
@@ -65,17 +65,17 @@ namespace brcl
 		
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			WindowClosedEvent event;
 			data.EventCallback(event);
-			BRCL_CORE_TRACE("close callback completed");
+			BRCL_CORE_TRACE("Close callback completed");
 
 		});
 		
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 			data.Width = width;
 			data.Height = height;
 
@@ -86,7 +86,7 @@ namespace brcl
 
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int bitfield)
 		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 			
 			static int repeatcount = 0;
 
@@ -112,13 +112,19 @@ namespace brcl
 				KeyPressedEvent event(key, repeatcount);
 				data.EventCallback(event);
 				break;
+
+			}
+			default:
+			{
+				BRCL_CORE_WARN("Key {0}: Unknown GLFW action type ({1})!", key, action);
+				break;
 			}
 			}
 		});
 
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int unicode)
 		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			TextInputEvent event(unicode);
 			data.EventCallback(event);
@@ -126,7 +132,7 @@ namespace brcl
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int bitfield)
 		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			switch (action)
 			{
@@ -142,12 +148,17 @@ namespace brcl
 				data.EventCallback(event);
 				break;
 			}
+			default:
+			{
+				BRCL_CORE_WARN("Mouse button {0}: Unknown GLFW action type ({1})!", button, action);
+				break;
+			}
 			}
 		});
 
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double x, double y)
 		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			MouseScrolledEvent event((float)x, (float)y);
 			data.EventCallback(event);
@@ -155,7 +166,7 @@ namespace brcl
 		
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x, double y)
 		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
 
 			MouseMovedEvent event((float)x, (float)y);
 			data.EventCallback(event);
@@ -172,7 +183,7 @@ namespace brcl
 
 	WindowsWindow::~WindowsWindow()
 	{
-		Shutdown();
+		WindowsWindow::Shutdown();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)

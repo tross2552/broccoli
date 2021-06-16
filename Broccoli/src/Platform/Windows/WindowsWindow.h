@@ -25,7 +25,7 @@ namespace brcl
 		inline bool IsVSync() const override { return m_VSync; }
 		void SetVSync(bool enabled) override;
 
-		inline void SetEventCallback(const EventCallbackFn& func) { m_Data.EventCallback = func; };
+		inline void SetEventCallback(const EventCallbackFn& func) override { m_Data.EventCallback = func; };
 
 	private:
 
