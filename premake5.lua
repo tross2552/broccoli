@@ -63,6 +63,11 @@ project "Broccoli"
 		"ImGui",
 		"opengl32.lib"
 	}
+	
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
 
 	
 	filter "system:windows"
