@@ -8,7 +8,8 @@ namespace brcl
 	void OpenGLContext::Init()
 	{
 		glfwMakeContextCurrent(m_Window);
-		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		const int status = gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+		BRCL_CORE_ASSERT(status, "Failed to initialize Glad!");
 	}
 
 	void OpenGLContext::SwapBuffers() { 
