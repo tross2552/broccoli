@@ -28,8 +28,10 @@ include "Broccoli/vendor/glad"
 project "Broccoli"
 
 	location "Broccoli"
-	kind "SharedLib"
+	kind "StaticLib"
+	staticruntime "On"
 	language "C++"
+	cppdialect "C++17"
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -65,36 +67,29 @@ project "Broccoli"
 	
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 		
 		defines
 		{
 			"GLFW_INCLUDE_NONE",
-			"BRCL_PLATFORM_WINDOWS",
-			"BRCL_BUILD_DLL"
-		}
-		
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+			"BRCL_PLATFORM_WINDOWS"
 		}
 	
 	
 	filter "configurations:Debug"
 		defines "BRCL_DEBUG"
-		buildoptions "/MDd"
-		symbols "On"
+		runtime "Debug"
+		symbols "on"
 		
 	filter "configurations:Release"
 		defines "BRCL_RELEASE"
-		buildoptions "/MD"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 		
 	filter "configurations:Dist"
 		defines "BRCL_DIST"
-		buildoptions "/MD"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 
 
@@ -102,6 +97,7 @@ project "Sandbox"
 
 	location "Sandbox"
 	kind "ConsoleApp"
+	staticruntime "On"
 	language "C++"
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
@@ -127,8 +123,6 @@ project "Sandbox"
 	
 	
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 		
 		defines
@@ -139,15 +133,15 @@ project "Sandbox"
 	
 	filter "configurations:Debug"
 		defines "BRCL_DEBUG"
-		buildoptions "/MDd"
-		symbols "On"
+		runtime "Debug"
+		symbols "on"
 		
 	filter "configurations:Release"
 		defines "BRCL_RELEASE"
-		buildoptions "/MD"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 		
 	filter "configurations:Dist"
 		defines "BRCL_DIST"
-		buildoptions "/MD"
-		optimize "On"
+		runtime "Release"
+		optimize "on"

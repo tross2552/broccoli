@@ -18,7 +18,8 @@ namespace brcl
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		m_LayerInsertIndex = m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer) - m_Layers.begin();
+		auto it = m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
+		m_LayerInsertIndex = (int)(it - m_Layers.begin());
 		layer->OnAttach();
 	}
 
