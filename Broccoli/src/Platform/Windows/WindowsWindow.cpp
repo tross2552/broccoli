@@ -4,7 +4,7 @@
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Events/MouseEvent.h"
 #include "Broccoli/Events/KeyEvent.h"
-#include "glad/glad.h"
+
 
 
 namespace brcl
@@ -16,8 +16,7 @@ namespace brcl
 		/* Render here */
 		//glClear(GL_COLOR_BUFFER_BIT);
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 
 		/* Poll for and process events */
 		glfwPollEvents();
@@ -162,12 +161,8 @@ namespace brcl
 			data.EventCallback(event);
 		});
 
-
-		glfwMakeContextCurrent(m_Window);
-		//load opengl
-		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
-		glClear(GL_COLOR_BUFFER_BIT);
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 	}
 
 	void* WindowsWindow::GetNativeWindow() const

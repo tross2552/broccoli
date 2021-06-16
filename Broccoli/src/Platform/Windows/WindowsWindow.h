@@ -2,6 +2,7 @@
 
 #include "Broccoli/Window.h"
 #include "glfw/glfw3.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace brcl
 {
@@ -43,6 +44,7 @@ namespace brcl
 	private:
 
 		GLFWwindow* m_Window;
+		OpenGLContext* m_Context;
 
 		WindowData m_Data;
 		bool m_VSync;
