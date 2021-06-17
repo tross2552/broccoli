@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "LayerStack.h"
 #include "Renderer/Shader.h"
+#include "Renderer/Buffer.h"
 
 namespace brcl
 {
@@ -37,8 +38,12 @@ namespace brcl
 
 		static Application* s_Instance;
 
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		
+		unsigned int m_VertexArray;
 		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		
 	};
 
 	//To be defined in CLIENT

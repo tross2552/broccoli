@@ -6,6 +6,7 @@
 #include "Platform/Windows/WindowsInput.h"
 
 #include <glad/glad.h>
+#include "Platform/OpenGL/OpenGLBuffer.h"
 
 namespace brcl
 {
@@ -19,30 +20,22 @@ namespace brcl
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
-
-		glGenBuffers(1, & m_VertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-
-		const float vertices[3 * 3] = {
+		float vertices[3 * 3] = {
 			-0.5f, -0.5f, 0.0f,
 			 0.5f, -0.5f, 0.0f,
 			 0.0f,  0.5f, 0.0f,
 		};
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		m_VertexBuffer.reset(new OpenGLVertexBuffer(vertices, sizeof(vertices)));
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-		glGenBuffers(1, &m_IndexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+		unsigned int indices [] = { 0 , 1 , 2 };
 
-		const unsigned int indices [] = { 0 , 1 , 2 };
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		m_IndexBuffer.reset(new OpenGLIndexBuffer(indices, sizeof(indices)));
 
-		std::string vertexSrc = R"(
+		const std::string vertexSrc = R"(
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
@@ -56,7 +49,7 @@ namespace brcl
 			}
 		)";
 
-		std::string fragmentSrc = R"(
+		const std::string fragmentSrc = R"(
 			#version 330 core
 
 			layout(location = 0) out vec4 a_Color;
@@ -112,9 +105,9 @@ namespace brcl
 		dispatcher.Dispatch<WindowClosedEvent>(std::bind(&Application::OnWindowClosed, this, std::placeholders::_1));
 		BRCL_CORE_TRACE(event.ToString());
 
-		for (auto it = m_LayerStack.begin(); it != m_LayerStack.end(); ++it)
+		for (auto& layer : m_LayerStack)
 		{
-			(*it)->OnEvent(event);
+			layer->OnEvent(event);
 			if (event.GetHandled()) break;
 		}
 
