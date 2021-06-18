@@ -60,13 +60,10 @@ namespace brcl
 		uint32_t index = 0;
 		for (auto& element : m_VertexBuffer->GetLayout().GetElements())
 		{
-			glEnableVertexAttribArray(index++);
-			glVertexAttribPointer(element.Offset, ShaderDataTypeCount(element.Type), ShaderDataTypeToGLType(element.Type), GL_FALSE, m_VertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index, ShaderDataTypeCount(element.Type), ShaderDataTypeToGLType(element.Type), GL_FALSE, m_VertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
+			index++;
 		}
-			
-
-		//glEnableVertexAttribArray(0);
-		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
 		uint32_t indices[3] = { 0 , 1 , 2 };
 
@@ -100,7 +97,7 @@ namespace brcl
 			void main()
 			{
 				color = vec4( v_Position, 1.0 );
-				//color = v_Color;
+				color = v_Color;
 			}
 		)";
 
