@@ -8,6 +8,20 @@
 #include <glad/glad.h>
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
+void GLAPIENTRY
+MessageCallback(GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam)
+{
+	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+		type, severity, message);
+}
+
 namespace brcl
 {
 
@@ -20,18 +34,41 @@ namespace brcl
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
-		float vertices[3 * 3] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.0f,  0.5f, 0.0f,
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(MessageCallback, 0);
+
+		glGenVertexArrays(1, &m_VertexArray);
+		glBindVertexArray(m_VertexArray);
+		
+		float vertices[3 * 7] = {
+			-0.5f , -0.5f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f ,
+			 0.5f , -0.5f , 0.0f , 1.0f , 0.0f , 1.0f, 1.0f ,
+			 0.0f ,  0.5f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f
 		};
 
 		m_VertexBuffer.reset(new OpenGLVertexBuffer(vertices, sizeof(vertices)));
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		{
+			BufferLayout layout = {
+				{ ShaderDataType::Float3, "a_Position" },
+				{ ShaderDataType::Float4, "a_Color"    }
+			};
 
-		unsigned int indices [] = { 0 , 1 , 2 };
+			m_VertexBuffer->SetLayout(layout);
+		}
+		
+		uint32_t index = 0;
+		for (auto& element : m_VertexBuffer->GetLayout().GetElements())
+		{
+			glEnableVertexAttribArray(index++);
+			glVertexAttribPointer(element.Offset, ShaderDataTypeCount(element.Type), ShaderDataTypeToGLType(element.Type), GL_FALSE, m_VertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
+		}
+			
+
+		//glEnableVertexAttribArray(0);
+		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+
+		uint32_t indices[3] = { 0 , 1 , 2 };
 
 		m_IndexBuffer.reset(new OpenGLIndexBuffer(indices, sizeof(indices)));
 
@@ -39,12 +76,15 @@ namespace brcl
 			#version 330 core
 
 			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec4 a_Color;
 
-			out vec3 v_Position; 
+			out vec3 v_Position;
+			out vec4 v_Color;
 
 			void main()
 			{
 				v_Position = a_Position * 0.5 + 0.5;
+				v_Color = a_Color;
 				gl_Position = vec4(a_Position, 1.0);
 			}
 		)";
@@ -52,13 +92,15 @@ namespace brcl
 		const std::string fragmentSrc = R"(
 			#version 330 core
 
-			layout(location = 0) out vec4 a_Color;
+			layout(location = 0) out vec4 color;
 
-			in vec3 v_Position; 
+			in vec3 v_Position;
+			in vec4 v_Color;
 
 			void main()
 			{
-				a_Color = vec4( v_Position, 1.0 );
+				color = vec4( v_Position, 1.0 );
+				//color = v_Color;
 			}
 		)";
 
