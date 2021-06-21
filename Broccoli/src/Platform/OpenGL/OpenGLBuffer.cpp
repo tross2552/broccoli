@@ -36,10 +36,11 @@ namespace brcl
 		m_Layout = layout;
 	}
 
-	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t size)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t size) :
+		m_Count(size / sizeof(indices[0]))
 	{
 		glCreateBuffers(1, &m_RendererID);
-		OpenGLIndexBuffer::Bind();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
 	}
 
@@ -56,5 +57,9 @@ namespace brcl
 	void OpenGLIndexBuffer::Unbind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+	uint32_t OpenGLIndexBuffer::GetCount() const
+	{
+		return m_Count;
 	}
 }

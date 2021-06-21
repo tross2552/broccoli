@@ -60,9 +60,12 @@ namespace brcl
 		void Bind() const override;
 		void Unbind() const override;
 
+		uint32_t GetCount() const override;
+	
 	private:
 		
 		unsigned int m_RendererID;
+		uint32_t m_Count;
 		
 	};
 	

@@ -6,6 +6,7 @@
 #include "Platform/Windows/WindowsInput.h"
 
 #include <glad/glad.h>
+#include "Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
@@ -131,18 +132,16 @@ namespace brcl
 	void Application::Run()
 	{
 		
-		while (m_Running) { 
-
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			m_VertexArray->Bind();
+		while (m_Running) {
+			
+			RenderCommand::SetClearColor({ 1.0f , 0.0f, 1.0f, 1.0f });
+			RenderCommand::Clear();
+			
 			m_Shader->Bind();
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_VertexArray);
+			Renderer::Submit(m_VertexArraySquare);
 
-			m_VertexArraySquare->Bind();
-			m_Shader->Bind();
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
+			
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
