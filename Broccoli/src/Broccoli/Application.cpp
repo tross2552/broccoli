@@ -7,6 +7,7 @@
 
 #include <glad/glad.h>
 #include "Platform/OpenGL/OpenGLBuffer.h"
+#include "Platform/OpenGL/OpenGLVertexArray.h"
 
 void GLAPIENTRY
 MessageCallback(GLenum source,
@@ -37,8 +38,11 @@ namespace brcl
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(MessageCallback, 0);
 
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray.reset(new OpenGLVertexArray());
+
+
+		std::shared_ptr<VertexBuffer> vertexBuffer;
+		std::shared_ptr<IndexBuffer> indexBuffer;
 		
 		float vertices[3 * 7] = {
 			-0.5f , -0.5f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f ,
@@ -46,28 +50,44 @@ namespace brcl
 			 0.0f ,  0.5f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f
 		};
 
-		m_VertexBuffer.reset(new OpenGLVertexBuffer(vertices, sizeof(vertices)));
+		vertexBuffer.reset(new OpenGLVertexBuffer(vertices, sizeof(vertices)));
 
-		{
-			BufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position" },
-				{ ShaderDataType::Float4, "a_Color"    }
-			};
-
-			m_VertexBuffer->SetLayout(layout);
-		}
 		
-		uint32_t index = 0;
-		for (auto& element : m_VertexBuffer->GetLayout().GetElements())
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, ShaderDataTypeCount(element.Type), ShaderDataTypeToGLType(element.Type), GL_FALSE, m_VertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
-			index++;
-		}
+		BufferLayout layout = {
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float4, "a_Color"    }
+		};
+
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
+		
 
 		uint32_t indices[3] = { 0 , 1 , 2 };
 
-		m_IndexBuffer.reset(new OpenGLIndexBuffer(indices, sizeof(indices)));
+		indexBuffer.reset(new OpenGLIndexBuffer(indices, sizeof(indices)));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
+
+
+		
+		m_VertexArraySquare.reset(new OpenGLVertexArray());
+
+		float vertices2[4 * 7] = {
+			-0.7f , -0.7f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f ,
+			-0.7f , -0.8f , 0.0f , 1.0f , 0.0f , 1.0f, 1.0f ,
+			-0.8f , -0.8f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f ,
+			-0.8f , -0.7f , 0.0f , 1.0f , 1.0f , 1.0f, 1.0f
+		};
+
+		vertexBuffer.reset(new OpenGLVertexBuffer(vertices2, sizeof(vertices2)));
+
+		vertexBuffer->SetLayout(layout);
+		m_VertexArraySquare->AddVertexBuffer(vertexBuffer);
+
+		uint32_t indices2[6] = { 0 , 1 , 2, 0, 2, 3 };
+
+		indexBuffer.reset(new OpenGLIndexBuffer(indices2, sizeof(indices2)));
+		m_VertexArraySquare->SetIndexBuffer(indexBuffer);
+		
 
 		const std::string vertexSrc = R"(
 			#version 330 core
@@ -115,9 +135,13 @@ namespace brcl
 
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			glBindVertexArray(m_VertexArray);
+			m_VertexArray->Bind();
 			m_Shader->Bind();
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+
+			m_VertexArraySquare->Bind();
+			m_Shader->Bind();
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
 			{
