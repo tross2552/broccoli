@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <Broccoli/Math/Vector.h>
+#include <Broccoli/Math/Math.h>
 
 #include "VertexArray.h"
 

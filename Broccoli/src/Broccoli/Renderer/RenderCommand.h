@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RendererAPI.h"
+#include "Broccoli/Math/Math.h"
 
 namespace brcl
 {
