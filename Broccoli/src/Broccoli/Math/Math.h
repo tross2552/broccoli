@@ -13,6 +13,24 @@ namespace brcl
 	typedef blaze::StaticMatrix<float, 3, 3> Matrix3x3;
 	typedef blaze::StaticMatrix<float, 4, 4> Matrix4x4;
 
+	inline Matrix2x2 Identity2x2()
+	{
+		return blaze::IdentityMatrix<float>(2);
+		//return Matrix2x2({ {1,0}, {0,1} });
+	}
+
+	inline Matrix3x3 Identity3x3()
+	{
+		return blaze::IdentityMatrix<float>(3);
+		//return Matrix3x3({ {1,0,0}, {0,1,0}, {0,0,1} });
+	}
+
+	inline Matrix4x4 Identity4x4()
+	{
+		return blaze::IdentityMatrix<float>(4);
+		//return Matrix4x4({ {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} });
+	}
+
 	//TODO: make explicit that these functions use homogenous coordinates
 	
 	inline Matrix4x4 Ortho(float left, float right, float bottom, float top) {
@@ -34,9 +52,9 @@ namespace brcl
 	{
 		auto ret = m;
 		
-		ret(0, 3) = v[0];
-		ret(1, 3) = v[1];
-		ret(2, 3) = v[2];
+		ret(0, 3) = ret(0,0) * v[0];
+		ret(1, 3) = ret(1,1) * v[1];
+		ret(2, 3) = ret(2,2) * v[2];
 
 		return ret;
 	}
@@ -52,7 +70,29 @@ namespace brcl
 		return ret;
 	}
 
-	//TODO: implement
+	//TODO: proper quaternions
+	inline Matrix4x4 Rotate(const Matrix4x4& m, const Vector4& q)
+	{
+		Matrix4x4 ret;
+
+		auto& [x, y, z, w] = q;
+
+		ret(0,0) = 1.0f - 2.0f * (y * y + z * z);
+		ret(0,1) = 2.0f * (x * y - w*z);
+		ret(0,2) = 2.0f * (x * y + w * y);
+
+		ret(1, 0) = 2.0f * (x * y + w * z);
+		ret(1, 1) = 1.0f - 2.0f * (x * x + z * z);
+		ret(1, 2) = 2.0f * (y * z - w * x);
+
+		ret(2, 0) = 2.0f * (x * z - w * y);
+		ret(2, 1) = 2.0f * (y * z + w * x);
+		ret(2, 2) = 1.0f - 2.0f * (x * x + y * y);
+
+		return ret * m;
+	}
+
+
 	inline Matrix4x4 Rotate(const Matrix4x4& m, float angle, const Vector3& v)
 	{
 		
@@ -61,6 +101,8 @@ namespace brcl
 		Vector3 axis = blaze::normalize(v);
 
 		auto&[x, y, z] = axis;
+
+		//TODO: check this math
 
 		ret(0,0) = cos(angle) + (1.0f - cos(angle)) * x * x;
 		ret(1,0) = (1.0f - cos(angle)) * x * y + sin(angle) * z;
@@ -83,22 +125,22 @@ namespace brcl
 		ret(3,3) = 1.0f;
 
 		
-		return m * ret;
+		return ret * m;
+	}
+	
+	inline Matrix2x2 Invert(const Matrix2x2& mat)
+	{
+		return blaze::inv(mat);
 	}
 
-	inline Matrix2x2 Identity2x2()
+	inline Matrix3x3 Invert(const Matrix3x3& mat)
 	{
-		return Matrix2x2({ {1,0}, {0,1} });
+		return blaze::inv(mat);
 	}
-	
-	inline Matrix3x3 Identity3x3()
+
+	inline Matrix4x4 Invert(const Matrix4x4& mat)
 	{
-		return Matrix3x3({ {1,0,0}, {0,1,0}, {0,0,1} });
-	}
-	
-	inline Matrix4x4 Identity4x4()
-	{
-		return Matrix4x4({ {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} });
+		return blaze::inv(mat);
 	}
 	
 	

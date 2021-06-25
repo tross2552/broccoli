@@ -61,7 +61,8 @@ project "Broccoli"
 		"Glad",
 		"GLFW",
 		"ImGui",
-		"opengl32.lib"
+		"opengl32.lib",
+		"Broccoli/vendor/openblas/libopenblas.lib"
 	}
 	
 	defines
@@ -104,6 +105,7 @@ project "Sandbox"
 	kind "ConsoleApp"
 	staticruntime "On"
 	language "C++"
+	cppdialect "C++17"
 	
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
