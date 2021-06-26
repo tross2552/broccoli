@@ -5,6 +5,7 @@
 #include "LayerStack.h"
 #include "Renderer/Shader.h"
 #include "Renderer/Buffer.h"
+#include "Renderer/Camera.h"
 #include "Renderer/VertexArray.h"
 
 namespace brcl
@@ -45,6 +46,8 @@ namespace brcl
 		std::shared_ptr<VertexArray> m_VertexArray;
 
 		std::shared_ptr<VertexArray> m_VertexArraySquare;
+
+		Camera m_Camera;
 		
 	};
 

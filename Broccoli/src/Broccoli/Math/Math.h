@@ -52,9 +52,9 @@ namespace brcl
 	{
 		auto ret = m;
 		
-		ret(0, 3) = ret(0,0) * v[0];
-		ret(1, 3) = ret(1,1) * v[1];
-		ret(2, 3) = ret(2,2) * v[2];
+		ret(3, 0) = v[0];
+		ret(3, 1) = v[1];
+		ret(3, 2) = v[2];
 
 		return ret;
 	}
@@ -70,10 +70,12 @@ namespace brcl
 		return ret;
 	}
 
-	//TODO: proper quaternions
+	//TODO: quaternions
 	inline Matrix4x4 Rotate(const Matrix4x4& m, const Vector4& q)
 	{
 		Matrix4x4 ret;
+
+		//TODO: this math needs fixed
 
 		auto& [x, y, z, w] = q;
 

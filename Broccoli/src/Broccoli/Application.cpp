@@ -29,7 +29,8 @@ namespace brcl
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application() :
+		m_Camera(-2.0, 2.0, -2.0, 2.0)
 	{
 		if (!s_Instance) s_Instance = this;
 
@@ -96,6 +97,8 @@ namespace brcl
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
 
+			uniform mat4 u_ViewProjection;
+
 			out vec3 v_Position;
 			out vec4 v_Color;
 
@@ -103,7 +106,7 @@ namespace brcl
 			{
 				v_Position = a_Position * 0.5 + 0.5;
 				v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -136,15 +139,43 @@ namespace brcl
 			
 			RenderCommand::SetClearColor({ 1.0f , 0.0f, 1.0f, 1.0f });
 			RenderCommand::Clear();
+
+			Renderer::BeginScene(m_Camera);
 			
-			m_Shader->Bind();
-			Renderer::Submit(m_VertexArray);
-			Renderer::Submit(m_VertexArraySquare);
+			Renderer::Submit(m_Shader, m_VertexArray);
+			Renderer::Submit(m_Shader, m_VertexArraySquare);
 
 			
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
+
+				if (Input::IsKeyPressed(Input::BRCLKeyCodes::W))
+				{
+					BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
+					m_Camera.SetPosition({ 0.0f, 1.0f, 0.0f });
+				}
+				
+				if (Input::IsKeyPressed(Input::BRCLKeyCodes::A))
+				{
+					BRCL_CORE_INFO("LEFT LEFT LEFT LEFT !!!!!!!");
+					m_Camera.SetPosition({ -0.5f, -0.5f, 0.0f });
+				}
+				
+				if (Input::IsKeyPressed(Input::BRCLKeyCodes::S))
+				{
+					BRCL_CORE_INFO("DOWN DOWN DOWN DOWN !!!!!!!");
+					m_Camera.SetPosition({ 0.0f, 0.0f, 0.0f });
+				}
+				
+				if (Input::IsKeyPressed(Input::BRCLKeyCodes::D))
+				{
+					BRCL_CORE_INFO("RIGHT RIGHT RIGHT RIGHT !!!!!!!");
+					m_Camera.SetPosition({ 0.5f, 0.5f, 0.0f });
+				}
+				
+
+				m_Camera.OnUpdate();
 			}
 
 			m_Window->OnUpdate();

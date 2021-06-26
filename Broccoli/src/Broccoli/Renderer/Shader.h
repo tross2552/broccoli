@@ -1,7 +1,10 @@
 #pragma once
 
+#include "Broccoli/Math/Math.h"
+
 namespace brcl
 {
+	//TODO: abstract implementation away from GL
 	class Shader
 	{
 		
@@ -11,7 +14,10 @@ namespace brcl
 
 		void Bind() const;
 		void Unbind() const;
+
+		void UploadUniformMat4(const std::string& uniformName, const Matrix4x4& matrix);
+	
 	private:
-		uint64_t m_RendererID;
+		uint32_t m_RendererID;
 	};
 }
