@@ -39,15 +39,6 @@ namespace brcl
 		bool m_Running = true;
 
 		static Application* s_Instance;
-
-		
-		std::shared_ptr<Shader> m_Shader;
-		
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		std::shared_ptr<VertexArray> m_VertexArraySquare;
-
-		Camera m_Camera;
 		
 	};
 
