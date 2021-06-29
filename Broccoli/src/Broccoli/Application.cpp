@@ -145,35 +145,50 @@ namespace brcl
 			Renderer::Submit(m_Shader, m_VertexArray);
 			Renderer::Submit(m_Shader, m_VertexArraySquare);
 
+			Renderer::EndScene();
+
+			static bool rotateFlag;
 			
 			for (Layer* layer : m_LayerStack)
 			{
 				layer->OnUpdate();
 
+				if (Input::IsKeyPressed(Input::BRCLKeyCodes::E)) rotateFlag = true;
+				if (Input::IsKeyPressed(Input::BRCLKeyCodes::Q)) rotateFlag = false;
+
 				if (Input::IsKeyPressed(Input::BRCLKeyCodes::W))
 				{
 					BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
-					m_Camera.SetPosition({ 0.0f, 1.0f, 0.0f });
+					if(!rotateFlag) m_Camera.SetPosition(m_Camera.GetPosition()+ Vector3({ 0.0f, 0.01f, 0.0f }));
+					else m_Camera.SetRotation(m_Camera.GetRotation() + Vector3({ 0.0f,0.05f,0.0f }));
 				}
 				
 				if (Input::IsKeyPressed(Input::BRCLKeyCodes::A))
 				{
 					BRCL_CORE_INFO("LEFT LEFT LEFT LEFT !!!!!!!");
-					m_Camera.SetPosition({ -0.5f, -0.5f, 0.0f });
+					if (!rotateFlag) m_Camera.SetPosition(m_Camera.GetPosition() + Vector3({ -0.01f, 0.0f, 0.0f }));
+					else m_Camera.SetRotation(m_Camera.GetRotation() + Vector3({ 0.05f,0.0f,0.0f }));
 				}
 				
 				if (Input::IsKeyPressed(Input::BRCLKeyCodes::S))
 				{
 					BRCL_CORE_INFO("DOWN DOWN DOWN DOWN !!!!!!!");
-					m_Camera.SetPosition({ 0.0f, 0.0f, 0.0f });
+					if (!rotateFlag) m_Camera.SetPosition(m_Camera.GetPosition() + Vector3({ 0.0f, -0.01f, 0.0f }));
+					else m_Camera.SetRotation(m_Camera.GetRotation() + Vector3({ 0.0f,-0.05f,0.0f }));
 				}
 				
 				if (Input::IsKeyPressed(Input::BRCLKeyCodes::D))
 				{
 					BRCL_CORE_INFO("RIGHT RIGHT RIGHT RIGHT !!!!!!!");
-					m_Camera.SetPosition({ 0.5f, 0.5f, 0.0f });
+					if (!rotateFlag) m_Camera.SetPosition(m_Camera.GetPosition() + Vector3({ 0.01f, 0.0f, 0.0f }));
+					else m_Camera.SetRotation(m_Camera.GetRotation() + Vector3({ -0.05f,0.0f,0.0f }));
 				}
-				
+
+				if(Input::IsKeyPressed(Input::BRCLKeyCodes::X))
+				{
+					m_Camera.SetPosition({ 0.0f, 0.0f, 0.0f });
+					m_Camera.SetRotation({ 0.0f,0.0f,0.0f });
+				}
 
 				m_Camera.OnUpdate();
 			}

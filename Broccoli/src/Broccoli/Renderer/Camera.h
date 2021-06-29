@@ -15,8 +15,8 @@ namespace brcl
 		void SetPosition(const Vector3& position) { m_Position = position; }
 		const Vector3& GetPosition() const { return m_Position; }
 
-		void SetRotation(const Vector4& rotation) { m_Rotation = rotation; }
-		const Vector4& GetRotation() const { return m_Rotation; }
+		void SetRotation(const Vector3& rotation) { m_Rotation = rotation; }
+		const Vector3& GetRotation() const { return m_Rotation; }
 		
 		void SetProjectionMatrix(const Matrix4x4& proj) { m_ProjectionMatrix = proj; }
 		Matrix4x4 GetProjectionMatrix() const { return m_ProjectionMatrix; };
@@ -34,7 +34,7 @@ namespace brcl
 		bool m_Orthographic;
 
 		Vector3 m_Position;
-		Vector4 m_Rotation;
+		Vector3 m_Rotation;
 		
 		Matrix4x4 m_ProjectionMatrix;
 		Matrix4x4 m_ViewMatrix;

@@ -20,7 +20,7 @@ namespace brcl
 	void Camera::CalculateViewMatrix()
 	{
 		Matrix4x4 view =Translate(Identity4x4(), m_Position);
-		//view = Rotate(view, m_Rotation);
+		view = Rotate(view, m_Rotation);
 		m_ViewMatrix = Invert(view);
 		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}

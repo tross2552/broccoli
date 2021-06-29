@@ -71,25 +71,26 @@ namespace brcl
 	}
 
 	//TODO: quaternions
-	inline Matrix4x4 Rotate(const Matrix4x4& m, const Vector4& q)
+	inline Matrix4x4 Rotate(const Matrix4x4& m, const Vector3& e)
 	{
-		Matrix4x4 ret;
+		Matrix4x4 ret = Identity4x4();
+		
 
 		//TODO: this math needs fixed
+		
+		auto& [x, y, z] = e;
 
-		auto& [x, y, z, w] = q;
+		ret(0,0) =  cos(z) * cos(y);
+		ret(1,0) =  sin(z) * cos(y);
+		ret(2,0) = -sin(y);
 
-		ret(0,0) = 1.0f - 2.0f * (y * y + z * z);
-		ret(0,1) = 2.0f * (x * y - w*z);
-		ret(0,2) = 2.0f * (x * y + w * y);
+		ret(0, 1) = cos(z) * sin(y) * sin(x) - sin(z) * cos(x);
+		ret(1, 1) = sin(z) * sin(y) * sin(x) + cos(z) * cos(x);
+		ret(2, 1) = cos(y) * sin(x);
 
-		ret(1, 0) = 2.0f * (x * y + w * z);
-		ret(1, 1) = 1.0f - 2.0f * (x * x + z * z);
-		ret(1, 2) = 2.0f * (y * z - w * x);
-
-		ret(2, 0) = 2.0f * (x * z - w * y);
-		ret(2, 1) = 2.0f * (y * z + w * x);
-		ret(2, 2) = 1.0f - 2.0f * (x * x + y * y);
+		ret(0, 2) = cos(z) * sin(y) * cos(x) + sin(z) * sin(x);
+		ret(1, 2) = sin(z) * sin(y) * cos(x) - cos(z) * sin(x);
+		ret(2, 2) = cos(y) * cos(x);
 
 		return ret * m;
 	}
