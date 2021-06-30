@@ -14,7 +14,7 @@ namespace brcl
 
 		void OnAttach() override;
 		void OnDetach() override;
-		void OnUpdate() override;
+		void OnUpdate(Timestep time) override;
 		void OnEvent(Event& event) override;
 
 	private:

@@ -36,6 +36,8 @@ namespace brcl
 
 		static Application* s_Instance;
 
+		Timer m_Timer;
+		Timestep m_PrevTime;
 		
 		
 	};

@@ -40,7 +40,7 @@ namespace brcl
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnUpdate()
+	void ImGuiLayer::OnUpdate(Timestep deltaTime)
 	{
 
 		ImGui_ImplOpenGL3_NewFrame();

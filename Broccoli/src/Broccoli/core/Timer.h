@@ -14,6 +14,19 @@ namespace brcl
 		operator float() const { return m_Time; }
 
 		float GetSeconds() const { return m_Time; }
+		
+		Timestep& operator+=(const Timestep& delta)
+		{
+			m_Time += delta;
+			return *this;
+		}
+
+		std::string ToString() const
+		{
+			std::stringstream ss;
+			ss << GetSeconds() << "s";
+			return ss.str();
+		}
 
 	private:
 		float m_Time;
@@ -43,7 +56,7 @@ namespace brcl
 		std::string ToString() const
 		{
 			std::stringstream ss;
-			ss << m_Name << " Timer: " << GetTime() <<"s";
+			ss << m_Name << " Timer: " << GetTime().ToString();
 			return ss.str();
 		}
 	

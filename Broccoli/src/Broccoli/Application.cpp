@@ -3,36 +3,18 @@
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Platform/Windows/WindowsWindow.h"
 
-#include <glad/glad.h>
-
-void GLAPIENTRY
-MessageCallback(GLenum source,
-	GLenum type,
-	GLuint id,
-	GLenum severity,
-	GLsizei length,
-	const GLchar* message,
-	const void* userParam)
-{
-	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
-		type, severity, message);
-}
-
 namespace brcl
 {
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application() :
+		m_Timer("Application")
 	{
 		if (!s_Instance) s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
-
-		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback(MessageCallback, 0);
 		
 	}
 	Application::~Application()
@@ -44,10 +26,15 @@ namespace brcl
 	{
 		
 		while (m_Running) {
+
+			Timestep curr = m_Timer.GetTime();
+
+			Timestep deltaTime = curr - m_PrevTime;
+			m_PrevTime = curr;
 			
 			for (Layer* layer : m_LayerStack)
 			{
-				layer->OnUpdate();
+				layer->OnUpdate(deltaTime);
 			}
 
 			m_Window->OnUpdate();

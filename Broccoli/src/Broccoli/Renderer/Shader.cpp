@@ -143,12 +143,6 @@ namespace brcl
 			matrix2[i*4 + j] = matrix(i,j);
 		}
 
-		BRCL_CORE_INFO("uploading: {0}{1}{2}{3}", matrix2[0], matrix2[1], matrix2[2], matrix2[3]);
-		BRCL_CORE_INFO("uploading: {0}{1}{2}{3}", matrix2[4], matrix2[5], matrix2[6], matrix2[7]);
-		BRCL_CORE_INFO("uploading: {0}{1}{2}{3}", matrix2[8], matrix2[9], matrix2[10], matrix2[11]);
-		BRCL_CORE_INFO("uploading: {0}{1}{2}{3}", matrix2[12], matrix2[13], matrix2[14], matrix2[15]);
-
-		
 		glUniformMatrix4fv(location, 1, GL_FALSE, matrix2);
 	}
 }
