@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Broccoli/Core.h"
 #include "Layer.h"
 
 #include <vector>

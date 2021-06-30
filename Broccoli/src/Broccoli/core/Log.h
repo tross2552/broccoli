@@ -5,6 +5,7 @@
 #include "Core.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 namespace brcl
 {
@@ -12,13 +13,22 @@ namespace brcl
 	class BRCL_API Log
 	{
 	public:
-		static void Init();
+		static void Init()
+		{
+			spdlog::set_pattern("%^[%T] %n: %v%$");
 
-		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
-		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+			s_CoreLogger = spdlog::stdout_color_mt("BRCL");
+			s_CoreLogger->set_level(spdlog::level::level_enum::trace);
+			s_ClientLogger = spdlog::stdout_color_mt("APP");
+			s_ClientLogger->set_level(spdlog::level::level_enum::trace);
+		}
+
+		static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
+		static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+		
 	private:
-		static std::shared_ptr<spdlog::logger> s_CoreLogger;
-		static std::shared_ptr<spdlog::logger> s_ClientLogger;
+		inline static std::shared_ptr<spdlog::logger> s_CoreLogger;
+		inline static std::shared_ptr<spdlog::logger> s_ClientLogger;
 	};
 
 }

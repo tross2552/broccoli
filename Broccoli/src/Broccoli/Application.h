@@ -1,12 +1,8 @@
 #pragma once
 
-#include "Core.h"
 #include "Window.h"
 #include "LayerStack.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Buffer.h"
-#include "Renderer/Camera.h"
-#include "Renderer/VertexArray.h"
+#include "Events/ApplicationEvent.h"
 
 namespace brcl
 {
@@ -39,6 +35,8 @@ namespace brcl
 		bool m_Running = true;
 
 		static Application* s_Instance;
+
+		
 		
 	};
 

@@ -1,14 +1,9 @@
 #include "brclpch.h"
 #include "Application.h"
 #include "Broccoli/Events/ApplicationEvent.h"
-#include "Broccoli/Log.h"
 #include "Platform/Windows/WindowsWindow.h"
-#include "Platform/Windows/WindowsInput.h"
 
 #include <glad/glad.h>
-#include "Renderer/Renderer.h"
-#include "Platform/OpenGL/OpenGLBuffer.h"
-#include "Platform/OpenGL/OpenGLVertexArray.h"
 
 void GLAPIENTRY
 MessageCallback(GLenum source,

@@ -1,5 +1,4 @@
 #pragma once
-#include "Broccoli/Core.h"
 #include "Broccoli/Events/Event.h"
 
 namespace brcl

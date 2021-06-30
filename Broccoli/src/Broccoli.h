@@ -2,8 +2,9 @@
 
 //For use by Broccoli applications
 #include "Broccoli/Application.h"
-#include "Broccoli/Log.h"
 #include "Broccoli/Layer.h"
+
+#include "Broccoli/Core/Log.h"
 
 #include "Broccoli/ImGui/ImGuiLayer.h"
 

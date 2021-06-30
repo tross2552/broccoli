@@ -12,7 +12,9 @@
 #include<unordered_map>
 #include <unordered_set>
 
-#include "Broccoli/Log.h"
+#include "Broccoli/Core/Log.h"
+#include "Broccoli/Core/Core.h"
+#include "Broccoli/Core/Timer.h"
 
 #ifdef BRCL_PLATFORM_WINDOWS
 	#include <Windows.h>
