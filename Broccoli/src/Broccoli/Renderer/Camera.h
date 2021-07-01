@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Broccoli/Transform.h"
 #include "Broccoli/Math/Math.h"
 
 namespace brcl
@@ -12,11 +13,7 @@ namespace brcl
 
 		void OnUpdate();
 
-		void SetPosition(const Vector3& position) { m_Position = position; }
-		const Vector3& GetPosition() const { return m_Position; }
-
-		void SetRotation(const Vector3& rotation) { m_Rotation = rotation; }
-		const Vector3& GetRotation() const { return m_Rotation; }
+		Transform& GetTransform() { return m_Transform; }
 		
 		void SetProjectionMatrix(const Matrix4x4& proj) { m_ProjectionMatrix = proj; }
 		Matrix4x4 GetProjectionMatrix() const { return m_ProjectionMatrix; };
@@ -31,10 +28,9 @@ namespace brcl
 
 	protected:
 
-		bool m_Orthographic;
+		Transform m_Transform;
 
-		Vector3 m_Position;
-		Vector3 m_Rotation;
+		bool m_Orthographic;
 		
 		Matrix4x4 m_ProjectionMatrix;
 		Matrix4x4 m_ViewMatrix;

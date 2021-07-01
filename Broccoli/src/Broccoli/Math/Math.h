@@ -52,9 +52,9 @@ namespace brcl
 	{
 		auto ret = m;
 		
-		ret(3, 0) = v[0];
-		ret(3, 1) = v[1];
-		ret(3, 2) = v[2];
+		ret(3, 0) = blaze::sum(blaze::column(m,0)* v[0]);
+		ret(3, 1) = blaze::sum(blaze::column(m, 1) * v[1]);
+		ret(3, 2) = blaze::sum(blaze::column(m, 2) * v[2]);
 
 		return ret;
 	}
@@ -63,9 +63,9 @@ namespace brcl
 	{
 		auto ret = m;
 
-		ret(0, 0) *= v[0];
-		ret(1, 1) *= v[1];
-		ret(2, 2) *= v[2];
+		blaze::row(ret, 0) *= v[0];
+		blaze::row(ret, 1) *= v[1];
+		blaze::row(ret, 2) *= v[2];
 
 		return ret;
 	}

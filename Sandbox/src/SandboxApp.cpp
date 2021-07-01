@@ -36,7 +36,7 @@ namespace Sandbox
 
 
 	ExampleLayer::ExampleLayer() :
-		Layer("Example"), m_Camera(-2.0, 2.0, -2.0, 2.0)
+		Layer("Example"), m_Camera(-1.6, 1.6, -0.9, 0.9)
 	{
 		m_VertexArray.reset(brcl::VertexArray::Create());
 
@@ -72,10 +72,10 @@ namespace Sandbox
 		m_VertexArraySquare.reset(brcl::VertexArray::Create());
 
 		float vertices2[4 * 7] = {
-			-0.7f , -0.7f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f ,
-			-0.7f , -0.8f , 0.0f , 1.0f , 0.0f , 1.0f, 1.0f ,
-			-0.8f , -0.8f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f ,
-			-0.8f , -0.7f , 0.0f , 1.0f , 1.0f , 1.0f, 1.0f
+			0.0f , 0.0f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f ,
+			0.0f , -1.0f , 0.0f , 1.0f , 0.0f , 1.0f, 1.0f ,
+			-1.0f , -1.0f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f ,
+			-1.0f , 0.0f , 0.0f , 1.0f , 1.0f , 1.0f, 1.0f
 		};
 
 		vertexBuffer.reset(brcl::VertexBuffer::Create(vertices2, sizeof(vertices2)));
@@ -96,6 +96,7 @@ namespace Sandbox
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -104,7 +105,7 @@ namespace Sandbox
 			{
 				v_Position = a_Position * 0.5 + 0.5;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -136,10 +137,25 @@ namespace Sandbox
 
 		brcl::Renderer::BeginScene(m_Camera);
 
-		brcl::Renderer::Submit(m_Shader, m_VertexArray);
-		brcl::Renderer::Submit(m_Shader, m_VertexArraySquare);
+		brcl::Renderer::Submit(m_Shader, m_VertexArray, brcl::Identity4x4());
+
+		
+		brcl::Matrix4x4 scale = brcl::Scale(brcl::Identity4x4(), brcl::Vector3(0.1f));
+
+		for(int i = 0; i  < 10; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				brcl::Vector3 pos({ i * 0.11f, j*0.11f, 0.0f });
+				brcl::Matrix4x4 transform = brcl::Translate(brcl::Identity4x4(), pos);
+				transform=scale*transform;
+				brcl::Renderer::Submit(m_Shader, m_VertexArraySquare, transform);
+			}
+		}
 
 		brcl::Renderer::EndScene();
+
+		brcl::Transform& camTransform = m_Camera.GetTransform();
 
 		static bool rotateFlag;
 
@@ -149,35 +165,41 @@ namespace Sandbox
 		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::W))
 		{
 			BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
-			if (!rotateFlag) m_Camera.SetPosition(m_Camera.GetPosition() + brcl::Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime);
-			else m_Camera.SetRotation(m_Camera.GetRotation() + brcl::Vector3({ 0.0f,1.0f,0.0f }) * deltaTime);
+			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime);
+			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ -1.0f,0.0f,0.0f }) * deltaTime);
 		}
 
 		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::A))
 		{
 			BRCL_CORE_INFO("LEFT LEFT LEFT LEFT !!!!!!!");
-			if (!rotateFlag) m_Camera.SetPosition(m_Camera.GetPosition() + brcl::Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime);
-			else m_Camera.SetRotation(m_Camera.GetRotation() + brcl::Vector3({ 1.0f,0.0f,0.0f }) * deltaTime);
+			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime);
+			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ 0.0f,-1.0f,0.0f }) * deltaTime);
 		}
 
 		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::S))
 		{
 			BRCL_CORE_INFO("DOWN DOWN DOWN DOWN !!!!!!!");
-			if (!rotateFlag) m_Camera.SetPosition(m_Camera.GetPosition() + brcl::Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime);
-			else m_Camera.SetRotation(m_Camera.GetRotation() + brcl::Vector3({ 0.0f,-1.0f,0.0f }) * deltaTime);
+			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime);
+			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ 1.0f,0.0f,0.0f }) * deltaTime);
 		}
 
 		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::D))
 		{
 			BRCL_CORE_INFO("RIGHT RIGHT RIGHT RIGHT !!!!!!!");
-			if (!rotateFlag) m_Camera.SetPosition(m_Camera.GetPosition() + brcl::Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime);
-			else m_Camera.SetRotation(m_Camera.GetRotation() + brcl::Vector3({ -1.0f,0.0f,0.0f }) * deltaTime);
+			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime);
+			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ 0.0f,1.0f,0.0f }) * deltaTime);
+		}
+
+		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::F))
+		{
+			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ 0.0f, 0.0f, 1.0f }) * deltaTime);
+			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ 0.0f,0.0f,1.0f }) * deltaTime);
 		}
 
 		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::X))
 		{
-			m_Camera.SetPosition({ 0.0f, 0.0f, 0.0f });
-			m_Camera.SetRotation({ 0.0f,0.0f,0.0f });
+			camTransform.SetPosition({ 0.0f, 0.0f, 0.0f });
+			camTransform.SetRotation({ 0.0f,0.0f,0.0f });
 		}
 
 		m_Camera.OnUpdate();
