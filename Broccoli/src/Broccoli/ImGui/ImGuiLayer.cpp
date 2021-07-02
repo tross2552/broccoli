@@ -3,7 +3,6 @@
 #include "Broccoli/Application.h"
 #include "ImGuiBackend.h"
 #include "GLFW/glfw3.h"
-#include "glad/glad.h"
 
 namespace brcl
 {
@@ -11,6 +10,7 @@ namespace brcl
 	static inline ImGuiIO* io;
 
 	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer") {}
+	ImGuiLayer::ImGuiLayer(const std::string& name) : Layer(name) {}
 
 	ImGuiLayer::~ImGuiLayer() {}
 
@@ -47,14 +47,9 @@ namespace brcl
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		static bool show_demo = false;
-		if(show_demo)
-			ImGui::ShowDemoWindow(&show_demo);
-		ImGui::Begin("Another Window");
-		ImGui::Checkbox("Demo Window", &show_demo);      // Edit bools storing our window open/close state
-		ImGui::End();
-		
+		OnImGuiRender();
 		ImGui::Render();
+		
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		if (io->ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -64,6 +59,16 @@ namespace brcl
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
+	}
+
+	void ImGuiLayer::OnImGuiRender()
+	{
+		static bool show_demo = false;
+		if (show_demo)
+			ImGui::ShowDemoWindow(&show_demo);
+		ImGui::Begin("Another Window");
+		ImGui::Checkbox("Demo Window", &show_demo);      // Edit bools storing our window open/close state
+		ImGui::End();
 	}
 
 	void ImGuiLayer::OnEvent(Event& event)

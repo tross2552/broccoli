@@ -120,7 +120,8 @@ project "Sandbox"
 	{
 		"Broccoli/vendor/spdlog/include",
 		"%{IncludeDir.Blaze}",
-		"Broccoli/src"
+		"Broccoli/src",
+		"Broccoli/vendor"
 	}
 	
 	links

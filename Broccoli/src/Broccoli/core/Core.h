@@ -11,7 +11,7 @@
 #endif
 
 #ifdef BRCL_ENABLE_ASSERTS
-#define BRCL_ASSERT(x, ...) { if(!(x)) { BRCL_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak() } }
+#define BRCL_ASSERT(x, ...) { if(!(x)) { BRCL_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #define BRCL_CORE_ASSERT(x, ...) { if(!(x)) { BRCL_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
 #define BRCL_ASSERT(x, ...)

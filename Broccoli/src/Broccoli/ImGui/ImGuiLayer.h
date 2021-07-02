@@ -1,7 +1,5 @@
 #pragma once
 #include "Broccoli/Layer.h"
-#include "Broccoli/Events/MouseEvent.h"
-#include "Broccoli/Events/KeyEvent.h"
 
 
 namespace brcl
@@ -10,16 +8,16 @@ namespace brcl
 	{
 	public:
 		ImGuiLayer();
+		ImGuiLayer(const std::string& name);
 		~ImGuiLayer() override;
 
-		void OnAttach() override;
-		void OnDetach() override;
-		void OnUpdate(Timestep time) override;
+		void OnAttach() final;
+		void OnDetach() final;
+		
+		void OnUpdate(Timestep time) final;
+		virtual void OnImGuiRender();
+		
 		void OnEvent(Event& event) override;
-
-	private:
-		bool m_ReleaseMouse = false;
-		float m_Time = 0;
 	};
 
 

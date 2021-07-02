@@ -1,5 +1,8 @@
 #include <Broccoli.h>
 
+#include "Platform/OpenGL/OpenGLShader.h"
+#include "imgui/imgui.h"
+
 namespace Sandbox
 {
 
@@ -12,6 +15,8 @@ namespace Sandbox
 
 		void OnEvent(brcl::Event& event) override;
 
+		brcl::Vector4 color;
+
 	private:
 
 		std::shared_ptr<brcl::Shader> m_Shader;
@@ -22,6 +27,21 @@ namespace Sandbox
 
 		brcl::Camera m_Camera;
 	};
+
+	//temporary app gui!!!!!
+	class ExampleImGuiLayer : public brcl::ImGuiLayer
+	{
+	public:
+
+		ExampleImGuiLayer(ExampleLayer* layer) :
+			ImGuiLayer("AppGuiLayer"), m_AppLayer(layer) {}
+		
+		void OnImGuiRender() override;
+
+	private:
+
+		ExampleLayer* m_AppLayer;
+	};
 	
 	class Sandbox : public brcl::Application
 	{
@@ -29,14 +49,23 @@ namespace Sandbox
 		
 		Sandbox()
 		{
-			PushLayer(new ExampleLayer());
-			PushLayer(new brcl::ImGuiLayer());
+			ExampleLayer* app = new ExampleLayer();
+			PushLayer(app);
+			PushLayer(new ExampleImGuiLayer(app));
 		}
 	};
 
+	void ExampleImGuiLayer::OnImGuiRender()
+	{
+		ImGui::Begin("Settings");
+		ImGui::Text("Hello");
+		ImGui::ColorEdit4("Square Color", m_AppLayer->color.data());
+		ImGui::End();
+	}
+
 
 	ExampleLayer::ExampleLayer() :
-		Layer("Example"), m_Camera(-1.6, 1.6, -0.9, 0.9)
+		Layer("Example"), m_Camera(-1.6, 1.6, -0.9, 0.9), color(1.0f)
 	{
 		m_VertexArray.reset(brcl::VertexArray::Create());
 
@@ -97,6 +126,7 @@ namespace Sandbox
 
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
+			uniform vec4 u_Color;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -105,6 +135,7 @@ namespace Sandbox
 			{
 				v_Position = a_Position * 0.5 + 0.5;
 				v_Color = a_Color;
+				v_Color *= u_Color;
 				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		)";
@@ -124,7 +155,7 @@ namespace Sandbox
 			}
 		)";
 
-		m_Shader.reset(new brcl::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(brcl::Shader::Create(vertexSrc, fragmentSrc));
 	}
 
 	void ExampleLayer::OnUpdate(brcl::Timestep deltaTime)
@@ -138,6 +169,7 @@ namespace Sandbox
 		brcl::Renderer::BeginScene(m_Camera);
 
 		brcl::Renderer::Submit(m_Shader, m_VertexArray, brcl::Identity4x4());
+		std::dynamic_pointer_cast<brcl::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", color);
 
 		
 		brcl::Matrix4x4 scale = brcl::Scale(brcl::Identity4x4(), brcl::Vector3(0.1f));
@@ -212,7 +244,6 @@ namespace Sandbox
 		BRCL_TRACE("{0}", event);
 	}
 
-	
 }
 
 brcl::Application* brcl::CreateApplication()
