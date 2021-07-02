@@ -43,7 +43,7 @@ namespace brcl
 	};
 
 	//To be defined in CLIENT
-	Application* CreateApplication();
+	extern Application* CreateApplication();
 
 }
 

@@ -1,8 +1,7 @@
 #pragma once
+#include "Broccoli/Application.h"
 
 #ifdef BRCL_PLATFORM_WINDOWS
-
-extern brcl::Application* brcl::CreateApplication();
 
 int main(int argc, char** argv)
 {

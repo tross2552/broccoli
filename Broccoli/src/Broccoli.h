@@ -21,6 +21,3 @@
 #include "Broccoli/Renderer/Buffer.h"
 #include "Broccoli/Renderer/Shader.h"
 #include "Broccoli/Renderer/VertexArray.h"
-
-// ENTRY POINT ----------------
-#include "Broccoli/EntryPoint.h"
