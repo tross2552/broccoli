@@ -59,6 +59,17 @@ namespace brcl
 		return ret;
 	}
 
+	inline Matrix4x4 Scale(const Matrix4x4& m, const float scale)
+	{
+		auto ret = m;
+
+		blaze::row(ret, 0) *= scale;
+		blaze::row(ret, 1) *= scale;
+		blaze::row(ret, 2) *= scale;
+
+		return ret;
+	}
+
 	inline Matrix4x4 Scale(const Matrix4x4& m, const Vector3& v)
 	{
 		auto ret = m;

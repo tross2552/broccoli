@@ -22,10 +22,10 @@ namespace Sandbox
 		std::shared_ptr<brcl::VertexBuffer> vertexBuffer;
 		std::shared_ptr<brcl::IndexBuffer> indexBuffer;
 
-		float vertices[3 * 7] = {
-			-0.5f , -0.5f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f ,
-			 0.5f , -0.5f , 0.0f , 1.0f , 0.0f , 1.0f, 1.0f ,
-			 0.0f ,  0.5f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f
+		float vertices[3 * 9] = {
+			-0.5f , -0.5f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f , 0.0f, 0.0f,
+			 0.5f , -0.5f , 0.0f , 1.0f , 0.0f , 1.0f, 1.0f , 0.0f, 0.0f,
+			 0.0f ,  0.5f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f , 0.0f, 0.0f
 		};
 
 		vertexBuffer.reset(brcl::VertexBuffer::Create(vertices, sizeof(vertices)));
@@ -33,7 +33,8 @@ namespace Sandbox
 
 		brcl::BufferLayout layout = {
 			{ brcl::ShaderDataType::Float3, "a_Position" },
-			{ brcl::ShaderDataType::Float4, "a_Color"    }
+			{ brcl::ShaderDataType::Float4, "a_Color"    },
+			{ brcl::ShaderDataType::Float2, "a_TexCoord"    }
 		};
 
 		vertexBuffer->SetLayout(layout);
@@ -49,11 +50,11 @@ namespace Sandbox
 
 		m_VertexArraySquare.reset(brcl::VertexArray::Create());
 
-		float vertices2[4 * 7] = {
-			0.0f , 0.0f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f ,
-			0.0f , -1.0f , 0.0f , 1.0f , 0.0f , 1.0f, 1.0f ,
-			-1.0f , -1.0f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f ,
-			-1.0f , 0.0f , 0.0f , 1.0f , 1.0f , 1.0f, 1.0f
+		float vertices2[4 * 9] = {
+			0.0f , 0.0f , 0.0f , 0.0f , 1.0f , 1.0f, 1.0f , 0.0f, 0.0f,
+			0.0f , 1.0f , 0.0f , 1.0f , 0.0f , 1.0f, 1.0f , 0.0f, 1.0f,
+			1.0f , 1.0f , 0.0f , 1.0f , 1.0f , 0.0f, 1.0f , 1.0f, 1.0f,
+			1.0f , 0.0f , 0.0f , 1.0f , 1.0f , 1.0f, 1.0f , 1.0f, 0.0f
 		};
 
 		vertexBuffer.reset(brcl::VertexBuffer::Create(vertices2, sizeof(vertices2)));
@@ -72,6 +73,7 @@ namespace Sandbox
 
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
+			layout(location = 2) in vec2 a_TexCoord;
 
 			uniform mat4 u_ViewProjection;
 			uniform mat4 u_Transform;
@@ -79,12 +81,14 @@ namespace Sandbox
 
 			out vec3 v_Position;
 			out vec4 v_Color;
+			out vec2 v_TexCoord;
 
 			void main()
 			{
 				v_Position = a_Position * 0.5 + 0.5;
 				v_Color = a_Color;
 				v_Color *= u_Color;
+				v_TexCoord = a_TexCoord;
 				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		)";
@@ -94,17 +98,25 @@ namespace Sandbox
 
 			layout(location = 0) out vec4 color;
 
+			uniform sampler2D u_Texture;
+
+		
 			in vec3 v_Position;
 			in vec4 v_Color;
+			in vec2 v_TexCoord;
 
 			void main()
 			{
-				color = vec4( v_Position, 1.0 );
-				color = v_Color;
+				//color   = vec4( v_Position , 1.0 );
+				color = texture(u_Texture, v_TexCoord);
+				//color   = vec4( v_TexCoord , 0.0 , 1.0 );
+				//color  *= v_Color;
 			}
 		)";
 
 		m_Shader.reset(brcl::Shader::Create(vertexSrc, fragmentSrc));
+
+		m_Texture.reset(brcl::Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png"));
 	}
 
 	void ExampleLayer::OnUpdate(brcl::Timestep deltaTime)
@@ -117,13 +129,16 @@ namespace Sandbox
 
 		brcl::Renderer::BeginScene(m_Camera);
 
+		
+		m_Texture->Bind();
+		std::dynamic_pointer_cast<brcl::OpenGLShader>(m_Shader)->UploadUniformInt("u_Texture", 0); //todo: texture slots in shader
 		brcl::Renderer::Submit(m_Shader, m_VertexArray, brcl::Identity4x4());
 		std::dynamic_pointer_cast<brcl::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", color);
 
 
 		brcl::Matrix4x4 scale = brcl::Scale(brcl::Identity4x4(), brcl::Vector3(0.1f));
 
-		for (int i = 0; i < 10; i++)
+		/*for (int i = 0; i < 10; i++)
 		{
 			for (int j = 0; j < 10; j++)
 			{
@@ -132,7 +147,9 @@ namespace Sandbox
 				transform = scale * transform;
 				brcl::Renderer::Submit(m_Shader, m_VertexArraySquare, transform);
 			}
-		}
+		}*/
+
+		brcl::Renderer::Submit(m_Shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
 
 		brcl::Renderer::EndScene();
 

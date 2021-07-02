@@ -19,6 +19,7 @@ IncludeDir["GLFW"] = "Broccoli/vendor/glfw/include"
 IncludeDir["Glad"] = "Broccoli/vendor/glad/include"
 IncludeDir["ImGui"] = "Broccoli/vendor/imgui"
 IncludeDir["Blaze"] = "Broccoli/vendor/blaze"
+IncludeDir["Stb"] = "Broccoli/vendor/stb"
 
 
 include "Broccoli/vendor/imgui"
@@ -43,6 +44,8 @@ project "Broccoli"
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb/**.cpp",
+		"%{prj.name}/vendor/stb/**.h",
 		"%{prj.name}/vendor/blaze/**.h"
 	}
 	
@@ -53,7 +56,8 @@ project "Broccoli"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.Blaze}"
+		"%{IncludeDir.Blaze}",
+		"%{IncludeDir.Stb}"
 	}
 
 	links

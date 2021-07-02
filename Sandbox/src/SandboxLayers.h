@@ -19,6 +19,7 @@ namespace Sandbox
 		std::shared_ptr<brcl::Shader> m_Shader;
 		std::shared_ptr<brcl::VertexArray> m_VertexArray;
 		std::shared_ptr<brcl::VertexArray> m_VertexArraySquare;
+		std::shared_ptr<brcl::Texture2D> m_Texture;
 
 		brcl::Camera m_Camera;
 	};

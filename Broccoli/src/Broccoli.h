@@ -20,4 +20,5 @@
 
 #include "Broccoli/Renderer/Buffer.h"
 #include "Broccoli/Renderer/Shader.h"
+#include "Broccoli/Renderer/Texture.h"
 #include "Broccoli/Renderer/VertexArray.h"
