@@ -3,5 +3,6 @@
 
 namespace brcl
 {
+	//TODO: multiple render platforms
 	RendererAPI::API RendererAPI::s_API = API::OpenGL;
 }

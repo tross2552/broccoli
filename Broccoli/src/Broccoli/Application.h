@@ -25,9 +25,9 @@ namespace brcl
 
 		bool OnWindowClosed(WindowClosedEvent& event);
 
-		static inline Application& Get() { return *s_Instance; }
+		static Application& Get() { return *s_Instance; }
 
-		inline Window& GetWindow() const { return *m_Window; }
+		Window& GetWindow() const { return *m_Window; }
 
 	private:
 		std::unique_ptr<Window> m_Window;

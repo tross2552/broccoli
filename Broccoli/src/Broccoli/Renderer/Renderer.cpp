@@ -6,7 +6,12 @@ namespace brcl
 {
 
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData();
-	
+
+	void Renderer::Init()
+	{
+		RenderCommand::Init();
+	}
+
 	void Renderer::BeginScene(const Camera& camera)
 	{
 		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();

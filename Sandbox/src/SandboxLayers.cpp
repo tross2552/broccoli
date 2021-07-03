@@ -117,6 +117,7 @@ namespace Sandbox
 		m_Shader.reset(brcl::Shader::Create(vertexSrc, fragmentSrc));
 
 		m_Texture.reset(brcl::Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png"));
+		m_TextureLogo.reset(brcl::Texture2D::Create("assets/textures/logo_formatted.png"));
 	}
 
 	void ExampleLayer::OnUpdate(brcl::Timestep deltaTime)
@@ -149,6 +150,8 @@ namespace Sandbox
 			}
 		}*/
 
+		brcl::Renderer::Submit(m_Shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
+		m_TextureLogo->Bind();
 		brcl::Renderer::Submit(m_Shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
 
 		brcl::Renderer::EndScene();

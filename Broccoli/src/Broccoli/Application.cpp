@@ -1,7 +1,8 @@
 #include "brclpch.h"
 #include "Application.h"
+
 #include "Broccoli/Events/ApplicationEvent.h"
-#include "Platform/Windows/WindowsWindow.h"
+#include "Broccoli/Renderer/Renderer.h"
 
 namespace brcl
 {
@@ -15,6 +16,8 @@ namespace brcl
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+
+		Renderer::Init();
 		
 	}
 	Application::~Application()
