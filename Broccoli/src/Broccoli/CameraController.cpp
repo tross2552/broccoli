@@ -83,7 +83,7 @@ namespace brcl
 
 	bool CameraController::OnWindowResized(WindowResizedEvent& event)
 	{
-		m_AspectRatio = event.GetWidth() / event.GetHeight();
+		m_AspectRatio = static_cast<float>(event.GetWidth()) / event.GetHeight();
 		return false;
 	}
 }

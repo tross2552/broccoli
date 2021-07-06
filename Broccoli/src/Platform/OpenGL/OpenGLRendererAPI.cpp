@@ -24,5 +24,9 @@ namespace brcl
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 		BRCL_CORE_INFO("Draw call ({0} indices drawn)", vertexArray->GetIndexBuffer()->GetCount());
 	}
-	
+
+	void OpenGLRendererAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+	{
+		glViewport( x , y , width , height );
+	}
 }

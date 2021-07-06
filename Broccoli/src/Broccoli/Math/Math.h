@@ -30,14 +30,12 @@ namespace brcl
 		return blaze::IdentityMatrix<float>(4);
 		//return Matrix4x4({ {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} });
 	}
-
-	//TODO: make explicit that these functions use homogenous coordinates
 	
 	inline Matrix4x4 Ortho(float left, float right, float bottom, float top) {
 
 		//assume near = -1f and far = 1f;
 		
-		auto ret = static_cast<Matrix4x4>(blaze::IdentityMatrix<float>(4));
+		Matrix4x4 ret = Identity4x4();
 
 		ret(0,0) = 2.0f / (right - left);
 		ret(1,1) = 2.0f / (top - bottom);

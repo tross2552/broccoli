@@ -24,6 +24,7 @@ namespace brcl
 		void OnEvent(Event& e);
 
 		bool OnWindowClosed(WindowClosedEvent& event);
+		bool OnWindowResized(WindowResizedEvent& event);
 
 		static Application& Get() { return *s_Instance; }
 
@@ -33,6 +34,7 @@ namespace brcl
 		std::unique_ptr<Window> m_Window;
 		LayerStack m_LayerStack;
 		bool m_Running = true;
+		bool m_Minimized;
 
 		static Application* s_Instance;
 

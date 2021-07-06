@@ -9,12 +9,12 @@ namespace brcl
 
 	public:
 
-		WindowResizedEvent(float width, float height)
+		WindowResizedEvent(int width, int height)
 			: m_Width(width), m_Height(height) {}
 
 
-		inline float GetWidth() const { return m_Width; }
-		inline float GetHeight() const { return m_Height; }
+		inline int GetWidth() const { return m_Width; }
+		inline int GetHeight() const { return m_Height; }
 
 		EVENT_CLASS_TYPE(WindowResized)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -30,8 +30,8 @@ namespace brcl
 
 	protected:
 
-		float m_Width;
-		float m_Height;
+		int m_Width;
+		int m_Height;
 	};
 
 	class BRCL_API WindowMovedEvent : public Event

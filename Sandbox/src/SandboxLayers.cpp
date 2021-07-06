@@ -10,6 +10,8 @@ namespace Sandbox
 		ImGui::Text("Hello");
 		ImGui::ColorEdit4("Square Color", m_AppLayer->color.data());
 		ImGui::End();
+
+		ImGui::ShowDemoWindow();
 	}
 
 

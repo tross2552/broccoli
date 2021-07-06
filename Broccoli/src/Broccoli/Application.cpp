@@ -10,7 +10,7 @@ namespace brcl
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application() :
-		m_Timer("Application")
+		m_Timer("Application"), m_Minimized(false)
 	{
 		if (!s_Instance) s_Instance = this;
 
@@ -34,10 +34,15 @@ namespace brcl
 
 			Timestep deltaTime = curr - m_PrevTime;
 			m_PrevTime = curr;
-			
-			for (Layer* layer : m_LayerStack)
+
+			if (!m_Minimized)
 			{
-				layer->OnUpdate(deltaTime);
+
+				for (Layer* layer : m_LayerStack)
+				{
+
+					layer->OnUpdate(deltaTime);
+				}
 			}
 
 			m_Window->OnUpdate();
@@ -58,6 +63,7 @@ namespace brcl
 	{
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowClosedEvent>(BRCL_BIND_EVENT_FN(Application::OnWindowClosed) );
+		dispatcher.Dispatch<WindowResizedEvent>(BRCL_BIND_EVENT_FN(Application::OnWindowResized));
 		BRCL_CORE_TRACE(event.ToString());
 
 		for (auto& layer : m_LayerStack)
@@ -68,9 +74,16 @@ namespace brcl
 
 	}
 
-	bool Application::OnWindowClosed(WindowClosedEvent& e)
+	bool Application::OnWindowClosed(WindowClosedEvent& event)
 	{
 		m_Running = false;
-		return true;
+		return false;
+	}
+
+	bool Application::OnWindowResized(WindowResizedEvent& event)
+	{
+		m_Minimized = event.GetWidth() == 0 && event.GetHeight() == 0;
+		Renderer::ResizeViewport(event.GetWidth(), event.GetHeight());
+		return false;
 	}
 }

@@ -79,7 +79,7 @@ namespace brcl
 			data.Width = width;
 			data.Height = height;
 
-			WindowResizedEvent event((float)width, (float)height);
+			WindowResizedEvent event(width, height);
 			data.EventCallback(event);
 			
 		});

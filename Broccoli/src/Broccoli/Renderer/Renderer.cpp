@@ -21,6 +21,11 @@ namespace brcl
 	{
 	}
 
+	void Renderer::ResizeViewport(uint32_t width, uint32_t height)
+	{
+		RenderCommand::SetViewport(0, 0, width, height);
+	}
+
 	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const Matrix4x4& transform)
 	{
 		shader->Bind();
