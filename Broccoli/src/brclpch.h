@@ -12,6 +12,8 @@
 #include<unordered_map>
 #include <unordered_set>
 
+#include <blaze/Blaze.h>
+
 #include "Broccoli/Core/Log.h"
 #include "Broccoli/Core/Core.h"
 #include "Broccoli/Core/Timer.h"

@@ -39,9 +39,11 @@ namespace brcl
 
 		ret(0,0) = 2.0f / (right - left);
 		ret(1,1) = 2.0f / (top - bottom);
-		ret(2,2) = -1.0f;
+		ret(2,2) = 1.0f / 2.0f;
+		
 		ret(3,0) = -(right + left) / (right - left);
 		ret(3,1) = -(top + bottom) / (top - bottom);
+		ret(3, 2) = 1.0f / 2.0f;
 		
 		return ret;
 	}
@@ -50,9 +52,9 @@ namespace brcl
 	{
 		auto ret = m;
 		
-		ret(3, 0) = blaze::sum(blaze::column(m,0)* v[0]);
-		ret(3, 1) = blaze::sum(blaze::column(m, 1) * v[1]);
-		ret(3, 2) = blaze::sum(blaze::column(m, 2) * v[2]);
+		ret(0, 3) = blaze::sum(blaze::column(m,0)* v[0]);
+		ret(1, 3) = blaze::sum(blaze::column(m, 1) * v[1]);
+		ret(2, 3) = blaze::sum(blaze::column(m, 2) * v[2]);
 
 		return ret;
 	}
