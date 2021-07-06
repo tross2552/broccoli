@@ -22,7 +22,7 @@ namespace Sandbox
 		std::shared_ptr<brcl::Texture2D> m_Texture;
 		std::shared_ptr<brcl::Texture2D> m_TextureLogo;
 
-		brcl::Camera m_Camera;
+		brcl::CameraController m_CameraController;
 	};
 
 	//temporary app gui!!!!!

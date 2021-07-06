@@ -1,6 +1,6 @@
 #include "brclpch.h"
 #include "Application.h"
-
+#include "Broccoli/Core/Core.h"
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Renderer/Renderer.h"
 
@@ -57,7 +57,7 @@ namespace brcl
 	void Application::OnEvent(Event& event)
 	{
 		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<WindowClosedEvent>(std::bind(&Application::OnWindowClosed, this, std::placeholders::_1));
+		dispatcher.Dispatch<WindowClosedEvent>(BRCL_BIND_EVENT_FN(Application::OnWindowClosed) );
 		BRCL_CORE_TRACE(event.ToString());
 
 		for (auto& layer : m_LayerStack)

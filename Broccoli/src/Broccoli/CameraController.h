@@ -1,0 +1,34 @@
+﻿#pragma once
+#include "Broccoli/Renderer/Camera.h"
+#include "Broccoli/Core/Timer.h"
+#include "Broccoli/Events/ApplicationEvent.h"
+#include "Broccoli/Events/MouseEvent.h"
+
+namespace brcl
+{
+	class CameraController
+	{
+	public:
+		CameraController(float aspectRatio);
+
+		Transform& GetTransform() { return m_Transform; }
+		Camera& GetCamera() { return m_Camera; }
+		
+		void OnUpdate(Timestep deltaTime);
+		void OnEvent(Event& e);
+	
+	private:
+		
+		bool OnMouseScrolled(MouseScrolledEvent& e);
+		bool OnWindowResized(WindowResizedEvent& e);
+	
+	private:
+		float m_ZoomLevel = 1.0f;
+		
+		float m_AspectRatio;
+		Camera m_Camera;
+		Transform m_Transform;
+		
+	};
+}
+

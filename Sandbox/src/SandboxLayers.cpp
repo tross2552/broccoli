@@ -14,7 +14,7 @@ namespace Sandbox
 
 
 	ExampleLayer::ExampleLayer() :
-		Layer("Example"), m_Camera(-1.6, 1.6, -0.9, 0.9), color(1.0f)
+		Layer("Example"), m_CameraController(16.0f/9.0f), color(1.0f)
 	{
 		m_VertexArray.reset(brcl::VertexArray::Create());
 
@@ -77,11 +77,14 @@ namespace Sandbox
 	{
 
 		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
+		m_CameraController.OnUpdate(deltaTime);
+
+		
 
 		brcl::RenderCommand::SetClearColor({ 1.0f , 0.0f, 1.0f, 1.0f });
 		brcl::RenderCommand::Clear();
 
-		brcl::Renderer::BeginScene(m_Camera);
+		brcl::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		auto shader = m_ShaderLibrary.Get("Texture");
 		
@@ -98,60 +101,12 @@ namespace Sandbox
 
 		brcl::Renderer::EndScene();
 
-		brcl::Transform& camTransform = m_Camera.GetTransform();
-
-		static bool rotateFlag;
-
-		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::E)) rotateFlag = true;
-		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::Q)) rotateFlag = false;
-
-		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::W))
-		{
-			BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
-			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime);
-			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ -1.0f,0.0f,0.0f }) * deltaTime);
-		}
-
-		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::A))
-		{
-			BRCL_CORE_INFO("LEFT LEFT LEFT LEFT !!!!!!!");
-			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime);
-			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ 0.0f,-1.0f,0.0f }) * deltaTime);
-		}
-
-		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::S))
-		{
-			BRCL_CORE_INFO("DOWN DOWN DOWN DOWN !!!!!!!");
-			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime);
-			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ 1.0f,0.0f,0.0f }) * deltaTime);
-		}
-
-		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::D))
-		{
-			BRCL_CORE_INFO("RIGHT RIGHT RIGHT RIGHT !!!!!!!");
-			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime);
-			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ 0.0f,1.0f,0.0f }) * deltaTime);
-		}
-
-		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::F))
-		{
-			if (!rotateFlag) camTransform.SetPosition(camTransform.GetPosition() + brcl::Vector3({ 0.0f, 0.0f, 1.0f }) * deltaTime);
-			else camTransform.SetRotation(camTransform.GetRotation() + brcl::Vector3({ 0.0f,0.0f,1.0f }) * deltaTime);
-		}
-
-		if (brcl::Input::IsKeyPressed(brcl::Input::BRCLKeyCodes::X))
-		{
-			camTransform.SetPosition({ 0.0f, 0.0f, 0.0f });
-			camTransform.SetRotation({ 0.0f,0.0f,0.0f });
-		}
-
-		m_Camera.OnUpdate();
-
 
 	}
 
 	void ExampleLayer::OnEvent(brcl::Event& event)
 	{
 		BRCL_TRACE("{0}", event);
+		m_CameraController.OnEvent(event);
 	}
 }

@@ -11,6 +11,8 @@
 #include "Broccoli/Input.h"
 #include "Broccoli/Math/Math.h"
 
+#include "Broccoli/CameraController.h"
+
 // RENDERER ----------------
 
 #include "Broccoli/Renderer/Renderer.h"

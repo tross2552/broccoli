@@ -12,8 +12,9 @@ namespace Sandbox
 		Sandbox()
 		{
 			ExampleLayer* app = new ExampleLayer();
-			PushLayer(app);
 			PushLayer(new ExampleImGuiLayer(app));
+			PushLayer(app);
+			
 		}
 	};
 
