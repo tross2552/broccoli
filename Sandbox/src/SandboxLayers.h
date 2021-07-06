@@ -16,7 +16,7 @@ namespace Sandbox
 
 	private:
 
-		std::shared_ptr<brcl::Shader> m_Shader;
+		brcl::ShaderLibrary m_ShaderLibrary;
 		std::shared_ptr<brcl::VertexArray> m_VertexArray;
 		std::shared_ptr<brcl::VertexArray> m_VertexArraySquare;
 		std::shared_ptr<brcl::Texture2D> m_Texture;

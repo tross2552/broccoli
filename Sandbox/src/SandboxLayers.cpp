@@ -67,54 +67,7 @@ namespace Sandbox
 		indexBuffer.reset(brcl::IndexBuffer::Create(indices2, sizeof(indices2)));
 		m_VertexArraySquare->SetIndexBuffer(indexBuffer);
 
-
-		const std::string vertexSrc = R"(
-			#version 330 core
-
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec4 a_Color;
-			layout(location = 2) in vec2 a_TexCoord;
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-			uniform vec4 u_Color;
-
-			out vec3 v_Position;
-			out vec4 v_Color;
-			out vec2 v_TexCoord;
-
-			void main()
-			{
-				v_Position = a_Position * 0.5 + 0.5;
-				v_Color = a_Color;
-				v_Color *= u_Color;
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
-
-		const std::string fragmentSrc = R"(
-			#version 330 core
-
-			layout(location = 0) out vec4 color;
-
-			uniform sampler2D u_Texture;
-
-		
-			in vec3 v_Position;
-			in vec4 v_Color;
-			in vec2 v_TexCoord;
-
-			void main()
-			{
-				//color   = vec4( v_Position , 1.0 );
-				color = texture(u_Texture, v_TexCoord);
-				//color   = vec4( v_TexCoord , 0.0 , 1.0 );
-				//color  *= v_Color;
-			}
-		)";
-
-		m_Shader.reset(brcl::Shader::Create(vertexSrc, fragmentSrc));
+		m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		m_Texture.reset(brcl::Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png"));
 		m_TextureLogo.reset(brcl::Texture2D::Create("assets/textures/logo_formatted.png"));
@@ -130,29 +83,18 @@ namespace Sandbox
 
 		brcl::Renderer::BeginScene(m_Camera);
 
+		auto shader = m_ShaderLibrary.Get("Texture");
 		
 		m_Texture->Bind();
-		std::dynamic_pointer_cast<brcl::OpenGLShader>(m_Shader)->UploadUniformInt("u_Texture", 0); //todo: texture slots in shader
-		brcl::Renderer::Submit(m_Shader, m_VertexArray, brcl::Identity4x4());
-		std::dynamic_pointer_cast<brcl::OpenGLShader>(m_Shader)->UploadUniformFloat4("u_Color", color);
+		std::dynamic_pointer_cast<brcl::OpenGLShader>(shader)->UploadUniformInt("u_Texture", 0); //todo: texture slots in shader
+		brcl::Renderer::Submit(shader, m_VertexArray, brcl::Identity4x4());
+		std::dynamic_pointer_cast<brcl::OpenGLShader>(shader)->UploadUniformFloat4("u_Color", color);
 
+		
 
-		brcl::Matrix4x4 scale = brcl::Scale(brcl::Identity4x4(), brcl::Vector3(0.1f));
-
-		/*for (int i = 0; i < 10; i++)
-		{
-			for (int j = 0; j < 10; j++)
-			{
-				brcl::Vector3 pos({ i * 0.11f, j * 0.11f, 0.0f });
-				brcl::Matrix4x4 transform = brcl::Translate(brcl::Identity4x4(), pos);
-				transform = scale * transform;
-				brcl::Renderer::Submit(m_Shader, m_VertexArraySquare, transform);
-			}
-		}*/
-
-		brcl::Renderer::Submit(m_Shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
+		brcl::Renderer::Submit(shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
 		m_TextureLogo->Bind();
-		brcl::Renderer::Submit(m_Shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
+		brcl::Renderer::Submit(shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
 
 		brcl::Renderer::EndScene();
 
