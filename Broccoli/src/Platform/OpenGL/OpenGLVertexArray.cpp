@@ -50,7 +50,6 @@ namespace brcl
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
-		m_VertexBufferIndex += layout.GetElements().size();
 		
 	}
 	

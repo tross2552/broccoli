@@ -6,24 +6,24 @@
 
 namespace brcl
 {
-	Shader* Shader::Create(const std::string& path)
+	std::unique_ptr<Shader> Shader::Create(const std::string& path)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    BRCL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL:  return new OpenGLShader(path);
+		case RendererAPI::API::OpenGL:  return std::make_unique<OpenGLShader>(path);
 		}
 
 		BRCL_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 	
-	Shader* Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+	std::unique_ptr<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    BRCL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL:  return new OpenGLShader(name, vertexSrc, fragmentSrc);
+		case RendererAPI::API::OpenGL:  return std::make_unique<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
 
 		BRCL_CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -43,22 +43,22 @@ namespace brcl
 	}
 	
 
-	Shader* ShaderLibrary::Load(const std::string& path)
+	std::shared_ptr<Shader> ShaderLibrary::Load(const std::string& path)
 	{
-		auto shader = Shader::Create(path);
+		std::shared_ptr<Shader> shader = Shader::Create(path);
 		if (!shader) return nullptr;
 		
-		Add(std::shared_ptr<Shader>(shader));
+		Add(shader);
 		return shader;
 		
 	}
 
-	Shader* ShaderLibrary::Load(const std::string& name, const std::string& path)
+	std::shared_ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& path)
 	{
-		auto shader = Shader::Create(path);
-		if (!shader) return nullptr;
+		std::shared_ptr<Shader> shader = Shader::Create(path);
+		if (!shader) return std::shared_ptr<Shader>(nullptr);
 		
-		Add(std::shared_ptr<Shader>(shader));
+		Add(shader);
 		return shader;
 	}
 

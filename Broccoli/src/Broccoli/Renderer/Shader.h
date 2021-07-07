@@ -14,8 +14,8 @@ namespace brcl
 
 		virtual const std::string& GetName() const = 0;
 
-		static Shader* Create(const std::string& path); //TODO: proper filesystem
-		static Shader* Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+		static std::unique_ptr<Shader> Create(const std::string& path); //TODO: proper filesystem
+		static std::unique_ptr<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 
 		//TODO: decide how to handle uniforms
 		//void UploadUniformFloat4(const std::string& uniformName, const Vector4& vector);
@@ -30,8 +30,8 @@ namespace brcl
 		void Add(const std::string& name, std::shared_ptr<Shader> shader);
 		void Add(std::shared_ptr<Shader> shader);
 
-		Shader* Load(const std::string& path);
-		Shader* Load(const std::string& name, const std::string& path);
+		std::shared_ptr<Shader> Load(const std::string& path);
+		std::shared_ptr<Shader> Load(const std::string& name, const std::string& path);
 		
 		std::shared_ptr<Shader> Get(const std::string& name);
 

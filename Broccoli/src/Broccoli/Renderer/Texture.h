@@ -20,7 +20,7 @@ namespace brcl
 	class Texture2D : public Texture
 	{
 	public:
-		static Texture2D* Create(const std::string& path);
+		static std::unique_ptr<Texture2D> Create(const std::string& path);
 	};
 
 }
