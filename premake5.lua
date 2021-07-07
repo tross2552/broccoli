@@ -71,7 +71,8 @@ project "Broccoli"
 	
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"BLAS_BLAS_IS_64BIT"
 	}
 
 	

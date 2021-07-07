@@ -40,7 +40,7 @@ namespace brcl
 		for (auto& element : vertexBuffer->GetLayout().GetElements())
 		{
 			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, ShaderDataTypeCount(element.Type), ShaderDataTypeToGLType(element.Type), GL_FALSE, vertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
+			glVertexAttribPointer(index, ShaderDataTypeCount(element.Type), ShaderDataTypeToGLType(element.Type), GL_FALSE, vertexBuffer->GetLayout().GetStride(), (const void*)(intptr_t)element.Offset);
 			index++;
 		}
 
