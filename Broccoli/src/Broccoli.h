@@ -16,6 +16,7 @@
 // RENDERER ----------------
 
 #include "Broccoli/Renderer/Renderer.h"
+#include "Broccoli/Renderer/Renderer2D.h"
 #include "Broccoli/Renderer/RenderCommand.h"
 
 #include "Broccoli/Renderer/Camera.h"

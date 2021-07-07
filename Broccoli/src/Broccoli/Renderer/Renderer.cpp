@@ -1,38 +1,42 @@
 ﻿#include "brclpch.h"
 #include "Renderer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
-namespace brcl
+namespace brcl::renderer
 {
 
-	Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData();
+	static SceneData* s_SceneData = new SceneData();
 
-	void Renderer::Init()
+	void Init()
 	{
 		RenderCommand::Init();
 	}
 
-	void Renderer::BeginScene(const Camera& camera)
+	void BeginScene(const Camera& camera)
 	{
 		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 
-	void Renderer::EndScene()
+	void EndScene()
 	{
 	}
 
-	void Renderer::ResizeViewport(uint32_t width, uint32_t height)
+	void ResizeViewport(uint32_t width, uint32_t height)
 	{
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const Matrix4x4& transform)
+	void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const Matrix4x4& transform)
 	{
 		shader->Bind();
 		//TODO: handle uniforms in Shader base class then remove these casts
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
+		shader->SetUniformMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+		shader->SetUniformMat4("u_Transform", transform);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
+	}
+
+	RendererAPI::API GetAPI()
+	{
+		return RendererAPI::GetAPI();
 	}
 }

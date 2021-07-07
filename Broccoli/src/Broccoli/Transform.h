@@ -9,7 +9,7 @@ namespace brcl
 
 		Transform();
 		
-		Matrix4x4 GetMatrix();
+		Matrix4x4 GetMatrix() const;
 
 		void SetPosition(const Vector3& position) { m_Position = position; }
 		const Vector3& GetPosition() const { return m_Position; }

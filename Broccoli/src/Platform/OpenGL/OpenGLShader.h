@@ -24,7 +24,15 @@ namespace brcl
 		void Bind() const override;
 		void Unbind() const override;
 
-		void UploadUniformInt    (const std::string& uniformName, int vector);
+		void SetUniformInt    (const std::string& uniformName, int value)               override { UploadUniformInt    ( uniformName,  value ); }
+		void SetUniformFloat  (const std::string& uniformName, float value)             override { UploadUniformFloat  ( uniformName,  value ); }
+		void SetUniformFloat2 (const std::string& uniformName, const Vector2& vector)   override { UploadUniformFloat2 ( uniformName, vector ); }
+		void SetUniformFloat3 (const std::string& uniformName, const Vector3& vector)   override { UploadUniformFloat3 ( uniformName, vector ); }
+		void SetUniformFloat4 (const std::string& uniformName, const Vector4& vector)   override { UploadUniformFloat4 ( uniformName, vector ); }
+		void SetUniformMat3   (const std::string& uniformName, const Matrix4x4& matrix) override { UploadUniformMat3   ( uniformName, matrix ); }
+		void SetUniformMat4   (const std::string& uniformName, const Matrix4x4& matrix) override { UploadUniformMat4   ( uniformName, matrix ); }
+
+		void UploadUniformInt    (const std::string& uniformName, int value);
 		
 		void UploadUniformFloat  (const std::string& uniformName, float value);
 		void UploadUniformFloat2 (const std::string& uniformName, const Vector2& vector);
@@ -33,8 +41,6 @@ namespace brcl
 
 		void UploadUniformMat3   (const std::string& uniformName, const Matrix3x3& matrix);
 		void UploadUniformMat4   (const std::string& uniformName, const Matrix4x4& matrix);
-
-		
 	private:
 		uint32_t m_RendererID;
 		std::string m_Name;

@@ -2,6 +2,8 @@
 
 #include <blaze/Blaze.h>
 
+//simple wrapper around blaze library, to be extended over time
+
 namespace brcl
 {
 	
@@ -47,7 +49,7 @@ namespace brcl
 		
 		return ret;
 	}
-
+	
 	inline Matrix4x4 Translate(const Matrix4x4& m, const Vector3& v)
 	{
 		auto ret = m;
@@ -70,6 +72,16 @@ namespace brcl
 		return ret;
 	}
 
+	inline Matrix4x4 Scale(const Matrix4x4& m, const Vector2& v)
+	{
+		auto ret = m;
+
+		blaze::row(ret, 0) *= v[0];
+		blaze::row(ret, 1) *= v[1];
+
+		return ret;
+	}
+
 	inline Matrix4x4 Scale(const Matrix4x4& m, const Vector3& v)
 	{
 		auto ret = m;
@@ -82,14 +94,14 @@ namespace brcl
 	}
 
 	//TODO: quaternions
-	inline Matrix4x4 Rotate(const Matrix4x4& m, const Vector3& e)
+	inline Matrix4x4 Rotate(const Matrix4x4& m, const Vector3& euler)
 	{
 		Matrix4x4 ret = Identity4x4();
 		
 
 		//TODO: this math needs fixed
 		
-		auto& [x, y, z] = e;
+		auto& [x, y, z] = euler;
 
 		ret(0,0) =  cos(z) * cos(y);
 		ret(1,0) =  sin(z) * cos(y);

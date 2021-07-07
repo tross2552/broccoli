@@ -7,29 +7,6 @@ namespace Sandbox
 	
 	void Sandbox2DLayer::OnAttach()
 	{
-		std::shared_ptr<brcl::VertexBuffer> vertexBuffer;
-		std::shared_ptr<brcl::IndexBuffer>  indexBuffer;
-
-		brcl::BufferLayout layout = {
-			{ brcl::ShaderDataType::Float3, "a_Position" }
-		};
-
-		float vertices2[4 * 3] = {
-			0.0f , 0.0f , 0.0f ,
-			0.0f , 1.0f , 0.0f ,
-			1.0f , 1.0f , 0.0f ,
-			1.0f , 0.0f , 0.0f
-		};
-		uint32_t indices2[6] = { 0 , 1 , 2, 0, 2, 3 };
-
-		m_VertexArray = brcl::VertexArray::Create();
-		vertexBuffer = brcl::VertexBuffer::Create(vertices2, sizeof(vertices2));
-		indexBuffer = brcl::IndexBuffer::Create(indices2, sizeof(indices2));
-		vertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(vertexBuffer);
-		m_VertexArray->SetIndexBuffer(indexBuffer);
-
-		m_FlatShader = brcl::Shader::Create("assets/shaders/FlatColor.glsl");
 	}
 
 	void Sandbox2DLayer::OnDetach()
@@ -41,23 +18,20 @@ namespace Sandbox
 		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
 		m_CameraController.OnUpdate(deltaTime);
 
-		brcl::RenderCommand::SetClearColor({ 0.1f , 0.1f, 0.1f, 1.0f });
-		brcl::RenderCommand::Clear();
-
 		
-		brcl::Renderer::BeginScene(m_CameraController.GetCamera());
+		brcl::renderer2d::BeginScene(m_CameraController.GetCamera());
 
-		m_FlatShader->Bind();
-		std::dynamic_pointer_cast<brcl::OpenGLShader>(m_FlatShader)->UploadUniformFloat4("u_Color", m_Color);
-
-		brcl::Renderer::Submit(m_FlatShader, m_VertexArray, brcl::Identity4x4());
+		brcl::renderer2d::DrawQuad(brcl::Vector2({0.0f, 0.0f}) , {1.0f, 1.0f}, m_Color);
+		brcl::renderer2d::DrawQuad(brcl::Vector2({ -1.0f, 2.0f }), { 0.25f, 1.5f }, { 1.0f - m_Color[0], 1.0f - m_Color[1], 1.0f - m_Color[2], 1.0f });
 		
-		brcl::Renderer::EndScene();
+		brcl::renderer::EndScene();
 		
 	}
 
 	void Sandbox2DLayer::OnEvent(brcl::Event& event)
 	{
+		BRCL_TRACE("{0}", event);
+		m_CameraController.OnEvent(event);
 	}
 
 	//--------------Engine Debug Application-----------------
@@ -76,13 +50,15 @@ namespace Sandbox
 		Layer("Example"), m_CameraController(16.0f/9.0f), m_Color(1.0f)
 	{
 
-		std::shared_ptr<brcl::VertexBuffer> vertexBuffer;
-		std::shared_ptr<brcl::IndexBuffer>  indexBuffer;
+		using namespace brcl;
 		
-		brcl::BufferLayout layout = {
-			{ brcl::ShaderDataType::Float3, "a_Position" },
-			{ brcl::ShaderDataType::Float4, "a_Color"    },
-			{ brcl::ShaderDataType::Float2, "a_TexCoord"    }
+		std::shared_ptr<VertexBuffer> vertexBuffer;
+		std::shared_ptr<IndexBuffer>  indexBuffer;
+		
+		BufferLayout layout = {
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float4, "a_Color"    },
+			{ ShaderDataType::Float2, "a_TexCoord"    }
 		};
 		
 
@@ -95,9 +71,9 @@ namespace Sandbox
 		uint32_t indices[3] = { 0 , 1 , 2 };
 
 		
-		m_VertexArray = brcl::VertexArray::Create();
-		vertexBuffer = brcl::VertexBuffer::Create(vertices, sizeof(vertices));
-		indexBuffer  = brcl::IndexBuffer::Create(indices, sizeof(indices));
+		m_VertexArray = VertexArray::Create();
+		vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
+		indexBuffer  = IndexBuffer::Create(indices, sizeof(indices));
 		vertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 		m_VertexArray->SetIndexBuffer(indexBuffer);
@@ -111,9 +87,9 @@ namespace Sandbox
 		};
 		uint32_t indices2[6] = { 0 , 1 , 2, 0, 2, 3 };
 
-		m_VertexArraySquare = brcl::VertexArray::Create();
-		vertexBuffer = brcl::VertexBuffer::Create(vertices2, sizeof(vertices2));
-		indexBuffer  = brcl::IndexBuffer::Create(indices2, sizeof(indices2));
+		m_VertexArraySquare = VertexArray::Create();
+		vertexBuffer = VertexBuffer::Create(vertices2, sizeof(vertices2));
+		indexBuffer  = IndexBuffer::Create(indices2, sizeof(indices2));
 		vertexBuffer->SetLayout(layout);
 		m_VertexArraySquare->AddVertexBuffer(vertexBuffer);
 		m_VertexArraySquare->SetIndexBuffer(indexBuffer);
@@ -121,35 +97,37 @@ namespace Sandbox
 		
 		m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		
-		m_Texture     = brcl::Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
-		m_TextureLogo = brcl::Texture2D::Create("assets/textures/logo_formatted.png");
+		m_Texture     = Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
+		m_TextureLogo = Texture2D::Create("assets/textures/logo_formatted.png");
 	}
 
 	void ExampleLayer::OnUpdate(brcl::Timestep deltaTime)
 	{
 
+		using namespace brcl;
+		
 		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
 		m_CameraController.OnUpdate(deltaTime);
 
-		brcl::RenderCommand::SetClearColor({ 1.0f , 0.0f, 1.0f, 1.0f });
-		brcl::RenderCommand::Clear();
+		RenderCommand::SetClearColor({ 1.0f , 0.0f, 1.0f, 1.0f });
+		RenderCommand::Clear();
 
-		brcl::Renderer::BeginScene(m_CameraController.GetCamera());
+		renderer::BeginScene(m_CameraController.GetCamera());
 
 		auto shader = m_ShaderLibrary.Get("Texture");
 		
 		m_Texture->Bind();
 		std::dynamic_pointer_cast<brcl::OpenGLShader>(shader)->UploadUniformInt("u_Texture", 0); //todo: texture slots in shader
-		brcl::Renderer::Submit(shader, m_VertexArray, brcl::Identity4x4());
+		renderer::Submit(shader, m_VertexArray, brcl::Identity4x4());
 		std::dynamic_pointer_cast<brcl::OpenGLShader>(shader)->UploadUniformFloat4("u_Color", m_Color);
 
 		
 
-		brcl::Renderer::Submit(shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
+		renderer::Submit(shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
 		m_TextureLogo->Bind();
-		brcl::Renderer::Submit(shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
+		renderer::Submit(shader, m_VertexArraySquare, brcl::Scale(brcl::Identity4x4(), 2.0f));
 
-		brcl::Renderer::EndScene();
+		renderer::EndScene();
 
 
 	}

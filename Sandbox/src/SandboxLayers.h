@@ -20,11 +20,6 @@ namespace Sandbox
 
 	private:
 		brcl::CameraController m_CameraController;
-
-		//todo: abstract these away
-		std::shared_ptr<brcl::VertexArray> m_VertexArray;
-		std::shared_ptr<brcl::Shader> m_FlatShader;
-		std::shared_ptr<brcl::Texture2D> m_Texture;
 		brcl::Vector4 m_Color;
 
 

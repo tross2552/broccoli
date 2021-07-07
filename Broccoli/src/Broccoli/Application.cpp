@@ -3,6 +3,7 @@
 #include "Broccoli/Core/Core.h"
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Renderer/Renderer.h"
+#include "Broccoli/Renderer/Renderer2D.h"
 
 namespace brcl
 {
@@ -17,7 +18,8 @@ namespace brcl
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
-		Renderer::Init();
+		renderer::Init();
+		renderer2d::Init();
 		
 	}
 	Application::~Application()
@@ -83,7 +85,7 @@ namespace brcl
 	bool Application::OnWindowResized(WindowResizedEvent& event)
 	{
 		m_Minimized = event.GetWidth() == 0 && event.GetHeight() == 0;
-		Renderer::ResizeViewport(event.GetWidth(), event.GetHeight());
+		renderer::ResizeViewport(event.GetWidth(), event.GetHeight());
 		return false;
 	}
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "Broccoli/Math/Math.h"
 
 namespace brcl
 {
@@ -17,9 +18,13 @@ namespace brcl
 		static std::unique_ptr<Shader> Create(const std::string& path); //TODO: proper filesystem
 		static std::unique_ptr<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 
-		//TODO: decide how to handle uniforms
-		//void UploadUniformFloat4(const std::string& uniformName, const Vector4& vector);
-		//void UploadUniformMat4(const std::string& uniformName, const Matrix4x4& matrix);
+		virtual void SetUniformInt    (const std::string& uniformName, int   value) = 0;
+		virtual void SetUniformFloat  (const std::string& uniformName, float value) = 0;
+		virtual void SetUniformFloat2 (const std::string& uniformName, const Vector2&   vector) = 0;
+		virtual void SetUniformFloat3 (const std::string& uniformName, const Vector3&   vector) = 0;
+		virtual void SetUniformFloat4 (const std::string& uniformName, const Vector4&   vector) = 0;
+		virtual void SetUniformMat3   (const std::string& uniformName, const Matrix4x4& matrix) = 0;
+		virtual void SetUniformMat4   (const std::string& uniformName, const Matrix4x4& matrix) = 0;
 		
 	};
 
