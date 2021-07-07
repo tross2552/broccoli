@@ -3,7 +3,65 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Sandbox
-{	
+{
+	
+	void Sandbox2DLayer::OnAttach()
+	{
+		std::shared_ptr<brcl::VertexBuffer> vertexBuffer;
+		std::shared_ptr<brcl::IndexBuffer>  indexBuffer;
+
+		brcl::BufferLayout layout = {
+			{ brcl::ShaderDataType::Float3, "a_Position" }
+		};
+
+		float vertices2[4 * 3] = {
+			0.0f , 0.0f , 0.0f ,
+			0.0f , 1.0f , 0.0f ,
+			1.0f , 1.0f , 0.0f ,
+			1.0f , 0.0f , 0.0f
+		};
+		uint32_t indices2[6] = { 0 , 1 , 2, 0, 2, 3 };
+
+		m_VertexArray = brcl::VertexArray::Create();
+		vertexBuffer = brcl::VertexBuffer::Create(vertices2, sizeof(vertices2));
+		indexBuffer = brcl::IndexBuffer::Create(indices2, sizeof(indices2));
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
+		m_VertexArray->SetIndexBuffer(indexBuffer);
+
+		m_FlatShader = brcl::Shader::Create("assets/shaders/FlatColor.glsl");
+	}
+
+	void Sandbox2DLayer::OnDetach()
+	{
+	}
+
+	void Sandbox2DLayer::OnUpdate(brcl::Timestep deltaTime)
+	{
+		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
+		m_CameraController.OnUpdate(deltaTime);
+
+		brcl::RenderCommand::SetClearColor({ 0.1f , 0.1f, 0.1f, 1.0f });
+		brcl::RenderCommand::Clear();
+
+		
+		brcl::Renderer::BeginScene(m_CameraController.GetCamera());
+
+		m_FlatShader->Bind();
+		std::dynamic_pointer_cast<brcl::OpenGLShader>(m_FlatShader)->UploadUniformFloat4("u_Color", m_Color);
+
+		brcl::Renderer::Submit(m_FlatShader, m_VertexArray, brcl::Identity4x4());
+		
+		brcl::Renderer::EndScene();
+		
+	}
+
+	void Sandbox2DLayer::OnEvent(brcl::Event& event)
+	{
+	}
+
+	//--------------Engine Debug Application-----------------
+	
 	void ExampleImGuiLayer::OnImGuiRender()
 	{
 		ImGui::Begin("Settings");
@@ -72,8 +130,6 @@ namespace Sandbox
 
 		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
 		m_CameraController.OnUpdate(deltaTime);
-
-		
 
 		brcl::RenderCommand::SetClearColor({ 1.0f , 0.0f, 1.0f, 1.0f });
 		brcl::RenderCommand::Clear();

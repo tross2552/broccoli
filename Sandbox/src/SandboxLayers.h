@@ -3,6 +3,34 @@
 
 namespace Sandbox
 {
+	class Sandbox2DLayer : public brcl::Layer
+	{
+		friend class ExampleImGuiLayer;
+	public:
+
+		Sandbox2DLayer::Sandbox2DLayer() :
+			Layer("Example"), m_CameraController(16.0f / 9.0f), m_Color(1.0f) {}
+		~Sandbox2DLayer() override = default;
+
+		void OnAttach() override;
+		void OnDetach() override;
+		
+		void OnUpdate(brcl::Timestep deltaTime) override;
+		void OnEvent(brcl::Event& event) override;
+
+	private:
+		brcl::CameraController m_CameraController;
+
+		//todo: abstract these away
+		std::shared_ptr<brcl::VertexArray> m_VertexArray;
+		std::shared_ptr<brcl::Shader> m_FlatShader;
+		std::shared_ptr<brcl::Texture2D> m_Texture;
+		brcl::Vector4 m_Color;
+
+
+	};
+
+	//--------------Engine Debug Application-----------------
 	
 	class ExampleLayer : public brcl::Layer
 	{
@@ -34,7 +62,7 @@ namespace Sandbox
 	{
 	public:
 
-		ExampleImGuiLayer(ExampleLayer* layer) :
+		ExampleImGuiLayer(Sandbox2DLayer* layer) :
 			ImGuiLayer("AppGuiLayer"), m_AppLayer(layer)
 		{
 		}
@@ -43,6 +71,6 @@ namespace Sandbox
 
 	private:
 
-		ExampleLayer* m_AppLayer;
+		Sandbox2DLayer* m_AppLayer;
 	};
 }

@@ -11,10 +11,9 @@ namespace Sandbox
 		
 		Sandbox()
 		{
-			ExampleLayer* app = new ExampleLayer();
+			Sandbox2DLayer* app = new Sandbox2DLayer();
 			PushLayer(new ExampleImGuiLayer(app));
 			PushLayer(app);
-			
 		}
 	};
 
