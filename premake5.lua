@@ -9,6 +9,11 @@ workspace "Broccoli"
 		"Dist"
 	}
 	
+	flags
+	{
+		"MultiProcessorCompile"
+	}
+	
 	startproject "Sandbox"
 
 

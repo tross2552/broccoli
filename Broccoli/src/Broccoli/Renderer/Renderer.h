@@ -32,7 +32,7 @@ namespace brcl
 			Matrix4x4 ViewProjectionMatrix;
 		};
 
-		static SceneData* m_SceneData;
+		static SceneData* s_SceneData;
 	};
 
 }

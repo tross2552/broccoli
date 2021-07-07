@@ -11,7 +11,7 @@ namespace brcl
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
 		glGenVertexArrays(1, &m_RendererID);
-		OpenGLVertexArray::Bind();
+		glBindVertexArray(m_RendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
@@ -35,16 +35,22 @@ namespace brcl
 		
 		glBindVertexArray(m_RendererID);
 		vertexBuffer->Bind();
-
-		uint32_t index = 0;
+		const BufferLayout& layout = vertexBuffer->GetLayout();
+		
 		for (auto& element : vertexBuffer->GetLayout().GetElements())
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, ShaderDataTypeCount(element.Type), ShaderDataTypeToGLType(element.Type), GL_FALSE, vertexBuffer->GetLayout().GetStride(), (const void*)(intptr_t)element.Offset);
-			index++;
+			glEnableVertexAttribArray(m_VertexBufferIndex);
+			glVertexAttribPointer(m_VertexBufferIndex,
+				ShaderDataTypeCount(element.Type),
+				ShaderDataTypeToGLType(element.Type),
+				GL_FALSE,
+				layout.GetStride(),
+				(const void*)(intptr_t)element.Offset);
+			m_VertexBufferIndex++;
 		}
 
 		m_VertexBuffers.push_back(vertexBuffer);
+		m_VertexBufferIndex += layout.GetElements().size();
 		
 	}
 	
