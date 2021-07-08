@@ -6,7 +6,7 @@ namespace brcl
 	{
 	public:
 
-		enum BRCLMouseCodes
+		enum MouseCode
 		{
 			BUTTON_1 = 0,
 			BUTTON_2 = 1,
@@ -18,7 +18,7 @@ namespace brcl
 			BUTTON_8 = 7
 		};
 
-		enum BRCLKeyCodes
+		enum KeyCode
 		{
 			SPACE             = 32,
 			APOSTROPHE        = 39,
