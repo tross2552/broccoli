@@ -1,6 +1,5 @@
 ﻿#include "SandboxLayers.h"
 #include "imgui/imgui.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Sandbox
 {
@@ -131,9 +130,9 @@ namespace Sandbox
 		auto shader = m_ShaderLibrary.Get("Texture");
 		
 		m_Texture->Bind();
-		std::dynamic_pointer_cast<brcl::OpenGLShader>(shader)->UploadUniformInt("u_Texture", 0); //todo: texture slots in shader
+		shader->SetUniformInt("u_Texture", 0); //todo: texture slots in shader
 		renderer::Submit(shader, m_VertexArray, brcl::Identity4x4());
-		std::dynamic_pointer_cast<brcl::OpenGLShader>(shader)->UploadUniformFloat4("u_Color", m_Color);
+		shader->SetUniformFloat4("u_Color", m_Color);
 
 		
 
