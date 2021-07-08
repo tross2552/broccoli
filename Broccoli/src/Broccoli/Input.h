@@ -171,7 +171,7 @@ namespace brcl
 		virtual float GetMouseXImpl() const = 0;
 		virtual float GetMouseYImpl() const = 0;
 	private:
-		static Input* s_Instance;
+		static std::unique_ptr<Input> s_Instance;
 
 	};
 }

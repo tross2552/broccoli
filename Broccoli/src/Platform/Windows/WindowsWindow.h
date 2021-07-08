@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Broccoli/Window.h"
-#include "glfw/glfw3.h"
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "Broccoli/Renderer/RenderContext.h"
+#include <GLFW/glfw3.h>
 
 namespace brcl
 {
@@ -16,16 +16,16 @@ namespace brcl
 
 		WindowsWindow(const WindowProps& props);
 
-		inline int GetWidth() const override { return m_Data.Width; } //temp
-		inline int GetHeight() const override { return m_Data.Height; }
-		inline void GetSize(int& width, int& height) const override { width = m_Data.Width; height = m_Data.Height; }
+		int GetWidth() const override { return m_Data.Width; } //temp
+		int GetHeight() const override { return m_Data.Height; }
+		void GetSize(int& width, int& height) const override { width = m_Data.Width; height = m_Data.Height; }
 
 		void* GetNativeWindow() const override;
 
-		inline bool IsVSync() const override { return m_VSync; }
+		bool IsVSync() const override { return m_VSync; }
 		void SetVSync(bool enabled) override;
 
-		inline void SetEventCallback(const EventCallbackFn& func) override { m_Data.EventCallback = func; };
+		void SetEventCallback(const EventCallbackFn& func) override { m_Data.EventCallback = func; };
 
 	private:
 
@@ -44,7 +44,7 @@ namespace brcl
 	private:
 
 		GLFWwindow* m_Window;
-		OpenGLContext* m_Context;
+		std::unique_ptr<RenderContext> m_Context;
 
 		WindowData m_Data;
 		bool m_VSync;

@@ -4,7 +4,7 @@
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Events/MouseEvent.h"
 #include "Broccoli/Events/KeyEvent.h"
-
+#include "Platform/OpenGL/OpenGLContext.h"
 
 
 namespace brcl
@@ -172,7 +172,7 @@ namespace brcl
 			data.EventCallback(event);
 		});
 
-		m_Context = new OpenGLContext(m_Window);
+		m_Context = std::make_unique<OpenGLContext>(m_Window);
 		m_Context->Init();
 	}
 

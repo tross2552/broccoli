@@ -4,7 +4,7 @@
 namespace brcl::renderer
 {
 
-	static SceneData* s_SceneData = new SceneData();
+	static std::unique_ptr<SceneData> s_SceneData = std::make_unique<SceneData>();
 
 	void Init()
 	{

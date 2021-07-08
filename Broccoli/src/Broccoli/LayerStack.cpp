@@ -12,6 +12,7 @@ namespace brcl
 	{
 		for (Layer* layer : m_Layers)
 		{
+			PopLayer(layer);
 			delete layer;
 		}
 	}
