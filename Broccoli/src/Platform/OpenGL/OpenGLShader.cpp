@@ -48,11 +48,24 @@ namespace brcl
 	std::string OpenGLShader::ReadFile(const std::string& path)
 	{
 		std::ifstream shaderIn(path, std::ios::in | std::ios::binary);
-
-		if (!shaderIn) BRCL_CORE_ERROR("OpenGl Shader error: Failed to load file '{0}'", path);
-
 		std::string result;
+
+		if (!shaderIn)
+		{
+			BRCL_CORE_ERROR("OpenGl Shader error: Failed to load file '{0}'", path);
+			return result;
+		}
+
+		
 		shaderIn.seekg(0, std::ios::end);
+		size_t size = shaderIn.tellg();
+		
+		if (size == -1)
+		{
+			BRCL_CORE_ERROR("OpenGl Shader error: Failed to load file '{0}'", path);
+			return result;
+		}
+		
 		result.resize(shaderIn.tellg());
 		shaderIn.seekg(0, std::ios::beg);
 		shaderIn.read(&result[0], result.size());
