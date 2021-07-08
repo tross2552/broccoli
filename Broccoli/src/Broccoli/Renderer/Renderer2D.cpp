@@ -13,8 +13,8 @@ namespace brcl::renderer2d
 	struct Renderer2DStorage
 	{
 		std::shared_ptr<VertexArray> QuadVertexArray;
-		std::shared_ptr<Shader> FlatColorShader;
 		std::shared_ptr<Shader> FlatTextureShader;
+		std::shared_ptr<Texture2D> FlatColorTexture;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -46,9 +46,12 @@ namespace brcl::renderer2d
 		vertexBuffer->SetLayout(layout);
 		s_Data->QuadVertexArray->AddVertexBuffer(vertexBuffer);
 		s_Data->QuadVertexArray->SetIndexBuffer(indexBuffer);
-
-		s_Data->FlatColorShader   = Shader::Create("assets/shaders/FlatColor.glsl");
+		
 		s_Data->FlatTextureShader = Shader::Create("assets/shaders/FlatTexture.glsl");
+
+		s_Data->FlatColorTexture = Texture2D::Create(1, 1);
+		uint32_t whiteTextureData = 0xffffffff;
+		s_Data->FlatColorTexture->SetData(&whiteTextureData, 4);
 
 		s_Data->FlatTextureShader->Bind();
 		s_Data->FlatTextureShader->SetUniformInt("u_Texture", 0);
@@ -63,9 +66,6 @@ namespace brcl::renderer2d
 	{
 		RenderCommand::SetClearColor({ 0.1f , 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
-		
-		s_Data->FlatColorShader->Bind();
-		s_Data->FlatColorShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
 		s_Data->FlatTextureShader->Bind();
 		s_Data->FlatTextureShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
@@ -77,11 +77,11 @@ namespace brcl::renderer2d
 
 	void DrawQuad(const Transform& transform, const Vector4& color)
 	{
-		s_Data->FlatColorShader->Bind();
-		s_Data->FlatColorShader->SetUniformFloat4("u_Color", color);
+		s_Data->FlatColorTexture->Bind();
+		s_Data->FlatTextureShader->SetUniformFloat4("u_Color", color);
 
 
-		s_Data->FlatColorShader->SetUniformMat4("u_Transform", transform.GetMatrix());
+		s_Data->FlatTextureShader->SetUniformMat4("u_Transform", transform.GetMatrix());
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
@@ -89,8 +89,8 @@ namespace brcl::renderer2d
 
 	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture)
 	{
-		s_Data->FlatTextureShader->Bind();
 		texture->Bind();
+		s_Data->FlatTextureShader->SetUniformFloat4("u_Color", { 1.0f, 1.0f, 1.0f, 1.0f });
 
 
 		s_Data->FlatTextureShader->SetUniformMat4("u_Transform", transform.GetMatrix());

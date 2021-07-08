@@ -6,6 +6,21 @@
 
 namespace brcl
 {
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height) :
+		m_Width(width), m_Height(height), m_Format(GL_RGBA), m_InternalFormat(GL_RGBA8)
+	{
+
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	}
+
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: m_Path(path)
 	{
@@ -30,7 +45,10 @@ namespace brcl
 			dataFormat = GL_RGB;
 		}
 
-		BRCL_CORE_ASSERT(internalFormat & dataFormat, "Texture error: image format not supported!");
+		m_Format = dataFormat;
+		m_InternalFormat = internalFormat;
+
+		BRCL_CORE_ASSERT(internalFormat && dataFormat, "Texture error: image format not supported!");
 		
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
@@ -41,8 +59,6 @@ namespace brcl
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		BRCL_CORE_ASSERT(channels, "Texture error: brcl currently only supports rgb8 format!");
 		
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
 
@@ -57,5 +73,12 @@ namespace brcl
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
 		glBindTextureUnit(slot, m_RendererID);
+	}
+
+	void OpenGLTexture2D::SetData(void* data, uint32_t size)
+	{
+		//todo: proper calculation of texture size
+		BRCL_CORE_ASSERT(size == m_Width * m_Height * 4, "OpenGL Texture2D error: data size does not match texture size!");
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
 	}
 }

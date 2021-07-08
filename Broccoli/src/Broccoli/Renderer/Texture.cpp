@@ -7,6 +7,18 @@
 namespace brcl
 {
 
+	std::unique_ptr<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+	{
+		switch (renderer::GetAPI())
+		{
+		case RendererAPI::API::None:    BRCL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL:  return std::make_unique<OpenGLTexture2D>(width, height);
+		}
+
+		BRCL_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+	
 	std::unique_ptr<Texture2D> Texture2D::Create(const std::string& path)
 	{
 		switch (renderer::GetAPI())
