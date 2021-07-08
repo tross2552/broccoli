@@ -76,8 +76,8 @@ namespace brcl
 	{
 		auto ret = m;
 
-		blaze::row(ret, 0) *= v[0];
-		blaze::row(ret, 1) *= v[1];
+		blaze::column(ret, 0) *= v[0];
+		blaze::column(ret, 1) *= v[1];
 
 		return ret;
 	}
@@ -86,9 +86,9 @@ namespace brcl
 	{
 		auto ret = m;
 
-		blaze::row(ret, 0) *= v[0];
-		blaze::row(ret, 1) *= v[1];
-		blaze::row(ret, 2) *= v[2];
+		blaze::column(ret, 0) *= v[0];
+		blaze::column(ret, 1) *= v[1];
+		blaze::column(ret, 2) *= v[2];
 
 		return ret;
 	}

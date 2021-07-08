@@ -1,6 +1,7 @@
 ﻿#include "brclpch.h"
 #include "Renderer2D.h"
 
+#include "Texture.h"
 #include "Broccoli/Renderer/Shader.h"
 #include "Broccoli/Renderer/VertexArray.h"
 #include "Broccoli/Renderer/RenderCommand.h"
@@ -13,6 +14,7 @@ namespace brcl::renderer2d
 	{
 		std::shared_ptr<VertexArray> QuadVertexArray;
 		std::shared_ptr<Shader> FlatColorShader;
+		std::shared_ptr<Shader> FlatTextureShader;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -45,8 +47,11 @@ namespace brcl::renderer2d
 		s_Data->QuadVertexArray->AddVertexBuffer(vertexBuffer);
 		s_Data->QuadVertexArray->SetIndexBuffer(indexBuffer);
 
-		s_Data->FlatColorShader = brcl::Shader::Create("assets/shaders/FlatColor.glsl");
-		
+		s_Data->FlatColorShader   = Shader::Create("assets/shaders/FlatColor.glsl");
+		s_Data->FlatTextureShader = Shader::Create("assets/shaders/FlatTexture.glsl");
+
+		s_Data->FlatTextureShader->Bind();
+		s_Data->FlatTextureShader->SetUniformInt("u_Texture", 0);
 	}
 
 	void Shutdown()
@@ -60,30 +65,40 @@ namespace brcl::renderer2d
 		RenderCommand::Clear();
 		
 		s_Data->FlatColorShader->Bind();
-		//TODO: Shader::SetUniform()
 		s_Data->FlatColorShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+
+		s_Data->FlatTextureShader->Bind();
+		s_Data->FlatTextureShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void EndScene()
 	{
 	}
-	
-	void DrawQuad(const Vector2& position, const Vector2& size, const Vector4& color)
-	{
-		DrawQuad(Vector3({position[0], position[1], 0.0f}), size, color);
-	}
 
-	void DrawQuad(const Vector3& position, const Vector2& size, const Vector4& color)
+	void DrawQuad(const Transform& transform, const Vector4& color)
 	{
 		s_Data->FlatColorShader->Bind();
-		//TODO: Shader::SetUniform()
 		s_Data->FlatColorShader->SetUniformFloat4("u_Color", color);
 
-		
-		s_Data->FlatColorShader->SetUniformMat4("u_Transform", Translate(Identity4x4(), position) * Scale(Identity4x4(), size)); //todo: per-quad transforms
+
+		s_Data->FlatColorShader->SetUniformMat4("u_Transform", transform.GetMatrix());
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
+
+	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture)
+	{
+		s_Data->FlatTextureShader->Bind();
+		texture->Bind();
+
+
+		s_Data->FlatTextureShader->SetUniformMat4("u_Transform", transform.GetMatrix());
+
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	
 	
 }

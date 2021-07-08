@@ -11,6 +11,8 @@ namespace brcl
 		
 		Matrix4x4 GetMatrix() const;
 
+		void AbsMove(const Vector3& distance) { m_Position += distance; }
+
 		void SetPosition(const Vector3& position) { m_Position = position; }
 		const Vector3& GetPosition() const { return m_Position; }
 
@@ -20,6 +22,8 @@ namespace brcl
 		void SetScale(float scale) { m_Scale = Vector3(scale); }
 		void SetScale(const Vector3& scale) { m_Scale = scale; }
 		const Vector3& GetScale() const { return m_Position; }
+
+		
 
 	
 	private:

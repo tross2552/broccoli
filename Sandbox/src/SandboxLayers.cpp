@@ -7,6 +7,7 @@ namespace Sandbox
 	
 	void Sandbox2DLayer::OnAttach()
 	{
+		m_Texture = brcl::Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
 	}
 
 	void Sandbox2DLayer::OnDetach()
@@ -21,8 +22,21 @@ namespace Sandbox
 		
 		brcl::renderer2d::BeginScene(m_CameraController.GetCamera());
 
-		brcl::renderer2d::DrawQuad(brcl::Vector2({0.0f, 0.0f}) , {1.0f, 1.0f}, m_Color);
-		brcl::renderer2d::DrawQuad(brcl::Vector2({ -1.0f, 2.0f }), { 0.25f, 1.5f }, { 1.0f - m_Color[0], 1.0f - m_Color[1], 1.0f - m_Color[2], 1.0f });
+		brcl::Transform quad;
+		brcl::Vector4 colorInv = 1.0f - m_Color;
+		colorInv[3] = 1.0f;
+		
+		brcl::renderer2d::DrawQuad(quad, m_Color);
+		
+		quad.AbsMove(brcl::Vector3({ -1.0f, -1.0f, 0.0f }));
+		quad.SetScale({ 0.5f, 1.0f, 0.0f });
+		
+		brcl::renderer2d::DrawQuad(quad, colorInv);
+
+		quad.SetScale(10.0f);
+		quad.SetPosition({ -5.0f, -5.0f, 0.1f });
+
+		brcl::renderer2d::DrawQuad(quad, m_Texture);
 		
 		brcl::renderer::EndScene();
 		

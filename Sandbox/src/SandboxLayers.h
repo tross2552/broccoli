@@ -21,6 +21,7 @@ namespace Sandbox
 	private:
 		brcl::CameraController m_CameraController;
 		brcl::Vector4 m_Color;
+		std::shared_ptr<brcl::Texture2D> m_Texture;
 
 
 	};
