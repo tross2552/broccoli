@@ -3,6 +3,8 @@
 .vs/
 bin/
 bin-int/
+GPUCache/
+Sandbox/VTune Profiler Results/
 
 # Files
 
@@ -12,3 +14,4 @@ bin-int/
 *.filters
 
 Sandbox/imgui.ini
+debug.log
