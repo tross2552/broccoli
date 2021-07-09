@@ -12,5 +12,5 @@ namespace brcl::renderer2d
 	void EndScene();
 
 	void DrawQuad(const Transform& transform, const Vector4& color);
-	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture);
+	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture, const Vector4& textureParameters = { 0.0f, 0.0f, 1.0f, 1.0f });
 }

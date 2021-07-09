@@ -35,7 +35,7 @@ namespace Sandbox
 		quad.SetScale(10.0f);
 		quad.SetPosition({ -5.0f, -5.0f, 0.1f });
 
-		brcl::renderer2d::DrawQuad(quad, m_Texture);
+		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
 		
 		brcl::renderer::EndScene();
 		
@@ -54,6 +54,7 @@ namespace Sandbox
 		ImGui::Begin("Settings");
 		ImGui::Text("Hello");
 		ImGui::ColorEdit4("Square Color", m_AppLayer->m_Color.data());
+		ImGui::DragFloat4("Checker Texture", m_AppLayer->m_TexParams.data(), 0.01f, 0.0f, 20.0f);
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();

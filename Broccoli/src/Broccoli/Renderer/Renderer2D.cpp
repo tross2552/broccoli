@@ -79,7 +79,7 @@ namespace brcl::renderer2d
 	{
 		s_Data->FlatColorTexture->Bind();
 		s_Data->FlatTextureShader->SetUniformFloat4("u_Color", color);
-
+		s_Data->FlatTextureShader->SetUniformFloat4("u_TexParams", { 0.0f, 0.0f, 1.0f, 1.0f });
 
 		s_Data->FlatTextureShader->SetUniformMat4("u_Transform", transform.GetMatrix());
 
@@ -87,10 +87,11 @@ namespace brcl::renderer2d
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
-	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture)
+	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture, const Vector4& textureParameters)
 	{
 		texture->Bind();
 		s_Data->FlatTextureShader->SetUniformFloat4("u_Color", { 1.0f, 1.0f, 1.0f, 1.0f });
+		s_Data->FlatTextureShader->SetUniformFloat4("u_TexParams", textureParameters);
 
 
 		s_Data->FlatTextureShader->SetUniformMat4("u_Transform", transform.GetMatrix());

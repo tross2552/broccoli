@@ -9,7 +9,7 @@ namespace Sandbox
 	public:
 
 		Sandbox2DLayer::Sandbox2DLayer() :
-			Layer("Example"), m_CameraController(16.0f / 9.0f), m_Color(1.0f) {}
+			Layer("Example"), m_CameraController(16.0f / 9.0f), m_Color(1.0f), m_TexParams({0.0f, 0.0f, 2.0f, 8.0f}) {}
 		~Sandbox2DLayer() override = default;
 
 		void OnAttach() override;
@@ -21,6 +21,7 @@ namespace Sandbox
 	private:
 		brcl::CameraController m_CameraController;
 		brcl::Vector4 m_Color;
+		brcl::Vector4 m_TexParams;
 		std::shared_ptr<brcl::Texture2D> m_Texture;
 
 
