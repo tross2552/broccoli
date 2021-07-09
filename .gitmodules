@@ -1,12 +1,16 @@
 [submodule "Broccoli/vendor/spdlog"]
 	path = Broccoli/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+	branch = v1.x
 [submodule "Broccoli/vendor/glfw"]
 	path = Broccoli/vendor/glfw
 	url = https://github.com/tross2552/glfw.git
+	branch = master
 [submodule "Broccoli/vendor/imgui"]
 	path = Broccoli/vendor/imgui
 	url = https://github.com/tross2552/imgui.git
+	branch = docking
 [submodule "Broccoli/vendor/blaze"]
 	path = Broccoli/vendor/blaze
 	url = https://bitbucket.org/blaze-lib/blaze.git
+	branch = master
