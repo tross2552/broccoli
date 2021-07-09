@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Event.h"
+#include "Broccoli/Input.h"
 
 namespace brcl
 {
-	class BRCL_API MouseMovedEvent : public Event
+	class MouseMovedEvent : public Event
 	{
 		//need to be able to get coords
 
@@ -13,8 +14,8 @@ namespace brcl
 		MouseMovedEvent(float x, float y)
 			: m_X(x), m_Y(y) {}
 
-		inline float GetX() const { return m_X; }
-		inline float GetY() const { return m_Y; }
+		float GetX() const { return m_X; }
+		float GetY() const { return m_Y; }
 
 		EVENT_CLASS_TYPE(MouseMoved)
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
@@ -34,19 +35,17 @@ namespace brcl
 		float m_Y;
 	};
 
-	class BRCL_API MouseScrolledEvent : public Event
+	class MouseScrolledEvent : public Event
 	{
 		//need to be able to get coords
 
 	public:
 
 		MouseScrolledEvent(float xOffset, float yOffset)
-			: m_XOffset(xOffset), m_YOffset(yOffset)
-		{
-		}
+			: m_XOffset(xOffset), m_YOffset(yOffset) {}
 
-		inline float GetXOffset() const { return m_XOffset; }
-		inline float GetYOffset() const { return m_YOffset; }
+		float GetXOffset() const { return m_XOffset; }
+		float GetYOffset() const { return m_YOffset; }
 
 		EVENT_CLASS_TYPE(MouseScrolled)
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
@@ -66,30 +65,31 @@ namespace brcl
 		float m_YOffset;
 	};
 
-	class BRCL_API MouseButtonEvent : public Event
+	class MouseButtonEvent : public Event
 	{
-		//serves as base class for button pressed and button released
-		//need which button
+		
 	public:
 
-		inline int GetMouseButton() const { return m_Button; }
+		Input::MouseCode GetMouseButton() const { return m_Button; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouseButton | EventCategoryInput)
 
 	protected:
 
-		MouseButtonEvent(int button)
+		MouseButtonEvent(Input::MouseCode button)
 			: m_Button(button) {}
 
-		int m_Button;
+	protected:
+		
+		Input::MouseCode m_Button;
 	};
 
-	class BRCL_API MouseButtonPressedEvent : public MouseButtonEvent
+	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 
 	public:
 
-		MouseButtonPressedEvent(int button) :
+		MouseButtonPressedEvent(Input::MouseCode button) :
 			MouseButtonEvent(button) {}
 
 		std::string ToString() const override
@@ -106,12 +106,12 @@ namespace brcl
 	};
 
 
-	class BRCL_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 		
 	public:
 
-		MouseButtonReleasedEvent(int button) :
+		MouseButtonReleasedEvent(Input::MouseCode button) :
 			MouseButtonEvent(button) {}
 
 		std::string ToString() const override

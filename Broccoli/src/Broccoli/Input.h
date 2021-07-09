@@ -6,7 +6,7 @@ namespace brcl
 	{
 	public:
 
-		enum MouseCode
+		enum MouseCode : uint16_t
 		{
 			BUTTON_1 = 0,
 			BUTTON_2 = 1,
@@ -18,7 +18,7 @@ namespace brcl
 			BUTTON_8 = 7
 		};
 
-		enum KeyCode
+		enum KeyCode : uint16_t
 		{
 			SPACE             = 32,
 			APOSTROPHE        = 39,
@@ -145,14 +145,14 @@ namespace brcl
 			MENU              = 348
 		};
 
-		static bool IsKeyPressed(const int keycode)
+		static bool IsKeyPressed(const KeyCode keycode)
 		{
 			return s_Instance->IsKeyPressedImpl(keycode);
 		}
 
-		static bool IsMouseButtonPressed(const int keycode)
+		static bool IsMouseButtonPressed(const MouseCode mousecode)
 		{
-			return s_Instance->IsMouseButtonPressedImpl(keycode);
+			return s_Instance->IsMouseButtonPressedImpl(mousecode);
 		}
 		
 		static float GetMouseX()
@@ -166,8 +166,8 @@ namespace brcl
 		}
 
 	protected:
-		virtual bool IsKeyPressedImpl(const int keycode) const = 0;
-		virtual bool IsMouseButtonPressedImpl(const int button) const = 0;
+		virtual bool IsKeyPressedImpl(const KeyCode keycode) const = 0;
+		virtual bool IsMouseButtonPressedImpl(const MouseCode button) const = 0;
 		virtual float GetMouseXImpl() const = 0;
 		virtual float GetMouseYImpl() const = 0;
 	private:

@@ -9,7 +9,7 @@ namespace brcl
 
 	std::unique_ptr<Input> Input::s_Instance = std::make_unique<WindowsInput>();
 
-	bool WindowsInput::IsKeyPressedImpl(const int keycode) const
+	bool WindowsInput::IsKeyPressedImpl(const KeyCode keycode) const
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
@@ -18,11 +18,11 @@ namespace brcl
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(const int button) const
+	bool WindowsInput::IsMouseButtonPressedImpl(const MouseCode mousecode) const
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
-		int state = glfwGetMouseButton(window, button);
+		int state = glfwGetMouseButton(window, mousecode);
 
 		return state == GLFW_PRESS;
 	}

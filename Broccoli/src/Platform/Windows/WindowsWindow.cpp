@@ -91,33 +91,33 @@ namespace brcl
 
 			switch (action)
 			{
-			case GLFW_PRESS:
-			{
-				repeatcount = 0;
-				KeyPressedEvent event(key, repeatcount);
-				data.EventCallback(event);
-				break;
-			}
-			case GLFW_RELEASE:
-			{
-				repeatcount = 0;
-				KeyReleasedEvent event(key);
-				data.EventCallback(event);
-				break;
-			}
-			case GLFW_REPEAT:
-			{
-				repeatcount++;
-				KeyPressedEvent event(key, repeatcount);
-				data.EventCallback(event);
-				break;
+				case GLFW_PRESS:
+				{
+					repeatcount = 0;
+					KeyPressedEvent event(static_cast<Input::KeyCode>(key), repeatcount);
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					repeatcount = 0;
+					KeyReleasedEvent event(static_cast<Input::KeyCode>(key));
+					data.EventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					repeatcount++;
+					KeyPressedEvent event(static_cast<Input::KeyCode>(key), repeatcount);
+					data.EventCallback(event);
+					break;
 
-			}
-			default:
-			{
-				BRCL_CORE_WARN("Key {0}: Unknown GLFW action type ({1})!", key, action);
-				break;
-			}
+				}
+				default:
+				{
+					BRCL_CORE_WARN("Key {0}: Unknown GLFW action type ({1})!", key, action);
+					break;
+				}
 			}
 		});
 
@@ -137,13 +137,13 @@ namespace brcl
 			{
 			case GLFW_PRESS:
 			{
-				MouseButtonPressedEvent event(button);
+				MouseButtonPressedEvent event(static_cast<Input::MouseCode>(button));
 				data.EventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE:
 			{
-				MouseButtonReleasedEvent event(button);
+				MouseButtonReleasedEvent event(static_cast<Input::MouseCode>(button));
 				data.EventCallback(event);
 				break;
 			}

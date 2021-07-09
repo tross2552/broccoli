@@ -2,41 +2,41 @@
 
 #include "Event.h"
 
+#include "Broccoli/Input.h"
+
 namespace brcl
 {
-	class BRCL_API KeyEvent : public Event
+	class KeyEvent : public Event
 	{
-		//serves as base class for key pressed and key released
-		//need to be able to get key code
+
 	public:
 		
-		inline int GetKeyCode() const { return m_KeyCode; }
+		Input::KeyCode GetKeyCode() const { return m_KeyCode; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 
 		
 	protected:
 		
-		KeyEvent(int keycode)
+		KeyEvent(Input::KeyCode keycode)
 			: m_KeyCode(keycode) {}
 
-		int m_KeyCode;
+		Input::KeyCode m_KeyCode;
 	};
 
-	class BRCL_API KeyPressedEvent : public KeyEvent
+	class KeyPressedEvent : public KeyEvent
 	{
-		//"repeat" presses will be accounted for here
-		//need to be able to get repeat count
+
 	public:
 
-		KeyPressedEvent(int keycode, int repeatCount) :
+		KeyPressedEvent(Input::KeyCode keycode, int repeatCount) :
 			KeyEvent(keycode), m_RepeatCount(repeatCount) {}
 
-		inline int GetRepeatCount() const { return m_RepeatCount; }
+
+		int GetRepeatCount() const { return m_RepeatCount; }
 
 		std::string ToString() const override
 		{
-			//give the event type, keycode, repeatcount
 
 			std::stringstream ss;
 			ss << GetEventName() << " Event: " << m_KeyCode << "(" << m_RepeatCount << ")";
@@ -51,17 +51,16 @@ namespace brcl
 	};
 
 
-	class BRCL_API KeyReleasedEvent : public KeyEvent
+	class KeyReleasedEvent : public KeyEvent
 	{
-		//same as keypressed, without "repeats"
+
 	public:
 
-		KeyReleasedEvent(int keycode) :
+		KeyReleasedEvent(Input::KeyCode keycode) :
 			KeyEvent(keycode) {}
 
 		std::string ToString() const override
 		{
-			//give the event type, keycode, repeatcount
 
 			std::stringstream ss;
 			ss << GetEventName() << " Event: " << m_KeyCode;
@@ -72,17 +71,14 @@ namespace brcl
 
 	};
 
-	class BRCL_API TextInputEvent : public Event
+	class TextInputEvent : public Event
 	{
 	public:
 
 		TextInputEvent(unsigned int unicode)
 			: m_Unicode(unicode) {}
 
-		inline unsigned int GetChar() const { return m_Unicode; }
-
-		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
-		EVENT_CLASS_TYPE(TextInput)
+		unsigned int GetChar() const { return m_Unicode; }
 
 		std::string ToString() const override
 		{
@@ -92,6 +88,9 @@ namespace brcl
 			ss << GetEventName() << " Event: " << (char)m_Unicode;
 			return ss.str();
 		}
+
+		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+		EVENT_CLASS_TYPE(TextInput)
 
 	private:
 

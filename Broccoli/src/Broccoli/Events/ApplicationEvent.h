@@ -4,7 +4,7 @@
 
 namespace brcl
 {
-	class BRCL_API WindowResizedEvent : public Event
+	class WindowResizedEvent : public Event
 	{
 
 	public:
@@ -13,11 +13,8 @@ namespace brcl
 			: m_Width(width), m_Height(height) {}
 
 
-		inline int GetWidth() const { return m_Width; }
-		inline int GetHeight() const { return m_Height; }
-
-		EVENT_CLASS_TYPE(WindowResized)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		int32_t GetWidth() const { return m_Width; }
+		int32_t GetHeight() const { return m_Height; }
 
 		std::string ToString() const override
 		{
@@ -27,6 +24,9 @@ namespace brcl
 			ss << GetEventName() << " Event: " << m_Width << "," << m_Height;
 			return ss.str();
 		}
+		
+		EVENT_CLASS_TYPE(WindowResized)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
 	protected:
 
@@ -34,40 +34,40 @@ namespace brcl
 		int m_Height;
 	};
 
-	class BRCL_API WindowMovedEvent : public Event
+	class WindowMovedEvent : public Event
 	{
 
 	public:
 
-		WindowMovedEvent() {}
+		WindowMovedEvent() = default;
 
 		EVENT_CLASS_TYPE(WindowMoved)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class BRCL_API WindowClosedEvent : public Event
+	class WindowClosedEvent : public Event
 	{
 
 	public:
 
-		WindowClosedEvent() {}
+		WindowClosedEvent() = default;
 
 		EVENT_CLASS_TYPE(WindowClosed)
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class BRCL_API WindowFocusedEvent : public Event
+	class WindowFocusedEvent : public Event
 	{
 
 	public:
 
-		WindowFocusedEvent() {}
+		WindowFocusedEvent() = default;
 
 		EVENT_CLASS_TYPE(WindowFocused)
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class BRCL_API WindowLostFocusEvent : public Event
+	class WindowLostFocusEvent : public Event
 	{
 
 	public:
@@ -76,7 +76,7 @@ namespace brcl
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class BRCL_API AppTickEvent : public Event
+	class AppTickEvent : public Event
 	{
 
 	public:
@@ -85,7 +85,7 @@ namespace brcl
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class BRCL_API AppUpdateEvent : public Event
+	class AppUpdateEvent : public Event
 	{
 
 	public:
@@ -94,7 +94,7 @@ namespace brcl
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class BRCL_API AppRenderEvent : public Event
+	class AppRenderEvent : public Event
 	{
 
 	public:

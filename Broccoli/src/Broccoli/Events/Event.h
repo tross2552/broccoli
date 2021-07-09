@@ -36,28 +36,24 @@ namespace brcl
 
 	};
 
-	class BRCL_API Event
+	class Event
 	{
 		//need functions to get: type, name, category flags
 		friend class EventDispatcher;
 
 	public:
 
+		virtual ~Event() = default;
+		
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetEventName() const = 0;
 		virtual int GetCategoryFlags() const = 0;
 
 		virtual std::string ToString() const { return GetEventName(); };
 
-		inline bool GetHandled() const
-		{
-			return m_Handled;
-		}
+		bool GetHandled() const { return m_Handled; }
 
-		inline bool IsInCategory(EventCategory category) const
-		{
-			return category & GetCategoryFlags();
-		}
+		bool IsInCategory(EventCategory category) const { return category & GetCategoryFlags(); }
 
 	protected:
 		bool m_Handled;
@@ -70,7 +66,7 @@ namespace brcl
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
 
-	class BRCL_API EventDispatcher
+	class EventDispatcher
 	{
 		template<typename T>
 		using EventFn = std::function<bool(T&)>;

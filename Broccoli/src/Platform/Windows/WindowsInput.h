@@ -6,8 +6,8 @@ namespace brcl
 	class WindowsInput : public Input
 	{
 	protected:
-		 bool IsKeyPressedImpl(const int keycode) const override;
-		 bool IsMouseButtonPressedImpl(const int button) const override;
+		 bool IsKeyPressedImpl(const KeyCode keycode) const override;
+		 bool IsMouseButtonPressedImpl(const MouseCode mousecode) const override;
 		 float GetMouseXImpl() const override;
 		 float GetMouseYImpl() const override;
 	};
