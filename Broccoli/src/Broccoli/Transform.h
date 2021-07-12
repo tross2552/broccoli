@@ -21,7 +21,7 @@ namespace brcl
 
 		void SetScale(float scale) { m_Scale = Vector3(scale); }
 		void SetScale(const Vector3& scale) { m_Scale = scale; }
-		const Vector3& GetScale() const { return m_Position; }
+		const Vector3& GetScale() const { return m_Scale; }
 
 		
 
