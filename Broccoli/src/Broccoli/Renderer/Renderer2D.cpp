@@ -22,6 +22,8 @@ namespace brcl::renderer2d
 		float r,g,b,a;
 		float u, v;
 		float texslot;
+		float tex_x, tex_y;
+		float texscale_x, texscale_y;
 	};
 	
 	//todo: determine best way to store renderer data
@@ -57,7 +59,8 @@ namespace brcl::renderer2d
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color"    },
 			{ ShaderDataType::Float2, "a_TexCoord" },
-			{ ShaderDataType::Float   , "a_TexSlot"  }
+			{ ShaderDataType::Float , "a_TexSlot"  },
+			{ ShaderDataType::Float4, "a_TexOffset"}
 		};
 
 		s_Data->Vertices = std::make_shared<std::array<Vertex2D, max_draw_vertices>>();
@@ -196,7 +199,8 @@ namespace brcl::renderer2d
 
 		auto& [x, y, z] = transform.GetPosition();
 		auto& [r, g, b, a] = color;
-		Vertex2D quadVertex = { x, y, z, r , g, b, a, 0.0f, 0.0f, texIndex };
+		auto& [tex_x, tex_y, texscale_x, texscale_y] = textureParameters;
+		Vertex2D quadVertex = { x, y, z, r , g, b, a, 0.0f, 0.0f, texIndex, tex_x, tex_y, texscale_x, texscale_y };
 
 		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4] = quadVertex;
 

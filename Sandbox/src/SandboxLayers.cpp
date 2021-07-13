@@ -36,6 +36,11 @@ namespace Sandbox
 		quad.SetPosition({ -5.0f, -5.0f, 0.1f });
 
 		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
+
+		quad.SetPosition({ -1.0f, -1.0f, 0.0f });
+		quad.SetScale(2.0f);
+		
+		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams*2);
 		
 		brcl::renderer2d::EndScene();
 		
