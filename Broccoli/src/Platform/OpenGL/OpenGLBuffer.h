@@ -34,15 +34,17 @@ namespace brcl
 	class OpenGLVertexBuffer : public VertexBuffer
 	{
 	public:
-		
+
+		OpenGLVertexBuffer(uint32_t size);
 		OpenGLVertexBuffer(float* vertices, uint32_t size);
 		~OpenGLVertexBuffer() override;
-		
-		void Bind() const override;
-		void Unbind() const override;
 
 		const BufferLayout& GetLayout() const override;
 		void SetLayout(const BufferLayout& layout) override;
+		
+		void Bind() const override;
+		void Unbind() const override;
+		void SetData(const void* data, uint32_t size) override;
 	
 	private:
 		
@@ -53,7 +55,7 @@ namespace brcl
 	class OpenGLIndexBuffer : public IndexBuffer
 	{
 	public:
-		
+
 		OpenGLIndexBuffer(uint32_t* indices, uint32_t size);
 		~OpenGLIndexBuffer() override;
 		

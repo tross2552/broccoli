@@ -6,7 +6,18 @@
 
 namespace brcl
 {
+	std::unique_ptr<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	{
+		switch (renderer::GetAPI())
+		{
+		case RendererAPI::API::None:    BRCL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL:  return std::make_unique <OpenGLVertexBuffer>(size);
+		}
 
+		BRCL_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+	
 	std::unique_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (renderer::GetAPI())

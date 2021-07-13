@@ -81,4 +81,10 @@ namespace brcl
 		BRCL_CORE_ASSERT(size == m_Width * m_Height * 4, "OpenGL Texture2D error: data size does not match texture size!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
 	}
+
+	bool OpenGLTexture2D::operator==(const Texture2D& other) const
+	{
+		return m_RendererID == dynamic_cast<const OpenGLTexture2D&>(other).m_RendererID; //todo: avoid dynamic cast
+	}
+	
 }

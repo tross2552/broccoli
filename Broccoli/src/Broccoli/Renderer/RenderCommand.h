@@ -29,9 +29,9 @@ namespace brcl
 			s_RendererAPI->Clear();
 		}
 		
-		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount = 0)
 		{
-			s_RendererAPI->DrawIndexed(vertexArray);
+			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
 	private:
 		static std::unique_ptr<RendererAPI> s_RendererAPI;

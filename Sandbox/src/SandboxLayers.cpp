@@ -37,7 +37,7 @@ namespace Sandbox
 
 		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
 		
-		brcl::renderer::EndScene();
+		brcl::renderer2d::EndScene();
 		
 	}
 

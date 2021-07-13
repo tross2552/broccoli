@@ -4,6 +4,17 @@
 
 namespace brcl
 {
+
+	//////////////////////////////////////////////////////////////////
+	// Vertex Buffer /////////////////////////////////////////////////
+	
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+	{
+		glCreateBuffers(1, &m_RendererID);
+		OpenGLVertexBuffer::Bind();
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+	}
+	
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{
 		glCreateBuffers(1, &m_RendererID);
@@ -26,6 +37,12 @@ namespace brcl
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	void OpenGLVertexBuffer::SetData(const void* data, uint32_t size)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+	}
+
 	const BufferLayout& OpenGLVertexBuffer::GetLayout() const
 	{
 		return m_Layout;
@@ -36,6 +53,9 @@ namespace brcl
 		m_Layout = layout;
 	}
 
+	//////////////////////////////////////////////////////////////////
+	// Index Buffer //////////////////////////////////////////////////
+	
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t size) :
 		m_Count(size / sizeof(indices[0]))
 	{

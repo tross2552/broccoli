@@ -18,6 +18,9 @@ namespace brcl
 		void Bind(uint32_t slot) const override;
 
 		void SetData(void* data, uint32_t size) override;
+
+		bool operator==(const Texture2D& other) const override;
+	
 	private:
 
 		//TODO: asset manager, then remove this
