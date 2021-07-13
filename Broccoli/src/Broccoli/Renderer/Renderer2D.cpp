@@ -11,7 +11,7 @@
 namespace brcl::renderer2d
 {
 
-	constexpr int max_draw_quads = 10000;
+	constexpr int max_draw_quads = 15000;
 	constexpr int max_draw_vertices = max_draw_quads * 4;
 	constexpr int max_draw_indices = max_draw_quads * 6;
 	constexpr int max_draw_textures = 32;
@@ -22,8 +22,6 @@ namespace brcl::renderer2d
 		float r,g,b,a;
 		float u, v;
 		float texslot;
-		float tex_x, tex_y;
-		float texscale_x, texscale_y;
 	};
 	
 	//todo: determine best way to store renderer data
@@ -38,10 +36,12 @@ namespace brcl::renderer2d
 		std::shared_ptr<std::array<Vertex2D, max_draw_vertices>> Vertices;
 		std::shared_ptr<std::array<uint32_t, max_draw_indices>> Indices;
 
-		std::array<std::shared_ptr<Texture2D>, 32> TextureSlots;
+		std::array<std::shared_ptr<Texture2D>, max_draw_textures> TextureSlots;
 
 		int32_t TexturesUsed;
 		unsigned int QuadsDrawn;
+
+		DebugStats stats;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -50,8 +50,7 @@ namespace brcl::renderer2d
 	void Init()
 	{
 
-		auto k = s_Data = new Renderer2DStorage();
-		
+		s_Data = new Renderer2DStorage();
 		
 		std::shared_ptr<IndexBuffer>  indexBuffer;
 
@@ -59,8 +58,7 @@ namespace brcl::renderer2d
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color"    },
 			{ ShaderDataType::Float2, "a_TexCoord" },
-			{ ShaderDataType::Float , "a_TexSlot"  },
-			{ ShaderDataType::Float4, "a_TexOffset"}
+			{ ShaderDataType::Float , "a_TexSlot"  }
 		};
 
 		s_Data->Vertices = std::make_shared<std::array<Vertex2D, max_draw_vertices>>();
@@ -101,9 +99,9 @@ namespace brcl::renderer2d
 		s_Data->FlatTextureShader->Bind();
 		//s_Data->FlatTextureShader->SetUniformInt("u_Texture", 0);
 
-		std::array<int32_t, 32> samplers;
-		for (int32_t i = 0; i < 32; i++) samplers[i] = i;
-		s_Data->FlatTextureShader->SetUniformIntArray("u_Textures", samplers.data(), 32);
+		std::array<int32_t, max_draw_textures> samplers;
+		for (int32_t i = 0; i < max_draw_textures; i++) samplers[i] = i;
+		s_Data->FlatTextureShader->SetUniformIntArray("u_Textures", samplers.data(), max_draw_textures);
 	}
 
 	void Shutdown()
@@ -125,13 +123,21 @@ namespace brcl::renderer2d
 
 	void EndScene()
 	{
-		s_Data->VertexBuffer->SetData(s_Data->Vertices->data(), sizeof(*s_Data->Vertices));
 		Flush();
+	}
+
+	void StartBatch()
+	{
+		BRCL_CORE_TRACE("Renderer2d: Starting new batch");
+		if (s_Data->QuadsDrawn) Flush();
+		s_Data->QuadsDrawn = 0;
+		s_Data->TexturesUsed = 1;
 	}
 
 	void Flush()
 	{
-		auto k = s_Data;
+		s_Data->VertexBuffer->SetData(s_Data->Vertices->data(), sizeof(*s_Data->Vertices));
+		
 		for (int32_t i = 0; i < s_Data->TexturesUsed; i++)
 		{
 			s_Data->TextureSlots[i]->Bind(i);
@@ -139,47 +145,29 @@ namespace brcl::renderer2d
 			
 		
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray, s_Data->QuadsDrawn*6);
-	}
 
-	void DrawQuad(const Transform& transform, const Vector4& color)
-	{
-		auto& [x, y, z] = transform.GetPosition();
-		auto& [r, g, b , a] = color;
-		Vertex2D quadVertex = { x, y, z, r , g, b, a, 0.0f, 0.0f, 0 };
-		
-		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4] = quadVertex;
-
-		
-		quadVertex.x += transform.GetScale()[0];
-		quadVertex.u += 1.0f;
-		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4 + 1] = quadVertex;
-
-		
-		quadVertex.y += transform.GetScale()[1];
-		quadVertex.v += 1.0f;
-		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4 + 2] = quadVertex;
-
-		quadVertex.x -= transform.GetScale()[0];
-		quadVertex.u -= 1.0f;
-		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4 + 3] = quadVertex;
-		
-		s_Data->QuadsDrawn++;
-		
-		
-		//s_Data->FlatColorTexture->Bind();
-		//s_Data->FlatTextureShader->SetUniformFloat4("u_Color", color);
-		//s_Data->FlatTextureShader->SetUniformFloat4("u_TexParams", { 0.0f, 0.0f, 1.0f, 1.0f });
-
-		//s_Data->FlatTextureShader->SetUniformMat4("u_Transform", transform.GetMatrix());
-
-		//s_Data->QuadVertexArray->Bind();
-		//RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		s_Data->stats.DrawCalls++;
 	}
 
 	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture, const Vector4& textureParameters)
 	{
+		DrawQuad(transform, texture, Vector4({ 1.0f, 1.0f, 1.0f, 1.0f }), textureParameters);
+	}
 
-		const Vector4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	void DrawQuad(const Transform& transform, const Vector4& color)
+	{
+
+		DrawQuad(transform, s_Data->TextureSlots[0], color, Vector4({ 0.0f, 0.0f, 1.0f, 1.0f }));
+	}
+
+	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture, const Vector4& color, const Vector4& textureParameters)
+	{
+
+		if (s_Data->QuadsDrawn == max_draw_quads)
+		{
+			BRCL_CORE_WARN("Renderer2d Warning: Exceeded max quads per batch (Quad {0})!", s_Data->QuadsDrawn+1);
+			StartBatch();
+		}
 
 		float texIndex = 0;
 
@@ -188,50 +176,64 @@ namespace brcl::renderer2d
 			if (*texture == *s_Data->TextureSlots[i]) texIndex = (float)i;
 		}
 
-		BRCL_CORE_ASSERT(texIndex || (s_Data->TexturesUsed < 32), "Renderer2d Warning: Max textures per batch exceeded!");
+		if (!texIndex && !(s_Data->TexturesUsed < max_draw_textures))
+		{
+			BRCL_CORE_WARN("Renderer2d Warning: Exceeded max textures per batch (Quad {0})!", s_Data->QuadsDrawn + 1);
+			StartBatch();
+		}
 
-		if(!texIndex)
+		if (!texIndex)
 		{
 			s_Data->TextureSlots[s_Data->TexturesUsed] = texture;
 			texIndex = (float)s_Data->TexturesUsed;
 			s_Data->TexturesUsed++;
 		}
 
-		auto& [x, y, z] = transform.GetPosition();
+		Matrix4x4 transformMatrix = transform.GetMatrix();
+		Matrix4x4 quadPositions = {
+			{ 0.0f,1.0f,1.0f,0.0f },
+			{ 0.0f,0.0f,1.0f,1.0f },
+			{ 0.0f,0.0f,0.0f,0.0f },
+			{ 1.0f,1.0f,1.0f,1.0f }
+		};
+
+		std::array<float, 8> texCoords = { {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			0.0f, 1.0f
+		} };
+
+		quadPositions = transformMatrix * quadPositions;
+
 		auto& [r, g, b, a] = color;
-		auto& [tex_x, tex_y, texscale_x, texscale_y] = textureParameters;
-		Vertex2D quadVertex = { x, y, z, r , g, b, a, 0.0f, 0.0f, texIndex, tex_x, tex_y, texscale_x, texscale_y };
+		Vertex2D quadVertex = { 0, 0, 0, r , g, b, a, 0.0f, 0.0f, texIndex };
 
-		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4] = quadVertex;
+		for (int i = 0; i < 4; i++)
+		{
+			quadVertex.x = quadPositions(0, i);
+			quadVertex.y = quadPositions(1, i);
+			quadVertex.z = quadPositions(2, i);
+			quadVertex.u = texCoords[i * 2] * textureParameters[2] + textureParameters[0];
+			quadVertex.v = texCoords[i * 2 + 1] * textureParameters[3] + textureParameters[1];
 
-
-		quadVertex.x += transform.GetScale()[0];
-		quadVertex.u += 1.0f;
-		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4 + 1] = quadVertex;
-
-
-		quadVertex.y += transform.GetScale()[1];
-		quadVertex.v += 1.0f;
-		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4 + 2] = quadVertex;
-
-		quadVertex.x -= transform.GetScale()[0];
-		quadVertex.u -= 1.0f;
-		(*s_Data->Vertices)[s_Data->QuadsDrawn * 4 + 3] = quadVertex;
+			(*s_Data->Vertices)[s_Data->QuadsDrawn * 4 + i] = quadVertex;
+		}
 
 		s_Data->QuadsDrawn++;
-			
-				
-		//texture->Bind();
-		//s_Data->FlatTextureShader->SetUniformFloat4("u_Color", { 1.0f, 1.0f, 1.0f, 1.0f });
-		//s_Data->FlatTextureShader->SetUniformFloat4("u_TexParams", textureParameters);
-
-
-		//s_Data->FlatTextureShader->SetUniformMat4("u_Transform", transform.GetMatrix());
-
-		//s_Data->QuadVertexArray->Bind();
-		//RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		s_Data->stats.QuadCount++;
 	}
 
+	DebugStats GetStats()
+	{
+		return s_Data->stats;
+	}
+
+	void ResetStats()
+	{
+		s_Data->stats.QuadCount = 0;
+		s_Data->stats.DrawCalls = 0;
+	}
 	
 	
 }

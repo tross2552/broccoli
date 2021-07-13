@@ -18,29 +18,56 @@ namespace Sandbox
 		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
 		m_CameraController.OnUpdate(deltaTime);
 
-		
-		brcl::renderer2d::BeginScene(m_CameraController.GetCamera());
+		static float rotation = 0.0f;
+		rotation += 0.01f;
 
+		brcl::renderer2d::ResetStats();
+		brcl::renderer2d::BeginScene(m_CameraController.GetCamera());
 		brcl::Transform quad;
 		brcl::Vector4 colorInv = 1.0f - m_Color;
 		colorInv[3] = 1.0f;
-		
+		/*
+		quad.SetPosition({ 0.0f,0.0f,0.0f });
+		quad.SetScale(1.0f);
 		brcl::renderer2d::DrawQuad(quad, m_Color);
 		
 		quad.AbsMove(brcl::Vector3({ -1.0f, -1.0f, 0.0f }));
 		quad.SetScale({ 0.5f, 1.0f, 0.0f });
-		
 		brcl::renderer2d::DrawQuad(quad, colorInv);
 
-		quad.SetScale(10.0f);
+		quad.SetScale(0.5f);
 		quad.SetPosition({ -5.0f, -5.0f, 0.1f });
-
 		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
 
+		quad.SetScale(1.0f);
+		quad.SetRotation({ 0.0f,0.0f, -rotation });
+		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
+
+		quad.SetRotation({ 0.0f, 0.0f, 0.0f });
 		quad.SetPosition({ -1.0f, -1.0f, 0.0f });
 		quad.SetScale(2.0f);
 		
 		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams*2);
+
+		quad.SetRotation({ 0.0f,0.0f, rotation });
+		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams * 2);
+		*/
+		
+		
+		const int tiles = 20;
+		const float tilescale = 0.5f;
+		quad.SetScale(tilescale * 0.9f);
+		for (int i = 0; i < tiles; i++)
+		{
+			for (int j = 0; j < tiles; j++)
+			{
+				quad.SetRotation({ sin(rotation) * j / (tiles*tiles), sin(rotation) * i / (tiles), sin(rotation) * (i+j) / (2*tiles) });
+				quad.SetPosition(brcl::Vector3({ -(float)tiles/2 + i, -(float)tiles/2 + j, -0.1f })*tilescale);
+				brcl::renderer2d::DrawQuad(quad, m_Color * brcl::Vector4({ (float)i / tiles, (float)j / tiles, 1.0f, (float)(i + j) / (2 * tiles) }));
+			}
+
+		}
+		
 		
 		brcl::renderer2d::EndScene();
 		
@@ -56,8 +83,15 @@ namespace Sandbox
 	
 	void ExampleImGuiLayer::OnImGuiRender()
 	{
+		static auto renderdebug = brcl::renderer2d::GetStats();
+		renderdebug = brcl::renderer2d::GetStats();
+		
 		ImGui::Begin("Settings");
 		ImGui::Text("Hello");
+		ImGui::Text("Draw Calls: %d", renderdebug.DrawCalls);
+		ImGui::Text("Quads: %d", renderdebug.QuadCount);
+		ImGui::Text("Vertices: %d", renderdebug.GetTotalVertexCount());
+		ImGui::Text("Indices: %d", renderdebug.GetTotalIndexCount());
 		ImGui::ColorEdit4("Square Color", m_AppLayer->m_Color.data());
 		ImGui::DragFloat4("Checker Texture", m_AppLayer->m_TexParams.data(), 0.01f, 0.0f, 20.0f);
 		ImGui::End();
