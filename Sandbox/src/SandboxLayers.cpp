@@ -4,7 +4,7 @@
 namespace Sandbox
 {
 	
-	void Sandbox2DLayer::OnAttach()
+	void EditorLayer::OnAttach()
 	{
 		m_Texture = brcl::Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
 
@@ -14,16 +14,14 @@ namespace Sandbox
 		m_Framebuffer = brcl::Framebuffer::Create(fBufferSpec);
 	}
 
-	void Sandbox2DLayer::OnDetach()
+	void EditorLayer::OnDetach()
 	{
 	}
 
-	void Sandbox2DLayer::OnUpdate(brcl::Timestep deltaTime)
+	void EditorLayer::OnUpdate(brcl::Timestep deltaTime)
 	{
-		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
+		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
 		m_CameraController.OnUpdate(deltaTime);
-
-		m_Framebuffer->Bind();
 		
 		static float rotation = 0.0f;
 		rotation += 0.01f;
@@ -77,12 +75,10 @@ namespace Sandbox
 		
 		
 		brcl::renderer2d::EndScene();
-
-		m_Framebuffer->Unbind();
 		
 	}
 
-	void Sandbox2DLayer::OnEvent(brcl::Event& event)
+	void EditorLayer::OnEvent(brcl::Event& event)
 	{
 		BRCL_TRACE("{0}", event);
 		m_CameraController.OnEvent(event);
@@ -95,8 +91,6 @@ namespace Sandbox
 		static auto renderdebug = brcl::renderer2d::GetStats();
 		renderdebug = brcl::renderer2d::GetStats();
 		
-		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-		
 		ImGui::Begin("Settings");
 		ImGui::Text("Hello");
 		ImGui::Text("Draw Calls: %d", renderdebug.DrawCalls);
@@ -105,7 +99,6 @@ namespace Sandbox
 		ImGui::Text("Indices: %d", renderdebug.GetTotalIndexCount());
 		ImGui::ColorEdit4("Square Color", m_AppLayer->m_Color.data());
 		ImGui::DragFloat4("Checker Texture", m_AppLayer->m_TexParams.data(), 0.01f, 0.0f, 20.0f);
-		ImGui::Image((void*)m_AppLayer->m_Framebuffer->GetColorAttachmentID(), ImVec2(m_AppLayer->m_Framebuffer->GetWidth(), m_AppLayer->m_Framebuffer->GetHeight()));
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();
@@ -171,7 +164,7 @@ namespace Sandbox
 
 		using namespace brcl;
 		
-		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
+		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
 		m_CameraController.OnUpdate(deltaTime);
 
 		RenderCommand::SetClearColor({ 1.0f , 0.0f, 1.0f, 1.0f });

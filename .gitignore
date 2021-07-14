@@ -14,4 +14,6 @@ Sandbox/VTune Profiler Results/
 *.filters
 
 Sandbox/imgui.ini
+Harvest/imgui.ini
+
 debug.log

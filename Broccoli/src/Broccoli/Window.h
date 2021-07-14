@@ -10,12 +10,12 @@ namespace brcl
 	struct WindowProps
 	{
 		std::string Title;
-		int Width;
-		int Height;
+		uint32_t Width;
+		uint32_t Height;
 
-		WindowProps(const std::string& title = "Broccoli Engine",
-			int width = 1280,
-			int height = 720)
+		WindowProps(const std::string title = "Broccoli Engine",
+			uint32_t width = 1280,
+			uint32_t height = 720)
 			: Title(title), Width(width), Height(height) {}
 
 
@@ -31,9 +31,9 @@ namespace brcl
 
 		virtual void OnUpdate() = 0;
 
-		virtual int GetWidth() const = 0;
-		virtual int GetHeight() const = 0;
-		virtual void GetSize(int& width, int& height) const = 0;
+		virtual uint32_t GetWidth() const = 0;
+		virtual uint32_t GetHeight() const = 0;
+		virtual void GetSize(uint32_t width, uint32_t height) const = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 

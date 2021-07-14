@@ -10,15 +10,14 @@ namespace brcl
 	{
 	public:
 
-		~WindowsWindow();
+		WindowsWindow(const WindowProps& props);
+		~WindowsWindow() override;
 
 		void OnUpdate() override;
 
-		WindowsWindow(const WindowProps& props);
-
-		int GetWidth() const override { return m_Data.Width; } //temp
-		int GetHeight() const override { return m_Data.Height; }
-		void GetSize(int& width, int& height) const override { width = m_Data.Width; height = m_Data.Height; }
+		uint32_t GetWidth() const override { return m_Data.Width; }
+		uint32_t GetHeight() const override { return m_Data.Height; }
+		void GetSize(uint32_t width, uint32_t height) const override { width = m_Data.Width; height = m_Data.Height; }
 
 		void* GetNativeWindow() const override;
 
@@ -31,8 +30,8 @@ namespace brcl
 
 		struct WindowData
 		{
-			int Width;
-			int Height;
+			uint32_t Width;
+			uint32_t Height;
 			std::string Title;
 
 			EventCallbackFn EventCallback;

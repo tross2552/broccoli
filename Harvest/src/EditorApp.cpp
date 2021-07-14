@@ -1,15 +1,16 @@
 #include <Broccoli.h>
 #include "Broccoli/EntryPoint.h"
-#include "SandboxLayers.h"
+#include "EditorLayers.h"
 
-namespace Sandbox
+namespace brcl
 {
 	
-	class Sandbox : public brcl::Application
+	class Editor : public Application
 	{
 	public:
 		
-		Sandbox()
+		Editor() :
+		Application("Harvest Editor")
 		{
 			EditorLayer* app = new EditorLayer();
 			PushLayer(new ExampleImGuiLayer(app));
@@ -23,5 +24,5 @@ namespace Sandbox
 
 brcl::Application* brcl::CreateApplication()
 {
-	return new Sandbox::Sandbox();
+	return new brcl::Editor();
 }

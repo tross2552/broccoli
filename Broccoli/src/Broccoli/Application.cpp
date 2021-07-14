@@ -10,12 +10,13 @@ namespace brcl
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application() :
+	Application::Application(std::string name) :
 		m_Timer("Application"), m_Minimized(false)
 	{
 		if (!s_Instance) s_Instance = this;
+		else return;
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = std::unique_ptr<Window>(Window::Create({name}));
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
 		renderer::Init();

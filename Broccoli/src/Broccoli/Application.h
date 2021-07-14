@@ -10,7 +10,7 @@ namespace brcl
 	{
 	public:
 
-		Application();
+		Application(std::string name = "Broccoli Application");
 		virtual ~Application();
 
 		void Run();
