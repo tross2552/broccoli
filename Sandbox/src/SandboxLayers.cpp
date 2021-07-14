@@ -7,6 +7,11 @@ namespace Sandbox
 	void Sandbox2DLayer::OnAttach()
 	{
 		m_Texture = brcl::Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
+
+		brcl::FrameBufferSpec fBufferSpec;
+		fBufferSpec.Width = 1280;
+		fBufferSpec.Height = 720;
+		m_Framebuffer = brcl::Framebuffer::Create(fBufferSpec);
 	}
 
 	void Sandbox2DLayer::OnDetach()
@@ -18,6 +23,8 @@ namespace Sandbox
 		BRCL_TRACE("Sandbox: Update ({0}) ", deltaTime.ToString());
 		m_CameraController.OnUpdate(deltaTime);
 
+		m_Framebuffer->Bind();
+		
 		static float rotation = 0.0f;
 		rotation += 0.01f;
 
@@ -70,6 +77,8 @@ namespace Sandbox
 		
 		
 		brcl::renderer2d::EndScene();
+
+		m_Framebuffer->Unbind();
 		
 	}
 
@@ -86,6 +95,8 @@ namespace Sandbox
 		static auto renderdebug = brcl::renderer2d::GetStats();
 		renderdebug = brcl::renderer2d::GetStats();
 		
+		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+		
 		ImGui::Begin("Settings");
 		ImGui::Text("Hello");
 		ImGui::Text("Draw Calls: %d", renderdebug.DrawCalls);
@@ -94,6 +105,7 @@ namespace Sandbox
 		ImGui::Text("Indices: %d", renderdebug.GetTotalIndexCount());
 		ImGui::ColorEdit4("Square Color", m_AppLayer->m_Color.data());
 		ImGui::DragFloat4("Checker Texture", m_AppLayer->m_TexParams.data(), 0.01f, 0.0f, 20.0f);
+		ImGui::Image((void*)m_AppLayer->m_Framebuffer->GetColorAttachmentID(), ImVec2(m_AppLayer->m_Framebuffer->GetWidth(), m_AppLayer->m_Framebuffer->GetHeight()));
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();

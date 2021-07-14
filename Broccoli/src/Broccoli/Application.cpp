@@ -51,6 +51,11 @@ namespace brcl
 		}
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
@@ -78,7 +83,7 @@ namespace brcl
 
 	bool Application::OnWindowClosed(WindowClosedEvent& event)
 	{
-		m_Running = false;
+		Close();
 		return false;
 	}
 

@@ -3,6 +3,34 @@
 
 #include "glad/glad.h"
 
+static void GLAPIENTRY
+MessageCallback(GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam)
+{
+
+	std::string prefix = (type == GL_DEBUG_TYPE_ERROR) ? "Error" : "Message";
+	
+	switch(severity)
+	{
+	case GL_DEBUG_SEVERITY_HIGH:
+		BRCL_CORE_ERROR("OpenGL {0}: {1}", prefix, message);
+		break;
+	case GL_DEBUG_SEVERITY_MEDIUM:
+		BRCL_CORE_WARN("OpenGL {0}: {1}", prefix, message);
+		break;
+	case GL_DEBUG_SEVERITY_LOW:
+		BRCL_CORE_INFO("OpenGL {0}: {1}", prefix, message);
+		break;
+	default:
+		BRCL_CORE_TRACE("OpenGL {0}: {1}", prefix, message);
+	}
+}
+
 namespace brcl
 {
 	void OpenGLRendererAPI::Init()
@@ -11,6 +39,10 @@ namespace brcl
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH_TEST);
+
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(MessageCallback, nullptr);
+		
 	}
 	void OpenGLRendererAPI::SetClearColor(const Vector4& color)
 	{

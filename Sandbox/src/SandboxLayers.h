@@ -23,8 +23,7 @@ namespace Sandbox
 		brcl::Vector4 m_Color;
 		brcl::Vector4 m_TexParams;
 		std::shared_ptr<brcl::Texture2D> m_Texture;
-
-
+		std::shared_ptr<brcl::Framebuffer> m_Framebuffer;
 	};
 
 	//--------------Engine Debug Application-----------------

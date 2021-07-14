@@ -11,14 +11,12 @@ namespace brcl
 	public:
 
 		Application();
-
 		virtual ~Application();
 
-
 		void Run();
+		void Close();
 
 		void PushLayer(Layer* layer);
-
 		void PushOverlay(Layer* layer);
 
 		void OnEvent(Event& e);
