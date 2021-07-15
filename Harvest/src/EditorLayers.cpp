@@ -9,9 +9,10 @@ namespace brcl
 		m_Texture = Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
 
 		FrameBufferSpec fBufferSpec;
-		fBufferSpec.Width = 1280;
-		fBufferSpec.Height = 720;
+		fBufferSpec.Width = 3840; //todo: detect best settings
+		fBufferSpec.Height = 2160;
 		m_Framebuffer = Framebuffer::Create(fBufferSpec);
+		renderer::ResizeViewport(fBufferSpec.Width, fBufferSpec.Height);
 	}
 
 	void EditorLayer::OnDetach()
@@ -21,7 +22,8 @@ namespace brcl
 	void EditorLayer::OnUpdate(Timestep deltaTime)
 	{
 		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
-		if(m_Focused) m_CameraController.OnUpdate(deltaTime);
+		m_CameraController.SetInputEnabled(m_Focused);
+		m_CameraController.OnUpdate(deltaTime);
 
 		m_Framebuffer->Bind();
 		
@@ -82,8 +84,6 @@ namespace brcl
 		if(m_AppLayer->m_Framebuffer->GetWidth() != viewportWidth ||
 			m_AppLayer->m_Framebuffer->GetHeight() != viewportHeight)
 		{
-			renderer::ResizeViewport(viewportWidth, viewportHeight);
-			m_AppLayer->m_Framebuffer->Resize(viewportWidth, viewportHeight);
 			m_AppLayer->m_CameraController.Resize(viewportWidth, viewportHeight);
 		}
 		

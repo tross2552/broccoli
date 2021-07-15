@@ -14,6 +14,8 @@ namespace brcl
 		void OnUpdate(Timestep deltaTime);
 		void OnEvent(Event& e);
 
+		void SetInputEnabled(bool enable) { m_InputEnabled = enable; }
+
 		void Resize(uint32_t width, uint32_t height);
 		
 		Transform& GetTransform() { return m_Transform; }
@@ -30,6 +32,8 @@ namespace brcl
 		float m_AspectRatio;
 		Camera m_Camera;
 		Transform m_Transform;
+
+		bool m_InputEnabled;
 		
 	};
 }

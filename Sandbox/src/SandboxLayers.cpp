@@ -4,7 +4,7 @@
 namespace Sandbox
 {
 	
-	void EditorLayer::OnAttach()
+	void SandboxLayer::OnAttach()
 	{
 		m_Texture = brcl::Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
 
@@ -14,11 +14,11 @@ namespace Sandbox
 		m_Framebuffer = brcl::Framebuffer::Create(fBufferSpec);
 	}
 
-	void EditorLayer::OnDetach()
+	void SandboxLayer::OnDetach()
 	{
 	}
 
-	void EditorLayer::OnUpdate(brcl::Timestep deltaTime)
+	void SandboxLayer::OnUpdate(brcl::Timestep deltaTime)
 	{
 		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
 		m_CameraController.OnUpdate(deltaTime);
@@ -78,10 +78,19 @@ namespace Sandbox
 		
 	}
 
-	void EditorLayer::OnEvent(brcl::Event& event)
+	bool SandboxLayer::OnResize(brcl::WindowResizedEvent& event) //todo: move this back into the engine
+	{
+		brcl::renderer::ResizeViewport(event.GetWidth(), event.GetHeight());
+		return true;
+	}
+
+	void SandboxLayer::OnEvent(brcl::Event& event)
 	{
 		BRCL_TRACE("{0}", event);
 		m_CameraController.OnEvent(event);
+		brcl::EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<brcl::WindowResizedEvent>(BRCL_BIND_EVENT_FN(SandboxLayer::OnResize));
+		
 	}
 
 	//--------------Engine Debug Application-----------------

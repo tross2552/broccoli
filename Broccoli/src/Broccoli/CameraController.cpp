@@ -5,62 +5,64 @@
 namespace brcl
 {
 	CameraController::CameraController(float aspectRatio) :
-		m_AspectRatio(aspectRatio), m_Camera(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel)
+		m_AspectRatio(aspectRatio), m_Camera(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
+		m_InputEnabled(true)
 	{
 	}
 
 	void CameraController::OnUpdate(Timestep deltaTime)
 	{
-
-		bool rotateFlag = Input::IsKeyPressed(Input::KeyCode::LEFT_SHIFT);
-
-		if (Input::IsKeyPressed(Input::KeyCode::W))
+		if (m_InputEnabled)
 		{
-			BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
-			if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime);
-			else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ -1.0f,0.0f,0.0f }) * deltaTime);
-		}
+			bool rotateFlag = Input::IsKeyPressed(Input::KeyCode::LEFT_SHIFT);
 
-		if (Input::IsKeyPressed(Input::KeyCode::A))
-		{
-			BRCL_CORE_INFO("LEFT LEFT LEFT LEFT !!!!!!!");
-			if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime);
-			else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 0.0f,-1.0f,0.0f }) * deltaTime);
-		}
+			if (Input::IsKeyPressed(Input::KeyCode::W))
+			{
+				BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
+				if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime);
+				else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ -1.0f,0.0f,0.0f }) * deltaTime);
+			}
 
-		if (Input::IsKeyPressed(Input::KeyCode::S))
-		{
-			BRCL_CORE_INFO("DOWN DOWN DOWN DOWN !!!!!!!");
-			if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime);
-			else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 1.0f,0.0f,0.0f }) * deltaTime);
-		}
+			if (Input::IsKeyPressed(Input::KeyCode::A))
+			{
+				BRCL_CORE_INFO("LEFT LEFT LEFT LEFT !!!!!!!");
+				if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime);
+				else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 0.0f,-1.0f,0.0f }) * deltaTime);
+			}
 
-		if (Input::IsKeyPressed(Input::KeyCode::D))
-		{
-			BRCL_CORE_INFO("RIGHT RIGHT RIGHT RIGHT !!!!!!!");
-			if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime);
-			else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 0.0f,1.0f,0.0f }) * deltaTime);
-		}
+			if (Input::IsKeyPressed(Input::KeyCode::S))
+			{
+				BRCL_CORE_INFO("DOWN DOWN DOWN DOWN !!!!!!!");
+				if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime);
+				else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 1.0f,0.0f,0.0f }) * deltaTime);
+			}
 
-		if (Input::IsKeyPressed(Input::KeyCode::R))
-		{
-			if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 0.0f, 0.0f, -1.0f }) * deltaTime);
-			else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 0.0f,0.0f,-1.0f }) * deltaTime);
-		}
+			if (Input::IsKeyPressed(Input::KeyCode::D))
+			{
+				BRCL_CORE_INFO("RIGHT RIGHT RIGHT RIGHT !!!!!!!");
+				if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime);
+				else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 0.0f,1.0f,0.0f }) * deltaTime);
+			}
 
-		if (Input::IsKeyPressed(Input::KeyCode::F))
-		{
-			if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 0.0f, 0.0f, 1.0f }) * deltaTime);
-			else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 0.0f,0.0f,1.0f }) * deltaTime);
-		}
+			if (Input::IsKeyPressed(Input::KeyCode::R))
+			{
+				if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 0.0f, 0.0f, -1.0f }) * deltaTime);
+				else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 0.0f,0.0f,-1.0f }) * deltaTime);
+			}
 
-		if (Input::IsKeyPressed(Input::KeyCode::X))
-		{
-			m_Transform.SetPosition({ 0.0f, 0.0f, 0.0f });
-			m_Transform.SetRotation({ 0.0f,0.0f,0.0f });
-			m_ZoomLevel = 1.0f;
-		}
+			if (Input::IsKeyPressed(Input::KeyCode::F))
+			{
+				if (!rotateFlag) m_Transform.SetPosition(m_Transform.GetPosition() + Vector3({ 0.0f, 0.0f, 1.0f }) * deltaTime);
+				else m_Transform.SetRotation(m_Transform.GetRotation() + Vector3({ 0.0f,0.0f,1.0f }) * deltaTime);
+			}
 
+			if (Input::IsKeyPressed(Input::KeyCode::X))
+			{
+				m_Transform.SetPosition({ 0.0f, 0.0f, 0.0f });
+				m_Transform.SetRotation({ 0.0f,0.0f,0.0f });
+				m_ZoomLevel = 1.0f;
+			}
+		}
 		m_Camera.SetViewMatrix(Invert(m_Transform.GetMatrix()));
 		m_Camera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		m_Camera.UpdateVPMatrix();

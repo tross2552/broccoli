@@ -91,7 +91,6 @@ namespace brcl
 	bool Application::OnWindowResized(WindowResizedEvent& event)
 	{
 		m_Minimized = event.GetWidth() == 0 && event.GetHeight() == 0;
-		renderer::ResizeViewport(event.GetWidth(), event.GetHeight());
 		return false;
 	}
 }

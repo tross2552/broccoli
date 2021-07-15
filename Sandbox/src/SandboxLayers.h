@@ -3,19 +3,20 @@
 
 namespace Sandbox
 {
-	class EditorLayer : public brcl::Layer
+	class SandboxLayer : public brcl::Layer
 	{
 		friend class ExampleImGuiLayer;
 	public:
 
-		EditorLayer::EditorLayer() :
+		SandboxLayer::SandboxLayer() :
 			Layer("Example"), m_CameraController(16.0f / 9.0f), m_Color(1.0f), m_TexParams({0.0f, 0.0f, 2.0f, 8.0f}) {}
-		~EditorLayer() override = default;
+		~SandboxLayer() override = default;
 
 		void OnAttach() override;
 		void OnDetach() override;
 		
 		void OnUpdate(brcl::Timestep deltaTime) override;
+		bool OnResize(brcl::WindowResizedEvent& event);
 		void OnEvent(brcl::Event& event) override;
 
 	private:
@@ -58,7 +59,7 @@ namespace Sandbox
 	{
 	public:
 
-		ExampleImGuiLayer(EditorLayer* layer) :
+		ExampleImGuiLayer(SandboxLayer* layer) :
 			ImGuiLayer("AppGuiLayer"), m_AppLayer(layer)
 		{
 		}
@@ -69,6 +70,6 @@ namespace Sandbox
 
 	private:
 
-		EditorLayer* m_AppLayer;
+		SandboxLayer* m_AppLayer;
 	};
 }
