@@ -164,10 +164,10 @@ namespace brcl
 			return;
 		}
 
-		for (auto shaderID : glShaderIds)
+		for(int i =0; i < shaderIndex; i++)
 		{
-			glDetachShader(m_RendererID, shaderID);
-			glDeleteShader(shaderID);
+			glDetachShader(m_RendererID, glShaderIds[i]);
+			glDeleteShader(glShaderIds[i]);
 		}
 		
 	}
