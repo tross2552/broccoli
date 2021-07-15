@@ -13,8 +13,8 @@ namespace brcl
 		Application("Harvest Editor")
 		{
 			EditorLayer* app = new EditorLayer();
-			PushLayer(new ExampleImGuiLayer(app));
 			PushLayer(app);
+			PushOverlay(new EditorImGuiLayer(app));
 		}
 	};
 

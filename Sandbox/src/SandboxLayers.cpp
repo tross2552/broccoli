@@ -104,6 +104,11 @@ namespace Sandbox
 		ImGui::ShowDemoWindow();
 	}
 
+	void ExampleImGuiLayer::OnEvent(brcl::Event& event)
+	{
+
+	}
+
 	ExampleLayer::ExampleLayer() :
 		Layer("Example"), m_CameraController(16.0f/9.0f), m_Color(1.0f)
 	{

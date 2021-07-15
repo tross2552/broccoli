@@ -21,7 +21,7 @@ namespace brcl
 	void EditorLayer::OnUpdate(Timestep deltaTime)
 	{
 		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
-		m_CameraController.OnUpdate(deltaTime);
+		if(m_Focused) m_CameraController.OnUpdate(deltaTime);
 
 		m_Framebuffer->Bind();
 		
@@ -43,8 +43,8 @@ namespace brcl
 			for (int j = 0; j < tiles; j++)
 			{
 				quad.SetRotation({ sin(rotation) * j / (tiles), sin(rotation) * i / (tiles), sin(rotation) * (i+j) / (2*tiles) });
-				quad.SetPosition(brcl::Vector3({ -(float)tiles/2 + i, -(float)tiles/2 + j, -0.1f })*tilescale);
-				renderer2d::DrawQuad(quad, m_Color * brcl::Vector4({ (float)i / tiles, (float)j / tiles, 1.0f, (float)(i + j) / (2 * tiles) }));
+				quad.SetPosition(Vector3({ -(float)tiles/2 + i, -(float)tiles/2 + j, -0.1f })*tilescale);
+				renderer2d::DrawQuad(quad, m_Color * Vector4({ (float)i / tiles, (float)j / tiles, 1.0f, (float)(i + j) / (2 * tiles) }));
 			}
 
 		}
@@ -62,7 +62,7 @@ namespace brcl
 		m_CameraController.OnEvent(event);
 	}
 	
-	void ExampleImGuiLayer::OnImGuiRender()
+	void EditorImGuiLayer::OnImGuiRender()
 	{
 		static auto renderdebug = renderer2d::GetStats();
 		renderdebug = renderer2d::GetStats();
@@ -72,6 +72,9 @@ namespace brcl
 		
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f,0.0f });
 		ImGui::Begin("Viewport");
+
+		m_isViewportFocused = ImGui::IsWindowFocused() && ImGui::IsWindowHovered();
+		m_AppLayer->m_Focused = ImGui::IsWindowFocused();
 		
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		uint32_t viewportWidth = viewportSize.x;
@@ -85,6 +88,7 @@ namespace brcl
 		}
 		
 		ImGui::Image((void*)m_AppLayer->m_Framebuffer->GetColorAttachmentID(), viewportSize, ImVec2(0,1), ImVec2(1,0));
+		
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -100,5 +104,10 @@ namespace brcl
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();
+	}
+	void EditorImGuiLayer::OnEvent(Event& event)
+	{
+		//since the viewport is an imgui window, we need to check which viewport is focused before blocking the event
+		if (!m_isViewportFocused) ImGuiLayer::OnEvent(event);
 	}
 }

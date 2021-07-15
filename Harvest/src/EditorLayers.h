@@ -5,7 +5,7 @@ namespace brcl
 {
 	class EditorLayer : public Layer
 	{
-		friend class ExampleImGuiLayer;
+		friend class EditorImGuiLayer;
 	public:
 
 		EditorLayer::EditorLayer() :
@@ -24,24 +24,26 @@ namespace brcl
 		Vector4 m_TexParams;
 		std::shared_ptr<Texture2D> m_Texture;
 		std::shared_ptr<Framebuffer> m_Framebuffer;
+		bool m_Focused;
 	};
 
 	//--------------Engine Debug Application-----------------
 
 	//temporary app gui!!!!!
-	class ExampleImGuiLayer : public ImGuiLayer
+	class EditorImGuiLayer : public ImGuiLayer
 	{
 	public:
 
-		ExampleImGuiLayer(EditorLayer* layer) :
-			ImGuiLayer("AppGuiLayer"), m_AppLayer(layer)
-		{
-		}
+		EditorImGuiLayer(EditorLayer* layer) :
+			ImGuiLayer("AppGuiLayer"), m_AppLayer(layer), m_isViewportFocused(false) {}
 
 		void OnImGuiRender() override;
+
+		void OnEvent(Event& event) override;
 
 	private:
 
 		EditorLayer* m_AppLayer;
+		bool m_isViewportFocused;
 	};
 }

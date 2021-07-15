@@ -56,7 +56,7 @@ namespace brcl
 		bool IsInCategory(EventCategory category) const { return category & GetCategoryFlags(); }
 
 	protected:
-		bool m_Handled;
+		bool m_Handled = false;
 	};
 
 #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }               \
@@ -86,6 +86,13 @@ namespace brcl
 			}
 			return false;
 		}
+
+		template<typename T>
+		void Block()
+		{
+			if (m_Event.GetEventType() == T::GetStaticType()) m_Event.m_Handled = true;
+		}
+	
 	private:
 
 		Event& m_Event;

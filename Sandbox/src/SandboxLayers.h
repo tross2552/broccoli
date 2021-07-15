@@ -65,6 +65,8 @@ namespace Sandbox
 
 		void OnImGuiRender() override;
 
+		void OnEvent(brcl::Event& event) override;
+
 	private:
 
 		EditorLayer* m_AppLayer;

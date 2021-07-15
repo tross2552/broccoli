@@ -4,6 +4,9 @@
 #include "ImGuiBackend.h"
 #include "GLFW/glfw3.h"
 
+#include "Broccoli/Events/MouseEvent.h"
+#include "Broccoli/Events/KeyEvent.h"
+
 namespace brcl
 {
 
@@ -74,7 +77,23 @@ namespace brcl
 	void ImGuiLayer::OnEvent(Event& event)
 	{
 
-		//imgui backend installs its own callbacks, so we don't need to handle events
+		//imgui backend installs its own callbacks, so we just need to block events that are being handled
+
+		EventDispatcher dispatcher(event);
+		
+		if(io->WantCaptureKeyboard)
+		{
+			dispatcher.Block<KeyPressedEvent>();
+			dispatcher.Block<KeyReleasedEvent>();
+			dispatcher.Block<TextInputEvent>();
+		}
+
+		if(io->WantCaptureMouse)
+		{
+			dispatcher.Block<MouseScrolledEvent>();
+			dispatcher.Block<MouseButtonPressedEvent>();
+			dispatcher.Block<MouseButtonReleasedEvent>();
+		}
 
 	}
 
