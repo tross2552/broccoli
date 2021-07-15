@@ -25,6 +25,7 @@ IncludeDir["Glad"] = "Broccoli/vendor/glad/include"
 IncludeDir["ImGui"] = "Broccoli/vendor/imgui"
 IncludeDir["Blaze"] = "Broccoli/vendor/blaze"
 IncludeDir["Stb"] = "Broccoli/vendor/stb"
+IncludeDir["EnTT"] = "Broccoli/vendor/entt/include"
 
 
 group "Dependencies"
@@ -53,7 +54,8 @@ project "Broccoli"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/stb/**.cpp",
 		"%{prj.name}/vendor/stb/**.h",
-		"%{prj.name}/vendor/blaze/**.h"
+		"%{prj.name}/vendor/blaze/**.h",
+		"%{prj.name}/vendor/entt/**.hpp"
 	}
 	
 	includedirs
@@ -63,6 +65,7 @@ project "Broccoli"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.EnTT}",
 		"%{IncludeDir.Blaze}",
 		"%{IncludeDir.Stb}"
 	}
