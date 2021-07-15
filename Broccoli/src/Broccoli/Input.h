@@ -1,4 +1,5 @@
 #pragma once
+#include "Broccoli/Math/Math.h"
 
 namespace brcl
 {
@@ -145,33 +146,11 @@ namespace brcl
 			MENU              = 348
 		};
 
-		static bool IsKeyPressed(const KeyCode keycode)
-		{
-			return s_Instance->IsKeyPressedImpl(keycode);
-		}
+		static bool IsKeyPressed(KeyCode keycode);
 
-		static bool IsMouseButtonPressed(const MouseCode mousecode)
-		{
-			return s_Instance->IsMouseButtonPressedImpl(mousecode);
-		}
+		static bool IsMouseButtonPressed(MouseCode mousecode);
 		
-		static float GetMouseX()
-		{
-			return s_Instance->GetMouseXImpl();
-		}
-
-		static float GetMouseY()
-		{
-			return s_Instance->GetMouseYImpl();
-		}
-
-	protected:
-		virtual bool IsKeyPressedImpl(const KeyCode keycode) const = 0;
-		virtual bool IsMouseButtonPressedImpl(const MouseCode button) const = 0;
-		virtual float GetMouseXImpl() const = 0;
-		virtual float GetMouseYImpl() const = 0;
-	private:
-		static std::unique_ptr<Input> s_Instance;
+		static Vector2 GetMousePos();
 
 	};
 }

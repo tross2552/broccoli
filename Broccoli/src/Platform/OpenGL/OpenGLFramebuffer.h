@@ -15,9 +15,11 @@ namespace brcl
 		void Unbind() const override;
 
 		const FrameBufferSpec& GetSpecification() const { return m_Spec; }
-		uint32_t GetWidth() override { return m_Spec.Width; }
-		uint32_t GetHeight() override { return m_Spec.Height; }
-		void Invalidate() override;
+		void Resize(uint32_t width, uint32_t height) override;
+		uint32_t GetWidth() const override { return m_Spec.Width; }
+		uint32_t GetHeight() const override { return m_Spec.Height; }
+		
+		void Invalidate();
 
 		uint32_t GetColorAttachmentID() const override { return m_ColorAttachment; }
 	private:

@@ -8,12 +8,14 @@ namespace brcl
 	OpenGLFramebuffer::OpenGLFramebuffer(const FrameBufferSpec& spec) :
 		m_Spec(spec)
 	{
-		OpenGLFramebuffer::Invalidate();
+		Invalidate();
 	}
 
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachment);
+		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
 	void OpenGLFramebuffer::Bind() const
@@ -26,12 +28,26 @@ namespace brcl
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
+	{
+		m_Spec.Width = width;
+		m_Spec.Height = height;
+		Invalidate();
+	}
+
 	void OpenGLFramebuffer::Invalidate()
 	{
+		if(m_RendererID)
+		{
+			glDeleteFramebuffers(1, &m_RendererID);
+			glDeleteTextures(1, &m_ColorAttachment);
+			glDeleteTextures(1, &m_DepthAttachment);
+		}
+		
 		glCreateFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
-
-		BRCL_CORE_INFO("fb bound");
+		
+		
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
 		glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, m_Spec.Width, m_Spec.Height);
@@ -39,7 +55,6 @@ namespace brcl
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachment, 0);
-		BRCL_CORE_INFO("color attachment created");
 		
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
@@ -48,7 +63,6 @@ namespace brcl
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
-		BRCL_CORE_INFO("depth attachment created");
 
 		BRCL_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Render Error: Framebuffer is incomplete!");
 		

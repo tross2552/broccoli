@@ -1,5 +1,5 @@
 #include "brclpch.h"
-#include "WindowsInput.h"
+#include "Broccoli/Input.h"
 #include "Broccoli/Application.h"
 
 #include <GLFW/glfw3.h>
@@ -7,9 +7,7 @@
 namespace brcl
 {
 
-	std::unique_ptr<Input> Input::s_Instance = std::make_unique<WindowsInput>();
-
-	bool WindowsInput::IsKeyPressedImpl(const KeyCode keycode) const
+	bool Input::IsKeyPressed(const KeyCode keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
@@ -18,7 +16,7 @@ namespace brcl
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(const MouseCode mousecode) const
+	bool Input::IsMouseButtonPressed(MouseCode mousecode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
@@ -27,25 +25,15 @@ namespace brcl
 		return state == GLFW_PRESS;
 	}
 
-	//temp, will be implementing 2d/3d vector struct in the future
-
-	float WindowsInput::GetMouseXImpl() const
+	Vector2 Input::GetMousePos()
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
 		double x, y = 0;
 		glfwGetCursorPos(window, &x, &y);
 
-		return (float)x;
+		return Vector2({ static_cast<float>(x),static_cast<float>(y) });
 	}
 
-	float WindowsInput::GetMouseYImpl() const
-	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-
-		double x, y = 0;
-		glfwGetCursorPos(window, &x, &y);
-
-		return (float)y;
-	}
+	
 }

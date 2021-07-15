@@ -42,7 +42,7 @@ namespace brcl
 		{
 			for (int j = 0; j < tiles; j++)
 			{
-				quad.SetRotation({ sin(rotation) * j / (tiles*tiles), sin(rotation) * i / (tiles), sin(rotation) * (i+j) / (2*tiles) });
+				quad.SetRotation({ sin(rotation) * j / (tiles), sin(rotation) * i / (tiles), sin(rotation) * (i+j) / (2*tiles) });
 				quad.SetPosition(brcl::Vector3({ -(float)tiles/2 + i, -(float)tiles/2 + j, -0.1f })*tilescale);
 				renderer2d::DrawQuad(quad, m_Color * brcl::Vector4({ (float)i / tiles, (float)j / tiles, 1.0f, (float)(i + j) / (2 * tiles) }));
 			}
@@ -61,8 +61,6 @@ namespace brcl
 		BRCL_TRACE("{0}", event);
 		m_CameraController.OnEvent(event);
 	}
-
-	//--------------Engine Debug Application-----------------
 	
 	void ExampleImGuiLayer::OnImGuiRender()
 	{
@@ -70,6 +68,26 @@ namespace brcl
 		renderdebug = renderer2d::GetStats();
 		
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+
+		
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0.0f,0.0f });
+		ImGui::Begin("Viewport");
+		
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		uint32_t viewportWidth = viewportSize.x;
+		uint32_t viewportHeight = viewportSize.y;
+		if(m_AppLayer->m_Framebuffer->GetWidth() != viewportWidth ||
+			m_AppLayer->m_Framebuffer->GetHeight() != viewportHeight)
+		{
+			renderer::ResizeViewport(viewportWidth, viewportHeight);
+			m_AppLayer->m_Framebuffer->Resize(viewportWidth, viewportHeight);
+			m_AppLayer->m_CameraController.Resize(viewportWidth, viewportHeight);
+		}
+		
+		ImGui::Image((void*)m_AppLayer->m_Framebuffer->GetColorAttachmentID(), viewportSize, ImVec2(0,1), ImVec2(1,0));
+		ImGui::End();
+		ImGui::PopStyleVar();
+
 		
 		ImGui::Begin("Settings");
 		ImGui::Text("Hello");
@@ -79,7 +97,6 @@ namespace brcl
 		ImGui::Text("Indices: %d", renderdebug.GetTotalIndexCount());
 		ImGui::ColorEdit4("Square Color", m_AppLayer->m_Color.data());
 		ImGui::DragFloat4("Checker Texture", m_AppLayer->m_TexParams.data(), 0.01f, 0.0f, 20.0f);
-		ImGui::Image((void*)m_AppLayer->m_Framebuffer->GetColorAttachmentID(), ImVec2(m_AppLayer->m_Framebuffer->GetWidth(), m_AppLayer->m_Framebuffer->GetHeight()));
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();

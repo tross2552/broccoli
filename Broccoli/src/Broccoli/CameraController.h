@@ -10,12 +10,14 @@ namespace brcl
 	{
 	public:
 		CameraController(float aspectRatio);
-
-		Transform& GetTransform() { return m_Transform; }
-		Camera& GetCamera() { return m_Camera; }
 		
 		void OnUpdate(Timestep deltaTime);
 		void OnEvent(Event& e);
+
+		void Resize(uint32_t width, uint32_t height);
+		
+		Transform& GetTransform() { return m_Transform; }
+		Camera& GetCamera() { return m_Camera; }
 	
 	private:
 		

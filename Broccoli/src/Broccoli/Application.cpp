@@ -37,13 +37,12 @@ namespace brcl
 
 			Timestep deltaTime = curr - m_PrevTime;
 			m_PrevTime = curr;
-
 			if (!m_Minimized)
 			{
 
 				for (Layer* layer : m_LayerStack)
 				{
-
+					BRCL_INFO("Updating layer {0}", layer->GetName());
 					layer->OnUpdate(deltaTime);
 				}
 			}
@@ -74,9 +73,10 @@ namespace brcl
 		dispatcher.Dispatch<WindowResizedEvent>(BRCL_BIND_EVENT_FN(Application::OnWindowResized));
 		BRCL_CORE_TRACE(event.ToString());
 
-		for (auto& layer : m_LayerStack)
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
 		{
-			layer->OnEvent(event);
+			BRCL_INFO("Sending Event {0} to layer {1}", event, (*it)->GetName());
+			(*it)->OnEvent(event);
 			if (event.GetHandled()) break;
 		}
 

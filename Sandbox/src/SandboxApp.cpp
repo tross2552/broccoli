@@ -12,7 +12,7 @@ namespace Sandbox
 		Sandbox()
 		{
 			EditorLayer* app = new EditorLayer();
-			PushLayer(new ExampleImGuiLayer(app));
+			PushOverlay(new ExampleImGuiLayer(app));
 			PushLayer(app);
 		}
 	};
