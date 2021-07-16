@@ -31,47 +31,33 @@ namespace Sandbox
 		brcl::Transform quad;
 		brcl::Vector4 colorInv = 1.0f - m_Color;
 		colorInv[3] = 1.0f;
-		/*
+		
 		quad.SetPosition({ 0.0f,0.0f,0.0f });
 		quad.SetScale(1.0f);
 		brcl::renderer2d::DrawQuad(quad, m_Color);
 		
-		quad.AbsMove(brcl::Vector3({ -1.0f, -1.0f, 0.0f }));
+		quad.SetPosition({ -1.0f, -1.0f, 0.0f });
 		quad.SetScale({ 0.5f, 1.0f, 0.0f });
 		brcl::renderer2d::DrawQuad(quad, colorInv);
 
-		quad.SetScale(0.5f);
-		quad.SetPosition({ -5.0f, -5.0f, 0.1f });
-		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
-
-		quad.SetScale(1.0f);
-		quad.SetRotation({ 0.0f,0.0f, -rotation });
-		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
-
-		quad.SetRotation({ 0.0f, 0.0f, 0.0f });
-		quad.SetPosition({ -1.0f, -1.0f, 0.0f });
-		quad.SetScale(2.0f);
 		
+		quad.SetPosition({ -5.0f, -5.0f, 0.2f });
+		quad.SetScale(0.5f);
+		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
+
+		quad.SetPosition({ -1.0f, -1.0f, 0.3f });
+		quad.SetRotation({ 0.0f, 0.0f, 0.0f });
+		quad.SetScale(2.0f);
 		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams*2);
 
+		quad.SetPosition({ -1.0f, -1.0f, 0.4f });
 		quad.SetRotation({ 0.0f,0.0f, rotation });
 		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams * 2);
-		*/
-		
-		
-		const int tiles = 20;
-		const float tilescale = 0.5f;
-		quad.SetScale(tilescale * 0.9f);
-		for (int i = 0; i < tiles; i++)
-		{
-			for (int j = 0; j < tiles; j++)
-			{
-				quad.SetRotation({ sin(rotation) * j / (tiles*tiles), sin(rotation) * i / (tiles), sin(rotation) * (i+j) / (2*tiles) });
-				quad.SetPosition(brcl::Vector3({ -(float)tiles/2 + i, -(float)tiles/2 + j, -0.1f })*tilescale);
-				brcl::renderer2d::DrawQuad(quad, m_Color * brcl::Vector4({ (float)i / tiles, (float)j / tiles, 1.0f, (float)(i + j) / (2 * tiles) }));
-			}
 
-		}
+		quad.SetPosition({ -5.0f, -5.0f, 0.5f });
+		quad.SetRotation({ 0.0f,0.0f, -rotation });
+		quad.SetScale(1.0f);
+		brcl::renderer2d::DrawQuad(quad, m_Texture, m_TexParams);
 		
 		
 		brcl::renderer2d::EndScene();

@@ -96,33 +96,33 @@ namespace brcl
 	//TODO: quaternions
 	inline Matrix4x4 Rotate(const Matrix4x4& m, const Vector3& euler)
 	{
-		Matrix4x4 ret = Identity4x4();
+		Matrix4x4 rotate = Identity4x4();
 		
 
 		//TODO: this math needs fixed
 		
 		auto& [x, y, z] = euler;
 
-		ret(0,0) =  cos(z) * cos(y);
-		ret(1,0) =  sin(z) * cos(y);
-		ret(2,0) = -sin(y);
+		rotate(0,0) =  cos(z) * cos(y);
+		rotate(1,0) =  sin(z) * cos(y);
+		rotate(2,0) = -sin(y);
 
-		ret(0, 1) = cos(z) * sin(y) * sin(x) - sin(z) * cos(x);
-		ret(1, 1) = sin(z) * sin(y) * sin(x) + cos(z) * cos(x);
-		ret(2, 1) = cos(y) * sin(x);
+		rotate(0, 1) = cos(z) * sin(y) * sin(x) - sin(z) * cos(x);
+		rotate(1, 1) = sin(z) * sin(y) * sin(x) + cos(z) * cos(x);
+		rotate(2, 1) = cos(y) * sin(x);
 
-		ret(0, 2) = cos(z) * sin(y) * cos(x) + sin(z) * sin(x);
-		ret(1, 2) = sin(z) * sin(y) * cos(x) - cos(z) * sin(x);
-		ret(2, 2) = cos(y) * cos(x);
+		rotate(0, 2) = cos(z) * sin(y) * cos(x) + sin(z) * sin(x);
+		rotate(1, 2) = sin(z) * sin(y) * cos(x) - cos(z) * sin(x);
+		rotate(2, 2) = cos(y) * cos(x);
 
-		return ret * m;
+		return rotate * m;
 	}
 
 
 	inline Matrix4x4 Rotate(const Matrix4x4& m, float angle, const Vector3& v)
 	{
 		
-		Matrix4x4 ret;
+		Matrix4x4 rotate;
 
 		Vector3 axis = blaze::normalize(v);
 
@@ -130,28 +130,28 @@ namespace brcl
 
 		//TODO: check this math
 
-		ret(0,0) = cos(angle) + (1.0f - cos(angle)) * x * x;
-		ret(1,0) = (1.0f - cos(angle)) * x * y + sin(angle) * z;
-		ret(2,0) = (1.0f - cos(angle)) * x * z - sin(angle) * y;
-		ret(3,0) = 0.0f;
+		rotate(0,0) = cos(angle) + (1.0f - cos(angle)) * x * x;
+		rotate(1,0) = (1.0f - cos(angle)) * x * y + sin(angle) * z;
+		rotate(2,0) = (1.0f - cos(angle)) * x * z - sin(angle) * y;
+		rotate(3,0) = 0.0f;
 
-		ret(0,1) = (1.0f - cos(angle)) * y * x - sin(angle) * z;
-		ret(1,1) = cos(angle) + (1.0f - cos(angle)) * y * y;
-		ret(2,1) = (1.0f - cos(angle)) * y * z + sin(angle) * x;
-		ret(3,1) = 0.0f;
+		rotate(0,1) = (1.0f - cos(angle)) * y * x - sin(angle) * z;
+		rotate(1,1) = cos(angle) + (1.0f - cos(angle)) * y * y;
+		rotate(2,1) = (1.0f - cos(angle)) * y * z + sin(angle) * x;
+		rotate(3,1) = 0.0f;
 
-		ret(0,2) = (1.0f - cos(angle)) * z * x + sin(angle) * y;
-		ret(1,2) = (1.0f - cos(angle)) * z * y - sin(angle) * x;
-		ret(2,2) = cos(angle) + (1.0f - cos(angle)) * z * z;
-		ret(3,2) = 0.0f;
+		rotate(0,2) = (1.0f - cos(angle)) * z * x + sin(angle) * y;
+		rotate(1,2) = (1.0f - cos(angle)) * z * y - sin(angle) * x;
+		rotate(2,2) = cos(angle) + (1.0f - cos(angle)) * z * z;
+		rotate(3,2) = 0.0f;
 
-		ret(0,3) = 0.0f;
-		ret(1,3) = 0.0f;
-		ret(2,3) = 0.0f;
-		ret(3,3) = 1.0f;
+		rotate(0,3) = 0.0f;
+		rotate(1,3) = 0.0f;
+		rotate(2,3) = 0.0f;
+		rotate(3,3) = 1.0f;
 
 		
-		return ret * m;
+		return rotate * m;
 	}
 	
 	inline Matrix2x2 Invert(const Matrix2x2& mat)

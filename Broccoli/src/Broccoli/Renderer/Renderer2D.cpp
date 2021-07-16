@@ -118,7 +118,9 @@ namespace brcl::renderer2d
 		s_Data->TexturesUsed = 1;
 
 		s_Data->FlatTextureShader->Bind();
-		s_Data->FlatTextureShader->SetUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		
+		auto mat = camera.GetViewProjectionMatrix();
+		s_Data->FlatTextureShader->SetUniformMat4("u_ViewProjection", mat);
 	}
 
 	void EndScene()

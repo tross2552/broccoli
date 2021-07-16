@@ -12,7 +12,8 @@ namespace brcl
 		Camera(float left, float right, float bottom, float top);
 		
 		void SetProjectionMatrix(float left, float right, float bottom, float top);
-		Matrix4x4 GetProjectionMatrix() const { return m_ProjectionMatrix; };
+		void SetProjectionMatrix(const Matrix4x4& mat) { m_ProjectionMatrix = mat; }
+		Matrix4x4 GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		
 		void SetViewMatrix(const Matrix4x4& view) { m_ViewMatrix = view; }
 		Matrix4x4 GetViewMatrix() const { return m_ViewMatrix; };

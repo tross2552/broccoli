@@ -38,6 +38,7 @@ namespace brcl
 	public:
 		Timer(const std::string& name = "Debug")
 			: m_Start(std::chrono::high_resolution_clock::now()), m_Name(name) {}
+		~Timer() = default;
 
 		void Reset()
 		{

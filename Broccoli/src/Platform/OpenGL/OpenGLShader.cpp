@@ -226,7 +226,7 @@ namespace brcl
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++)
-				matrixCopy[i + j * 3] = matrix(i, j);
+				matrixCopy[i * 3 + j] = matrix(j, i);
 		}
 
 		glUniformMatrix3fv(location, 1, GL_FALSE, matrixCopy);
@@ -240,7 +240,7 @@ namespace brcl
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
-				matrixCopy[i + j * 4] = matrix(i, j);
+				matrixCopy[i * 4 + j] = matrix(j, i);
 		}
 
 		glUniformMatrix4fv(location, 1, GL_FALSE, matrixCopy);
