@@ -109,7 +109,7 @@ namespace brcl::renderer2d
 		delete s_Data;
 	}
 	
-	void BeginScene(const Camera& camera)
+	void BeginScene(const Camera& camera, const Matrix4x4& transform)
 	{
 		RenderCommand::SetClearColor({ 0.1f , 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
@@ -119,7 +119,7 @@ namespace brcl::renderer2d
 
 		s_Data->FlatTextureShader->Bind();
 		
-		auto mat = camera.GetViewProjectionMatrix();
+		auto mat = camera.GetProjectionMatrix() * Invert(transform);
 		s_Data->FlatTextureShader->SetUniformMat4("u_ViewProjection", mat);
 	}
 

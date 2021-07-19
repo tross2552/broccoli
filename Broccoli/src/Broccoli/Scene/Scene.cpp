@@ -50,11 +50,27 @@ namespace brcl
 
 	void Scene::OnUpdate(Timestep ts)
 	{
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for(auto entity : group)
+
+		//render quads
+		auto view = m_Registry.view<TransformComponent, CameraComponent>();
+		int i = 0;
+		for(auto entity : view)
 		{
-			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			renderer2d::DrawQuad(transform, sprite.ColorVector);
+			BRCL_CORE_INFO("Camera {0}: {1}", ++i, entity);
+			auto& camera = view.get<CameraComponent>(entity).MyCamera;
+			auto& transform = view.get<TransformComponent>(entity).MyTransform;
+
+			renderer2d::BeginScene(camera, transform);
+
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto spriteEntity : group)
+			{
+				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(spriteEntity);
+				renderer2d::DrawQuad(transform, sprite.ColorVector);
+			}
+
+			renderer2d::EndScene();
+			
 		}
 	}
 

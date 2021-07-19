@@ -13,7 +13,7 @@ namespace brcl::renderer
 
 	void BeginScene(const Camera& camera)
 	{
-		s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+		s_SceneData->ViewProjectionMatrix = camera.GetProjectionMatrix();
 	}
 
 	void EndScene()

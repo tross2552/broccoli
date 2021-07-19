@@ -9,17 +9,24 @@ namespace brcl
 	public:
 
 		EditorLayer::EditorLayer() :
-			Layer("Example"), m_CameraController(16.0f / 9.0f), m_Color(nullptr), m_TexParams({0.0f, 0.0f, 2.0f, 8.0f}) {}
+			Layer("Example"), m_Color(nullptr), m_TexParams({0.0f, 0.0f, 2.0f, 8.0f})
+		{
+		}
+
 		~EditorLayer() override = default;
 
 		void OnAttach() override;
 		void OnDetach() override;
 		
 		void OnUpdate(Timestep deltaTime) override;
+		
 		void OnEvent(Event& event) override;
+		bool OnMouseScrolled(MouseScrolledEvent& event);
+		bool OnWindowResized(WindowResizedEvent& event);
+		
 
 	private:
-		CameraController m_CameraController;
+		Entity m_CameraEntity;
 		std::shared_ptr<Scene> m_ActiveScene;
 		
 		std::shared_ptr<Texture2D> m_Texture;
@@ -28,6 +35,9 @@ namespace brcl
 		Vector4* m_Color;
 		Vector4 m_TexParams;
 		bool m_Focused;
+
+		float m_ZoomLevel;
+		float m_AspectRatio;
 	};
 
 	//--------------Engine Debug Application-----------------

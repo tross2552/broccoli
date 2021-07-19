@@ -18,12 +18,20 @@ namespace brcl
 		fBufferSpec.Height = 2160;
 		m_Framebuffer = Framebuffer::Create(fBufferSpec);
 		renderer::ResizeViewport(fBufferSpec.Width, fBufferSpec.Height);
+		
 
 		m_ActiveScene = std::make_shared<Scene>();
-		auto square = m_ActiveScene->CreateEntity("square");
 
+		m_CameraEntity = m_ActiveScene->CreateEntity("Editor Camera");
+		m_CameraEntity.AddComponent<CameraComponent>(16.0f/9.0f);
+		
+		auto square = m_ActiveScene->CreateEntity("Square");
 		square.AddComponent<SpriteRendererComponent>();
-		m_Color = &square.GetComponent<SpriteRendererComponent>()->ColorVector;
+
+		m_Color = &square.GetComponent<SpriteRendererComponent>().ColorVector;
+
+		m_AspectRatio = (float)fBufferSpec.Width / fBufferSpec.Height;
+		m_ZoomLevel = 1.0f;
 	}
 
 	void EditorLayer::OnDetach()
@@ -33,13 +41,69 @@ namespace brcl
 	void EditorLayer::OnUpdate(Timestep deltaTime)
 	{
 		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
-		m_CameraController.SetInputEnabled(m_Focused);
-		m_CameraController.OnUpdate(deltaTime);
+		if (m_Focused)
+		{
 
+			bool rotateFlag = Input::IsKeyPressed(Input::KeyCode::LEFT_SHIFT);
+
+			auto& transform = m_CameraEntity.GetComponent<TransformComponent>().MyTransform;
+
+			if (Input::IsKeyPressed(Input::KeyCode::W))
+			{
+				BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime);
+				else transform.SetRotation(transform.GetRotation() + Vector3({ -1.0f,0.0f,0.0f }) * deltaTime);
+			}
+
+			if (Input::IsKeyPressed(Input::KeyCode::A))
+			{
+				BRCL_CORE_INFO("LEFT LEFT LEFT LEFT !!!!!!!");
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime);
+				else transform.SetRotation(transform.GetRotation() + Vector3({ 0.0f,-1.0f,0.0f }) * deltaTime);
+			}
+
+			if (Input::IsKeyPressed(Input::KeyCode::S))
+			{
+				BRCL_CORE_INFO("DOWN DOWN DOWN DOWN !!!!!!!");
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime);
+				else transform.SetRotation(transform.GetRotation() + Vector3({ 1.0f,0.0f,0.0f }) * deltaTime);
+			}
+
+			if (Input::IsKeyPressed(Input::KeyCode::D))
+			{
+				BRCL_CORE_INFO("RIGHT RIGHT RIGHT RIGHT !!!!!!!");
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime);
+				else transform.SetRotation(transform.GetRotation() + Vector3({ 0.0f,1.0f,0.0f }) * deltaTime);
+			}
+
+			if (Input::IsKeyPressed(Input::KeyCode::R))
+			{
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 0.0f, -1.0f }) * deltaTime);
+				else transform.SetRotation(transform.GetRotation() + Vector3({ 0.0f,0.0f,-1.0f }) * deltaTime);
+			}
+
+			if (Input::IsKeyPressed(Input::KeyCode::F))
+			{
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 0.0f, 1.0f }) * deltaTime);
+				else transform.SetRotation(transform.GetRotation() + Vector3({ 0.0f,0.0f,1.0f }) * deltaTime);
+			}
+
+			if (Input::IsKeyPressed(Input::KeyCode::X))
+			{
+				transform.SetPosition({ 0.0f, 0.0f, 0.0f });
+				transform.SetRotation({ 0.0f,0.0f,0.0f });
+				m_ZoomLevel = 1.0f;
+			}
+		}
+
+		
+		m_CameraEntity.GetComponent<CameraComponent>().MyCamera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+
+		
 		m_Framebuffer->Bind();
 
 		renderer2d::ResetStats();
-		renderer2d::BeginScene(m_CameraController.GetCamera());
+		
 		m_ActiveScene->OnUpdate(deltaTime);
 		
 		/*
@@ -63,9 +127,6 @@ namespace brcl
 			}
 
 		}*/
-		
-		
-		renderer2d::EndScene();
 
 		m_Framebuffer->Unbind();
 		
@@ -74,7 +135,22 @@ namespace brcl
 	void EditorLayer::OnEvent(Event& event)
 	{
 		BRCL_TRACE("{0}", event);
-		m_CameraController.OnEvent(event);
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<MouseScrolledEvent>(BRCL_BIND_EVENT_FN(EditorLayer::OnMouseScrolled));
+		dispatcher.Dispatch<WindowResizedEvent>(BRCL_BIND_EVENT_FN(EditorLayer::OnWindowResized));
+	}
+
+	bool EditorLayer::OnMouseScrolled(MouseScrolledEvent& event)
+	{
+		m_ZoomLevel -= event.GetYOffset() * 0.05f; //TODO: curve the controller's zoom
+		m_ZoomLevel = std::max(0.05f, m_ZoomLevel);
+		return false;
+	}
+
+	bool EditorLayer::OnWindowResized(WindowResizedEvent& event)
+	{
+		m_CameraEntity.GetComponent<CameraComponent>().MyCamera.ChangeAspectRatio( ((float)event.GetWidth()) / event.GetHeight() );
+		return false;
 	}
 	
 	void EditorImGuiLayer::OnImGuiRender()
@@ -97,7 +173,7 @@ namespace brcl
 		if(m_AppLayer->m_Framebuffer->GetWidth() != viewportWidth ||
 			m_AppLayer->m_Framebuffer->GetHeight() != viewportHeight)
 		{
-			m_AppLayer->m_CameraController.Resize(viewportWidth, viewportHeight);
+			m_AppLayer->m_AspectRatio = ((float)viewportWidth) / viewportHeight;
 		}
 		
 		ImGui::Image((void*)m_AppLayer->m_Framebuffer->GetColorAttachmentID(), viewportSize, ImVec2(0,1), ImVec2(1,0));

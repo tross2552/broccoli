@@ -20,7 +20,7 @@ namespace brcl::renderer2d
 	void Init();
 	void Shutdown();
 
-	void BeginScene(const Camera& camera);
+	void BeginScene(const Camera& camera, const Matrix4x4& transform);
 	void EndScene();
 
 	void Flush();

@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "Broccoli/Math/Math.h"
+#include "Broccoli/Renderer/Camera.h"
+#include "Broccoli/Transform.h"
 
 namespace brcl
 {
@@ -17,16 +19,12 @@ namespace brcl
 	struct TransformComponent
 	{
 
-		Matrix4x4 TransformMatrix;
+		Transform MyTransform; //todo: collapse transform into this struct
 
-		TransformComponent() :
-			TransformMatrix(Identity4x4()) {}
+		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const Matrix4x4& transform) :
-			TransformMatrix(transform) {}
-
-		operator Matrix4x4& () { return TransformMatrix; }
-		operator const Matrix4x4& () const { return TransformMatrix; }
+		
+		operator Matrix4x4 () const { return MyTransform.GetMatrix(); }
 
 	};
 
@@ -46,6 +44,18 @@ namespace brcl
 		operator Vector4& () { return ColorVector; }
 		operator const Vector4& () const { return ColorVector; }
 
+	};
+
+	struct CameraComponent
+	{
+		Camera MyCamera;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(float aspectRatio) :
+			MyCamera(aspectRatio) {}
+		CameraComponent(const Matrix4x4& projection) :
+			MyCamera(projection) {}
 	};
 
 }

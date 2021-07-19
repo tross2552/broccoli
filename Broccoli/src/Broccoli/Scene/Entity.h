@@ -21,12 +21,12 @@ namespace brcl
 		T& AddComponent(Args &&... args)
 		{
 			BRCL_CORE_ASSERT(m_Scene->m_Registry.valid(m_Handle), "Scene error: Entity not valid!");
-			BRCL_CORE_ASSERT(m_Scene->m_Registry.all_of<T>(m_Handle), "Scene error: Entity already has component!");
+			BRCL_CORE_ASSERT(!m_Scene->m_Registry.any_of<T>(m_Handle), "Scene error: Entity already has component!");
 			return m_Scene->m_Registry.emplace<T>(m_Handle, std::forward<Args>(args)...);
 		}
 
 		template <typename T>
-		T* GetComponent()
+		T& GetComponent()
 		{
 			BRCL_CORE_ASSERT(m_Scene->m_Registry.valid(m_Handle), "Scene error: Entity not valid!");
 			BRCL_CORE_ASSERT(m_Scene->m_Registry.all_of<T>(m_Handle), "Scene error: Entity does not have component!");

@@ -27,7 +27,7 @@ namespace Sandbox
 		rotation += 0.01f;
 
 		brcl::renderer2d::ResetStats();
-		brcl::renderer2d::BeginScene(m_CameraController.GetCamera());
+		brcl::renderer2d::BeginScene(m_CameraController.GetCamera(), m_CameraController.GetTransform().GetMatrix());
 		brcl::Transform quad;
 		brcl::Vector4 colorInv = 1.0f - m_Color;
 		colorInv[3] = 1.0f;

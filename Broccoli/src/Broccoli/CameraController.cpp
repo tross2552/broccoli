@@ -63,9 +63,9 @@ namespace brcl
 				m_ZoomLevel = 1.0f;
 			}
 		}
-		m_Camera.SetViewMatrix(Invert(m_Transform.GetMatrix()));
+		//m_Camera.SetViewMatrix(Invert(m_Transform.GetMatrix()));
 		m_Camera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
-		m_Camera.UpdateVPMatrix();
+		//m_Camera.UpdateVPMatrix();
 		
 	}
 
