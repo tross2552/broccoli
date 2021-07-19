@@ -23,6 +23,8 @@ namespace brcl
 		void SetScale(const Vector3& scale) { m_Scale = scale; }
 		const Vector3& GetScale() const { return m_Scale; }
 
+		operator const Matrix4x4 () const { return GetMatrix(); }
+
 		
 
 	

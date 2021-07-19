@@ -135,6 +135,7 @@ project "Sandbox"
 	{
 		"Broccoli/vendor/spdlog/include",
 		"%{IncludeDir.Blaze}",
+		"%{IncludeDir.EnTT}",
 		"Broccoli/src",
 		"Broccoli/vendor"
 	}
@@ -196,6 +197,7 @@ project "Harvest"
 	{
 		"Broccoli/vendor/spdlog/include",
 		"%{IncludeDir.Blaze}",
+		"%{IncludeDir.EnTT}",
 		"Broccoli/src",
 		"Broccoli/vendor"
 	}

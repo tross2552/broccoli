@@ -13,6 +13,10 @@
 
 #include "Broccoli/CameraController.h"
 
+#include "Broccoli/Scene/Scene.h"
+#include "Broccoli/Scene/Components.h"
+#include "Broccoli/Scene/Entity.h"
+
 // RENDERER ----------------
 
 #include "Broccoli/Renderer/Renderer.h"

@@ -3,6 +3,11 @@
 
 namespace brcl
 {
+
+	struct position
+	{
+		float x, y;
+	};
 	
 	void EditorLayer::OnAttach()
 	{
@@ -13,6 +18,12 @@ namespace brcl
 		fBufferSpec.Height = 2160;
 		m_Framebuffer = Framebuffer::Create(fBufferSpec);
 		renderer::ResizeViewport(fBufferSpec.Width, fBufferSpec.Height);
+
+		m_ActiveScene = std::make_shared<Scene>();
+		auto square = m_ActiveScene->CreateEntity("square");
+
+		square.AddComponent<SpriteRendererComponent>();
+		m_Color = &square.GetComponent<SpriteRendererComponent>()->ColorVector;
 	}
 
 	void EditorLayer::OnDetach()
@@ -26,12 +37,14 @@ namespace brcl
 		m_CameraController.OnUpdate(deltaTime);
 
 		m_Framebuffer->Bind();
-		
-		static float rotation = 0.0f;
-		rotation += 0.01f;
 
 		renderer2d::ResetStats();
 		renderer2d::BeginScene(m_CameraController.GetCamera());
+		m_ActiveScene->OnUpdate(deltaTime);
+		
+		/*
+		static float rotation = 0.0f;
+		rotation += 0.01f;
 		Transform quad;
 		Vector4 colorInv = 1.0f - m_Color;
 		colorInv[3] = 1.0f;
@@ -49,7 +62,7 @@ namespace brcl
 				renderer2d::DrawQuad(quad, m_Color * Vector4({ (float)i / tiles, (float)j / tiles, 1.0f, (float)(i + j) / (2 * tiles) }));
 			}
 
-		}
+		}*/
 		
 		
 		renderer2d::EndScene();
@@ -99,7 +112,7 @@ namespace brcl
 		ImGui::Text("Quads: %d", renderdebug.QuadCount);
 		ImGui::Text("Vertices: %d", renderdebug.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", renderdebug.GetTotalIndexCount());
-		ImGui::ColorEdit4("Square Color", m_AppLayer->m_Color.data());
+		ImGui::ColorEdit4("Square Color", (float*)m_AppLayer->m_Color);
 		ImGui::DragFloat4("Checker Texture", m_AppLayer->m_TexParams.data(), 0.01f, 0.0f, 20.0f);
 		ImGui::End();
 

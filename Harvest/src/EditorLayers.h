@@ -9,7 +9,7 @@ namespace brcl
 	public:
 
 		EditorLayer::EditorLayer() :
-			Layer("Example"), m_CameraController(16.0f / 9.0f), m_Color(1.0f), m_TexParams({0.0f, 0.0f, 2.0f, 8.0f}) {}
+			Layer("Example"), m_CameraController(16.0f / 9.0f), m_Color(nullptr), m_TexParams({0.0f, 0.0f, 2.0f, 8.0f}) {}
 		~EditorLayer() override = default;
 
 		void OnAttach() override;
@@ -20,10 +20,13 @@ namespace brcl
 
 	private:
 		CameraController m_CameraController;
-		Vector4 m_Color;
-		Vector4 m_TexParams;
+		std::shared_ptr<Scene> m_ActiveScene;
+		
 		std::shared_ptr<Texture2D> m_Texture;
 		std::shared_ptr<Framebuffer> m_Framebuffer;
+
+		Vector4* m_Color;
+		Vector4 m_TexParams;
 		bool m_Focused;
 	};
 

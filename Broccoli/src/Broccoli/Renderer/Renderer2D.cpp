@@ -151,18 +151,18 @@ namespace brcl::renderer2d
 		s_Data->stats.DrawCalls++;
 	}
 
-	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture, const Vector4& textureParameters)
+	void DrawQuad(const Matrix4x4& transform, std::shared_ptr<Texture2D> texture, const Vector4& textureParameters)
 	{
 		DrawQuad(transform, texture, Vector4({ 1.0f, 1.0f, 1.0f, 1.0f }), textureParameters);
 	}
 
-	void DrawQuad(const Transform& transform, const Vector4& color)
+	void DrawQuad(const Matrix4x4& transform, const Vector4& color)
 	{
 
 		DrawQuad(transform, s_Data->TextureSlots[0], color, Vector4({ 0.0f, 0.0f, 1.0f, 1.0f }));
 	}
 
-	void DrawQuad(const Transform& transform, std::shared_ptr<Texture2D> texture, const Vector4& color, const Vector4& textureParameters)
+	void DrawQuad(const Matrix4x4& transform, std::shared_ptr<Texture2D> texture, const Vector4& color, const Vector4& textureParameters)
 	{
 
 		if (s_Data->QuadsDrawn == max_draw_quads)
@@ -190,8 +190,7 @@ namespace brcl::renderer2d
 			texIndex = (float)s_Data->TexturesUsed;
 			s_Data->TexturesUsed++;
 		}
-
-		Matrix4x4 transformMatrix = transform.GetMatrix();
+		
 		Matrix4x4 quadPositions = {
 			{ 0.0f,1.0f,1.0f,0.0f },
 			{ 0.0f,0.0f,1.0f,1.0f },
@@ -206,7 +205,7 @@ namespace brcl::renderer2d
 			0.0f, 1.0f
 		} };
 
-		quadPositions = transformMatrix * quadPositions;
+		quadPositions = transform * quadPositions;
 
 		auto& [r, g, b, a] = color;
 		Vertex2D quadVertex = { 0, 0, 0, r , g, b, a, 0.0f, 0.0f, texIndex };
