@@ -53,9 +53,12 @@ namespace brcl
 		void OnImGuiRender() override;
 
 		void OnEvent(Event& event) override;
-
-		void DrawEntityNode(Entity entity);
 	
+	private:
+
+		void DrawEntityComponents(Entity entity);
+		void DrawEntityNode(Entity entity);
+
 	private:
 
 		EditorLayer* m_AppLayer;

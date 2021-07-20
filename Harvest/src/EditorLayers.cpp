@@ -190,22 +190,19 @@ namespace brcl
 		ImGui::Image((void*)m_AppLayer->m_Framebuffer->GetColorAttachmentID(), viewportSize, ImVec2(0,1), ImVec2(1,0));
 		
 		ImGui::End();
+		
 		ImGui::PopStyleVar();
 
-		ImGui::Begin("Settings");
-		ImGui::Text("Hello");
+		ImGui::Begin("Render Stats");
 		ImGui::Text("Draw Calls: %d", renderdebug.DrawCalls);
 		ImGui::Text("Quads: %d", renderdebug.QuadCount);
 		ImGui::Text("Vertices: %d", renderdebug.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", renderdebug.GetTotalIndexCount());
-		ImGui::ColorEdit4("Square Color", (float*)m_AppLayer->m_Color);
-		ImGui::DragFloat4("Checker Texture", m_AppLayer->m_TexParams.data(), 0.01f, 0.0f, 20.0f);
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();
 
 		ImGui::Begin("Scene Hierarchy");
-		
 		if (ImGui::TreeNode("Active Scene"))
 		{
 			
@@ -218,8 +215,110 @@ namespace brcl
 
 			ImGui::TreePop();
 		}
-		
 		ImGui::End();
+
+		ImGui::Begin("Properties");
+		if (m_Selection) DrawEntityComponents(m_Selection);
+		ImGui::End();
+	}
+
+	void EditorImGuiLayer::DrawEntityComponents(Entity entity)
+	{
+		
+		//todo: less oop in components
+
+		
+		if(entity.HasComponent<TagComponent>())
+		{
+			
+			auto& tag = entity.GetComponent<TagComponent>().Tag;
+			
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			strcpy(buffer, tag.c_str());
+			
+			
+			if(ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			{
+				tag = std::string(buffer);
+			}
+			
+		}
+
+		if(entity.HasComponent<TransformComponent>())
+		{
+			auto& transform = entity.GetComponent<TransformComponent>();
+
+			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			if(ImGui::TreeNode((void*)(intptr_t)1, "Transform Component"))
+			{
+				Vector3 position = transform.MyTransform.GetPosition();
+				Vector3 rotation = transform.MyTransform.GetRotation();
+				Vector3 scale = transform.MyTransform.GetScale();
+
+				if (ImGui::InputFloat3("Position", position.data(), "%.5f"))
+					transform.MyTransform.SetPosition(position);
+
+				if (ImGui::InputFloat3("Rotation", rotation.data(), "%.5f"))
+					transform.MyTransform.SetRotation(rotation);
+
+				if (ImGui::InputFloat3("Scale", scale.data(), "%.5f"))
+					transform.MyTransform.SetScale(scale);
+				
+				ImGui::TreePop();
+			}
+		}
+
+		if (entity.HasComponent<CameraComponent>())
+		{
+			auto& camera = entity.GetComponent<CameraComponent>();
+
+			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			if (ImGui::TreeNode((void*)(intptr_t)2, "Camera Component"))
+			{
+
+
+				float aspect = m_AppLayer->m_AspectRatio;
+				float zoom = m_AppLayer->m_ZoomLevel;
+
+				if (ImGui::InputFloat("Aspect Ratio", &aspect, 0, 0, "%.5f"))
+					m_AppLayer->m_AspectRatio = aspect;
+				if (ImGui::InputFloat("Zoom Level", &zoom, 0, 0, "%.5f"))
+					m_AppLayer->m_ZoomLevel = zoom;
+
+				ImGui::TreePop();
+			}
+
+		}
+
+		if(entity.HasComponent<SpriteRendererComponent>())
+		{
+			auto& renderer = entity.GetComponent<SpriteRendererComponent>();
+
+			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			if (ImGui::TreeNode((void*)(intptr_t)3, "Sprite Renderer Component"))
+			{
+				Vector4& color = renderer.ColorVector;
+				Vector4& texTransform = renderer.TextureTransform;
+
+				ImGui::ColorEdit4("Color", color.data());
+				ImGui::DragFloat4("Texture Transform", texTransform.data(), 0.01f, 0.0f, 20.0f);
+
+				ImGui::TreePop();
+			}
+		}
+
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			auto& script = entity.GetComponent<ScriptComponent>();
+
+			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+			if (ImGui::TreeNode((void*)(intptr_t)3, "Script Component"))
+			{
+				ImGui::Text(script.m_Enabled ? "Script enabled" : "Script disabled");
+				ImGui::TreePop();
+			}
+		}
 	}
 
 	void EditorImGuiLayer::DrawEntityNode(Entity entity)
