@@ -4,50 +4,25 @@
 namespace brcl
 {
 
-	struct position
+	class CameraController : public ScriptableEntity
 	{
-		float x, y;
-	};
-	
-	void EditorLayer::OnAttach()
-	{
-		m_Texture = Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
-
-		FrameBufferSpec fBufferSpec;
-		fBufferSpec.Width = 3840; //todo: detect best settings
-		fBufferSpec.Height = 2160;
-		m_Framebuffer = Framebuffer::Create(fBufferSpec);
-		renderer::ResizeViewport(fBufferSpec.Width, fBufferSpec.Height);
+	public:
 		
-
-		m_ActiveScene = std::make_shared<Scene>();
-
-		m_CameraEntity = m_ActiveScene->CreateEntity("Editor Camera");
-		m_CameraEntity.AddComponent<CameraComponent>(16.0f/9.0f);
-		
-		auto square = m_ActiveScene->CreateEntity("Square");
-		square.AddComponent<SpriteRendererComponent>();
-
-		m_Color = &square.GetComponent<SpriteRendererComponent>().ColorVector;
-
-		m_AspectRatio = (float)fBufferSpec.Width / fBufferSpec.Height;
-		m_ZoomLevel = 1.0f;
-	}
-
-	void EditorLayer::OnDetach()
-	{
-	}
-
-	void EditorLayer::OnUpdate(Timestep deltaTime)
-	{
-		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
-		if (m_Focused)
+		void OnCreate()
 		{
+			auto& transform = GetComponent<TransformComponent>().MyTransform;
+			transform.SetPosition(Vector3{ 1.0f,1.0f,0.0f });
+		}
+
+		void OnDestroy()
+		{
+		}
+		void OnUpdate(Timestep deltaTime)
+		{
+			auto& transform = GetComponent<TransformComponent>().MyTransform;
 
 			bool rotateFlag = Input::IsKeyPressed(Input::KeyCode::LEFT_SHIFT);
-
-			auto& transform = m_CameraEntity.GetComponent<TransformComponent>().MyTransform;
-
+			
 			if (Input::IsKeyPressed(Input::KeyCode::W))
 			{
 				BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
@@ -92,12 +67,48 @@ namespace brcl
 			{
 				transform.SetPosition({ 0.0f, 0.0f, 0.0f });
 				transform.SetRotation({ 0.0f,0.0f,0.0f });
-				m_ZoomLevel = 1.0f;
 			}
 		}
+	};
+	
+	void EditorLayer::OnAttach()
+	{
+		m_Texture = Texture2D::Create("assets/textures/broccoli_texture_small_formatted.png");
 
+		FrameBufferSpec fBufferSpec;
+		fBufferSpec.Width = 3840; //todo: detect best settings
+		fBufferSpec.Height = 2160;
+		m_Framebuffer = Framebuffer::Create(fBufferSpec);
+		renderer::ResizeViewport(fBufferSpec.Width, fBufferSpec.Height);
 		
-		m_CameraEntity.GetComponent<CameraComponent>().MyCamera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+
+		m_ActiveScene = std::make_shared<Scene>();
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Editor Camera");
+		m_CameraEntity.AddComponent<CameraComponent>(16.0f/9.0f);
+		m_CameraEntity.AddComponent<ScriptComponent>().Bind<CameraController>();
+		
+		auto square = m_ActiveScene->CreateEntity("Square");
+		square.AddComponent<SpriteRendererComponent>();
+
+		m_Color = &square.GetComponent<SpriteRendererComponent>().ColorVector;
+
+		m_ActiveScene->OnPlay();
+
+		m_AspectRatio = ((float)fBufferSpec.Width) / fBufferSpec.Height;
+	}
+
+	void EditorLayer::OnDetach()
+	{
+	}
+
+	void EditorLayer::OnUpdate(Timestep deltaTime)
+	{
+		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
+		
+		m_CameraEntity.GetComponent<ScriptComponent>().m_Enabled = m_Focused;
+		m_CameraEntity.GetComponent<CameraComponent>().MyCamera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		
 
 		
 		m_Framebuffer->Bind();
@@ -149,7 +160,7 @@ namespace brcl
 
 	bool EditorLayer::OnWindowResized(WindowResizedEvent& event)
 	{
-		m_CameraEntity.GetComponent<CameraComponent>().MyCamera.ChangeAspectRatio( ((float)event.GetWidth()) / event.GetHeight() );
+		m_ActiveScene->OnViewportResize(event.GetWidth(), event.GetHeight());
 		return false;
 	}
 	

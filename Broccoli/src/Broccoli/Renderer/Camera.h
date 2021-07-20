@@ -30,7 +30,7 @@ namespace brcl
 		void SetProjectionMatrix(const Matrix4x4& mat) { m_ProjectionMatrix = mat; }
 		Matrix4x4 GetProjectionMatrix() const { return m_ProjectionMatrix; }
 
-	protected:
+	private:
 
 		Matrix4x4 m_ProjectionMatrix;
 		

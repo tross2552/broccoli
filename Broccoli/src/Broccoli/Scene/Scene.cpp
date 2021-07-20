@@ -8,33 +8,6 @@
 namespace brcl
 {
 
-	static void DoMath(const Matrix4x4& transform)
-	{
-		
-	}
-	
-	Scene::Scene()
-	{
-#if 0
-		Entity oneEntity = m_Registry.create();
-
-		m_Registry.emplace<TransformComponent>(oneEntity, Identity4x4());
-		m_Registry.on_construct<TransformComponent>().connect<&OnTransformConstruct>();
-
-		if (m_Registry.any_of<TransformComponent>(oneEntity)) TransformComponent& transform = m_Registry.get<TransformComponent>(oneEntity);
-
-		
-		auto view = m_Registry.view<TransformComponent>();
-		for (auto entity : view)
-			TransformComponent& transform = view.get<TransformComponent>(entity);
-
-		
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for( auto entity : group)
-			auto& [transform, mesh] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-#endif	
-	}
-
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		auto handle = m_Registry.create();
@@ -48,9 +21,33 @@ namespace brcl
 		
 	}
 
-	void Scene::OnUpdate(Timestep ts)
+	void Scene::OnPlay()
+	{
+		m_Registry.view<ScriptComponent>().each([=](entt::entity entity, ScriptComponent& script)
+		{
+			script.instance = script.InstantiateScript();
+			script.instance->m_Entity = Entity{ entity, this };
+			script.instance->OnCreate();
+		});
+	}
+
+	void Scene::OnPause()
+	{
+		m_Registry.view<ScriptComponent>().each([=](ScriptComponent& script)
+		{
+			script.instance->OnDestroy();
+			script.DestroyScript(&script);
+		});
+	}
+
+	void Scene::OnUpdate(Timestep deltaTime)
 	{
 
+		m_Registry.view<ScriptComponent>().each([=](ScriptComponent& script)
+		{
+			if(script.m_Enabled) script.instance->OnUpdate(deltaTime);
+		});
+		
 		//render quads
 		auto view = m_Registry.view<TransformComponent, CameraComponent>();
 		int i = 0;
@@ -74,5 +71,17 @@ namespace brcl
 		}
 	}
 
-	
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
+		auto view = m_Registry.view<TransformComponent, CameraComponent>();
+		for (auto entity : view)
+		{
+			auto& camera = view.get<CameraComponent>(entity).MyCamera;
+			camera.ChangeAspectRatio((float)width / height);
+		}
+		
+	}
 }

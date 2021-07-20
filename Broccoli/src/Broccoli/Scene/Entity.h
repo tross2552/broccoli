@@ -1,10 +1,11 @@
 ﻿#pragma once
 #include <entt.hpp>
 
-#include "Scene.h"
+#include "Broccoli/Scene/Scene.h"
 
 namespace brcl
 {
+	
 	class Entity
 	{
 	public:

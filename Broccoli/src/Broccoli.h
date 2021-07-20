@@ -9,13 +9,16 @@
 #include "Broccoli/ImGui/ImGuiLayer.h"
 
 #include "Broccoli/Input.h"
-#include "Broccoli/Math/Math.h"
+#include "Broccoli/Events/MouseEvent.h"
+#include "Broccoli/Events/ApplicationEvent.h"
+#include "Broccoli/Events/KeyEvent.h"
 
-#include "Broccoli/CameraController.h"
+#include "Broccoli/Math/Math.h"
 
 #include "Broccoli/Scene/Scene.h"
 #include "Broccoli/Scene/Components.h"
 #include "Broccoli/Scene/Entity.h"
+#include "Broccoli/Scene/ScriptableEntity.h"
 
 // RENDERER ----------------
 

@@ -36,7 +36,7 @@ namespace brcl
 		Vector4 m_TexParams;
 		bool m_Focused;
 
-		float m_ZoomLevel;
+		float m_ZoomLevel = 1.0f;
 		float m_AspectRatio;
 	};
 
