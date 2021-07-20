@@ -33,12 +33,13 @@ namespace brcl
 	{
 
 		Vector4 ColorVector;
+		Vector4 TextureTransform;
 
 		SpriteRendererComponent() :
-			ColorVector(1.0f) {}
+			ColorVector(1.0f), TextureTransform{ 0.0f,0.0f,1.0f,1.0f } {}
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
-		SpriteRendererComponent(const Vector4& transform) :
-			ColorVector(transform)
+		SpriteRendererComponent(const Vector4& color, const Vector4& texTransform = {0.0f,0.0f,1.0f,1.0f}) :
+			ColorVector(color), TextureTransform(texTransform)
 		{
 		}
 
