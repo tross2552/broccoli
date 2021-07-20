@@ -9,6 +9,7 @@ namespace brcl
 	{
 
 		friend class Entity;
+		friend class EditorImGuiLayer;
 		
 	public:
 		Scene() = default;

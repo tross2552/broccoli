@@ -54,9 +54,13 @@ namespace brcl
 
 		void OnEvent(Event& event) override;
 
+		void DrawEntityNode(Entity entity);
+	
 	private:
 
 		EditorLayer* m_AppLayer;
 		bool m_isViewportFocused;
+
+		Entity m_Selection;
 	};
 }

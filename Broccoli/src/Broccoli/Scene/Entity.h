@@ -50,6 +50,16 @@ namespace brcl
 		}
 
 		operator bool() const { return m_Handle != entt::null; }
+
+		bool operator==(const Entity& other) const
+		{
+			return m_Handle == other.m_Handle && m_Scene == other.m_Scene;
+		}
+
+		bool operator!=(const Entity& other) const
+		{
+			return !(*this == other);
+		}
 	
 	private:
 		Scene* m_Scene;

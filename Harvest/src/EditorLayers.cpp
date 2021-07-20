@@ -192,7 +192,6 @@ namespace brcl
 		ImGui::End();
 		ImGui::PopStyleVar();
 
-		
 		ImGui::Begin("Settings");
 		ImGui::Text("Hello");
 		ImGui::Text("Draw Calls: %d", renderdebug.DrawCalls);
@@ -204,7 +203,51 @@ namespace brcl
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();
+
+		ImGui::Begin("Scene Hierarchy");
+		
+		if (ImGui::TreeNode("Active Scene"))
+		{
+			
+			m_AppLayer->m_ActiveScene->m_Registry.each([&] (auto& entityID)
+			{
+				Entity entity{ entityID, m_AppLayer->m_ActiveScene.get() };
+				DrawEntityNode(entity);
+				
+			} );
+
+			ImGui::TreePop();
+		}
+		
+		ImGui::End();
 	}
+
+	void EditorImGuiLayer::DrawEntityNode(Entity entity)
+	{
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+		const bool is_selected = (entity == m_Selection);
+		auto& tag = entity.GetComponent<TagComponent>().Tag;
+
+		if (is_selected)
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+
+		bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)entity, node_flags, "%s", tag.c_str());
+		if (ImGui::IsItemClicked())
+			m_Selection = entity;
+
+		if (ImGui::BeginDragDropSource())
+		{
+			ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
+			ImGui::Text("This is a drag and drop source");
+			ImGui::EndDragDropSource();
+		}
+		if (node_open)
+		{
+			ImGui::Text("TestChildNode");
+			ImGui::TreePop();
+		}
+	}
+	
 	void EditorImGuiLayer::OnEvent(Event& event)
 	{
 		//since the viewport is an imgui window, we need to check which viewport is focused before blocking the event
