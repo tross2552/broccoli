@@ -9,7 +9,7 @@ namespace brcl
 	public:
 
 		EditorLayer::EditorLayer() :
-			Layer("Example"), m_Color(nullptr), m_TexParams({0.0f, 0.0f, 2.0f, 8.0f})
+			Layer("Example")
 		{
 		}
 
@@ -31,9 +31,7 @@ namespace brcl
 		
 		std::shared_ptr<Texture2D> m_Texture;
 		std::shared_ptr<Framebuffer> m_Framebuffer;
-
-		Vector4* m_Color;
-		Vector4 m_TexParams;
+		
 		bool m_Focused;
 
 		float m_ZoomLevel = 1.0f;
@@ -41,6 +39,14 @@ namespace brcl
 	};
 
 	//--------------Engine Debug Application-----------------
+
+	struct EditorEntity
+	{
+		Entity Entity;
+		std::string Name;
+		bool Deleted;
+	};
+	
 
 	//temporary app gui!!!!!
 	class EditorImGuiLayer : public ImGuiLayer
@@ -57,7 +63,10 @@ namespace brcl
 	private:
 
 		void DrawEntityComponents(Entity entity);
-		void DrawEntityNode(Entity entity);
+		
+		Entity AddEntity(std::string name);
+		void ClearDeletedEntities();
+
 
 	private:
 
@@ -65,5 +74,8 @@ namespace brcl
 		bool m_isViewportFocused;
 
 		Entity m_Selection;
+
+		std::vector<EditorEntity> m_SceneEntities;
+		int m_EntityCount;
 	};
 }

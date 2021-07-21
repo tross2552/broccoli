@@ -1,11 +1,13 @@
 ﻿#pragma once
 #include <entt.hpp>
 
+#include "Components.h"
 #include "Broccoli/Scene/Scene.h"
 
 namespace brcl
 {
-	
+	struct TagComponent;
+
 	class Entity
 	{
 	public:
@@ -59,6 +61,16 @@ namespace brcl
 		bool operator!=(const Entity& other) const
 		{
 			return !(*this == other);
+		}
+
+		operator entt::entity() const
+		{
+			return m_Handle;
+		}
+
+		operator std::string() const
+		{
+			return std::to_string(((uint32_t)m_Handle));
 		}
 	
 	private:

@@ -21,6 +21,11 @@ namespace brcl
 		
 	}
 
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_EntitiesToBeRemoved.emplace_back(entity);
+	}
+
 	void Scene::OnPlay()
 	{
 		m_Registry.view<ScriptComponent>().each([=](entt::entity entity, ScriptComponent& script)
@@ -69,7 +74,23 @@ namespace brcl
 			renderer2d::EndScene();
 			
 		}
+
+
+		ClearDeletedEntities();
+		
 	}
+
+	void Scene::ClearDeletedEntities()
+	{
+		for(auto entity : m_EntitiesToBeRemoved)
+		{
+			m_Registry.destroy(entity);
+			
+		}
+
+		m_EntitiesToBeRemoved.clear();
+	}
+
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
 	{

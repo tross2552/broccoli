@@ -87,11 +87,6 @@ namespace brcl
 		m_CameraEntity = m_ActiveScene->CreateEntity("Editor Camera");
 		m_CameraEntity.AddComponent<CameraComponent>(16.0f/9.0f);
 		m_CameraEntity.AddComponent<ScriptComponent>().Bind<CameraController>();
-		
-		auto square = m_ActiveScene->CreateEntity("Square");
-		square.AddComponent<SpriteRendererComponent>();
-
-		m_Color = &square.GetComponent<SpriteRendererComponent>().ColorVector;
 
 		m_ActiveScene->OnPlay();
 
@@ -206,20 +201,84 @@ namespace brcl
 		if (ImGui::TreeNode("Active Scene"))
 		{
 			
-			m_AppLayer->m_ActiveScene->m_Registry.each([&] (auto& entityID)
+			for(auto it = m_SceneEntities.begin(); it!= m_SceneEntities.end();it+=1)
 			{
-				Entity entity{ entityID, m_AppLayer->m_ActiveScene.get() };
-				DrawEntityNode(entity);
 				
-			} );
+				std::string label = std::string("").append(it->Name).append("#").append(it->Entity);
+				ImGui::Selectable(label.c_str());
+				if (ImGui::IsItemClicked() || ImGui::IsItemActive()) m_Selection = it->Entity;
+				
+				if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
+				{
+					int copyTo = ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1;
+
+					
+					if (it+copyTo >= m_SceneEntities.begin() && it + copyTo != m_SceneEntities.end())
+					{
+						iter_swap(it, it + copyTo);
+						ImGui::ResetMouseDragDelta();
+					}
+				}
+
+				if (ImGui::BeginPopupContextItem())
+				{
+					if (ImGui::MenuItem("Delete Entity"))
+					{
+						it->Deleted = true;
+						if (m_Selection == it->Entity) m_Selection = Entity();
+					}
+					ImGui::EndPopup();
+				}
+			}
 
 			ImGui::TreePop();
 		}
+
+		if(ImGui::BeginPopupContextWindow(0,1,false))
+		{
+			if(ImGui::MenuItem("Create Empty"))
+			{
+				AddEntity("Empty");
+			}
+			if (ImGui::MenuItem("Create Quad"))
+			{
+				Entity quad = AddEntity("Quad");
+				quad.AddComponent<SpriteRendererComponent>();
+				
+			}
+			ImGui::EndPopup();
+		}
+		
+		
 		ImGui::End();
 
 		ImGui::Begin("Properties");
 		if (m_Selection) DrawEntityComponents(m_Selection);
 		ImGui::End();
+
+		ClearDeletedEntities();
+	}
+
+	Entity EditorImGuiLayer::AddEntity(std::string name)
+	{
+		auto createdEntity = m_AppLayer->m_ActiveScene->CreateEntity("");
+		m_SceneEntities.emplace_back(EditorEntity{ createdEntity, name, false });
+		m_EntityCount++;
+		return createdEntity;
+	}
+
+	void EditorImGuiLayer::ClearDeletedEntities()
+	{
+		for(auto it = m_SceneEntities.begin(); it != m_SceneEntities.end();)
+		{
+			if (it->Deleted)
+			{
+				m_AppLayer->m_ActiveScene->DestroyEntity(it->Entity);
+				it = m_SceneEntities.erase(it);
+				m_EntityCount--;
+			}
+			else ++it;
+		}
 	}
 
 	void EditorImGuiLayer::DrawEntityComponents(Entity entity)
@@ -318,32 +377,6 @@ namespace brcl
 				ImGui::Text(script.m_Enabled ? "Script enabled" : "Script disabled");
 				ImGui::TreePop();
 			}
-		}
-	}
-
-	void EditorImGuiLayer::DrawEntityNode(Entity entity)
-	{
-		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-		const bool is_selected = (entity == m_Selection);
-		auto& tag = entity.GetComponent<TagComponent>().Tag;
-
-		if (is_selected)
-			node_flags |= ImGuiTreeNodeFlags_Selected;
-
-		bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)entity, node_flags, "%s", tag.c_str());
-		if (ImGui::IsItemClicked())
-			m_Selection = entity;
-
-		if (ImGui::BeginDragDropSource())
-		{
-			ImGui::SetDragDropPayload("_TREENODE", NULL, 0);
-			ImGui::Text("This is a drag and drop source");
-			ImGui::EndDragDropSource();
-		}
-		if (node_open)
-		{
-			ImGui::Text("TestChildNode");
-			ImGui::TreePop();
 		}
 	}
 	
