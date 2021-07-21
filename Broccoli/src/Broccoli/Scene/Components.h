@@ -51,8 +51,7 @@ namespace brcl
 	struct CameraComponent
 	{
 		Camera MyCamera;
-
-		CameraComponent() = default;
+		
 		CameraComponent(const CameraComponent&) = default;
 		CameraComponent(float aspectRatio) :
 			MyCamera(aspectRatio) {}

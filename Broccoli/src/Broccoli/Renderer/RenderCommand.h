@@ -29,7 +29,7 @@ namespace brcl
 			s_RendererAPI->Clear();
 		}
 		
-		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount = 0)
+		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount = UINT32_MAX)
 		{
 			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}

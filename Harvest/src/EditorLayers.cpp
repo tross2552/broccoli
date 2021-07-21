@@ -254,7 +254,28 @@ namespace brcl
 
 		ImGui::Begin("Properties");
 		if (m_Selection) DrawEntityComponents(m_Selection);
+		
+		if (ImGui::Button("Add Component"))
+			ImGui::OpenPopup("AddComponent");
+
+		if (ImGui::BeginPopup("AddComponent"))
+		{
+			if (ImGui::MenuItem("Camera"))
+			{
+				m_Selection.AddComponent<CameraComponent>(m_AppLayer->m_AspectRatio);
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::MenuItem("Sprite Renderer"))
+			{
+				m_Selection.AddComponent<SpriteRendererComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
 		ImGui::End();
+		
 
 		ClearDeletedEntities();
 	}
@@ -348,6 +369,22 @@ namespace brcl
 				ImGui::TreePop();
 			}
 
+			if (ImGui::Button("Remove"))
+			{
+				ImGui::OpenPopup("Remove Component");
+			}
+
+			if (ImGui::BeginPopup("Remove Component"))
+			{
+				if (ImGui::MenuItem("Remove"))
+				{
+					m_Selection.RemoveComponent<CameraComponent>(); //todo: lazy delete here
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
+
 		}
 
 		if(entity.HasComponent<SpriteRendererComponent>())
@@ -362,6 +399,22 @@ namespace brcl
 
 				ImGui::ColorEdit4("Color", color.data());
 				ImGui::DragFloat4("Texture Transform", texTransform.data(), 0.01f, 0.0f, 20.0f);
+
+				if(ImGui::Button("Remove"))
+				{
+					ImGui::OpenPopup("Remove Component");
+				}
+
+				if (ImGui::BeginPopup("Remove Component"))
+				{
+					if (ImGui::MenuItem("Remove"))
+					{
+						m_Selection.RemoveComponent<SpriteRendererComponent>(); //todo: lazy delete here
+						ImGui::CloseCurrentPopup();
+					}
+
+					ImGui::EndPopup();
+				}
 
 				ImGui::TreePop();
 			}

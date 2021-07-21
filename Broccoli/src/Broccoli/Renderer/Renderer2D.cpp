@@ -138,6 +138,7 @@ namespace brcl::renderer2d
 
 	void Flush()
 	{
+		
 		s_Data->VertexBuffer->SetData(s_Data->Vertices->data(), sizeof(*s_Data->Vertices));
 		
 		for (int32_t i = 0; i < s_Data->TexturesUsed; i++)

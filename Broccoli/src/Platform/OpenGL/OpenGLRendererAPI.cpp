@@ -55,7 +55,7 @@ namespace brcl
 
 	void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t indexCount)
 	{
-		indexCount = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
+		indexCount = indexCount != UINT32_MAX ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 		BRCL_CORE_INFO("Draw call ({0} indices drawn)", indexCount);
 	}
