@@ -14,3 +14,7 @@
 	path = Broccoli/vendor/blaze
 	url = https://bitbucket.org/blaze-lib/blaze.git
 	branch = master
+[submodule "Broccoli/vendor/yaml-cpp"]
+	path = Broccoli/vendor/yaml-cpp
+	url = https://github.com/tross2552/yaml-cpp.git
+	branch = master
