@@ -26,12 +26,14 @@ IncludeDir["ImGui"] = "Broccoli/vendor/imgui"
 IncludeDir["Blaze"] = "Broccoli/vendor/blaze"
 IncludeDir["Stb"] = "Broccoli/vendor/stb"
 IncludeDir["EnTT"] = "Broccoli/vendor/entt/include"
+IncludeDir["YAML"] = "Broccoli/vendor/yaml-cpp/include"
 
 
 group "Dependencies"
 	include "Broccoli/vendor/imgui"
 	include "Broccoli/vendor/glfw"
 	include "Broccoli/vendor/glad"
+	include "Broccoli/vendor/yaml-cpp"
 
 group ""
 project "Broccoli"
@@ -67,7 +69,8 @@ project "Broccoli"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.EnTT}",
 		"%{IncludeDir.Blaze}",
-		"%{IncludeDir.Stb}"
+		"%{IncludeDir.Stb}",
+		"%{IncludeDir.YAML}"
 	}
 
 	links
