@@ -11,8 +11,8 @@ namespace brcl
 		ImGuiLayer(const std::string& name);
 		~ImGuiLayer() override;
 
-		void OnAttach() final;
-		void OnDetach() final;
+		void OnAttach() override;
+		void OnDetach() override;
 		
 		void OnUpdate(Timestep time) final;
 		virtual void OnImGuiRender();

@@ -110,8 +110,8 @@ namespace brcl
 		m_CameraEntity.AddComponent<CameraComponent>(16.0f/9.0f);
 		m_CameraEntity.AddComponent<ScriptComponent>().Bind<CameraController>();
 
-		m_ScriptDemo = m_ActiveScene->CreateEntity("Editor Camera"); //todo: add way to avoid serialization
-		m_ScriptDemo.AddComponent<ScriptComponent>().Bind<MovingQuadsScript>();
+		//m_ScriptDemo = m_ActiveScene->CreateEntity("Editor Camera"); //todo: add way to avoid serialization
+		//m_ScriptDemo.AddComponent<ScriptComponent>().Bind<MovingQuadsScript>();
 		
 
 		m_ActiveScene->OnPlay();
@@ -327,6 +327,49 @@ namespace brcl
 			}
 			else ++it;
 		}
+	}
+
+	void EditorImGuiLayer::OnAttach()
+	{
+		ImGuiLayer::OnAttach();
+		ImGuiIO io = ImGui::GetIO();
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Alegreya_Sans/AlegreyaSans-Regular.ttf", 18.0f);
+
+		Application::Get().GetWindow().SetIcon("assets/textures/window_icon.png");
+
+		auto& colors = ImGui::GetStyle().Colors;
+		colors[ImGuiCol_WindowBg] = ImVec4{ 0.08f, 0.165f, 0.09f, 1.0f };
+
+		// Headers
+		colors[ImGuiCol_Header] = ImVec4{ 0.15f, 0.285f, 0.15f, 1.0f };
+		colors[ImGuiCol_HeaderHovered] = ImVec4{ 0.3f, 0.405f, 0.31f, 1.0f };
+		colors[ImGuiCol_HeaderActive] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+
+		// Buttons
+		colors[ImGuiCol_Button] = ImVec4{ 0.15f, 0.285f, 0.15f, 1.0f };
+		colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.3f, 0.505f, 0.31f, 1.0f };
+		colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+
+		// Frame BG
+		colors[ImGuiCol_FrameBg] = ImVec4{ 0.15f, 0.285f, 0.15f, 1.0f };
+		colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.3f, 0.505f, 0.31f, 1.0f };
+		colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.15f, 0.3505f, 0.151f, 1.0f };
+
+		// Tabs
+		colors[ImGuiCol_Tab] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TabHovered] = ImVec4{ 0.33f, 0.4805f, 0.331f, 1.0f };
+		colors[ImGuiCol_TabActive] = ImVec4{ 0.28f, 0.3805f, 0.281f, 1.0f };
+		colors[ImGuiCol_TabUnfocused] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.2f, 0.305f, 0.21f, 1.0f };
+
+		// Title
+		colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+
+		colors[ImGuiCol_MenuBarBg] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+		colors[ImGuiCol_Border] = ImVec4{ 0.15f, 0.2505f, 0.151f, 1.0f };
+		
 	}
 
 	void EditorImGuiLayer::DrawEntityComponents(Entity entity)

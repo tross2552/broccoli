@@ -1,6 +1,7 @@
 #include "brclpch.h"
 #include "WindowsWindow.h"
 
+#include "stb_image.h"
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Events/MouseEvent.h"
 #include "Broccoli/Events/KeyEvent.h"
@@ -193,6 +194,22 @@ namespace brcl
 			glfwSwapInterval(1);
 		else
 			glfwSwapInterval(0);
+	}
+
+	void WindowsWindow::SetIcon(const std::string& path)
+	{
+		int width, height, channels;
+
+		stbi_set_flip_vertically_on_load(false);
+		auto* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		BRCL_CORE_ASSERT(data, "Window error: stb failed to load image!");
+
+		GLFWimage icon{ width, height, data };
+
+		glfwSetWindowIcon(m_Window, 1, &icon);
+		
+
+		stbi_image_free(data);
 	}
 
 	void WindowsWindow::Shutdown()

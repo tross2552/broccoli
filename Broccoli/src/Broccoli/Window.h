@@ -2,6 +2,7 @@
 #include "brclpch.h"
 
 #include "Broccoli/Events/Event.h"
+#include "Renderer/Texture.h"
 
 
 namespace brcl
@@ -40,6 +41,8 @@ namespace brcl
 		virtual void SetEventCallback(const EventCallbackFn& func) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
+
+		virtual void SetIcon(const std::string& path) = 0;
 
 		static Window* Create(const WindowProps& props = WindowProps());
 	};

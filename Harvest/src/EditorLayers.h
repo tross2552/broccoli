@@ -69,6 +69,8 @@ namespace brcl
 		void ClearDeletedEntities();
 
 
+	public:
+		void OnAttach() override;
 	private:
 
 		EditorLayer* m_AppLayer;

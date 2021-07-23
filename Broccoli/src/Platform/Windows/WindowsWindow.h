@@ -24,6 +24,8 @@ namespace brcl
 		bool IsVSync() const override { return m_VSync; }
 		void SetVSync(bool enabled) override;
 
+		void SetIcon(const std::string& path) override;
+
 		void SetEventCallback(const EventCallbackFn& func) override { m_Data.EventCallback = func; };
 
 	private:
@@ -44,6 +46,7 @@ namespace brcl
 
 		GLFWwindow* m_Window;
 		std::unique_ptr<RenderContext> m_Context;
+		std::shared_ptr<Texture2D> m_Icon;
 
 		WindowData m_Data;
 		bool m_VSync;
