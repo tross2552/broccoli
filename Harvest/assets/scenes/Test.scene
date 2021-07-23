@@ -1,0 +1,46 @@
+Scene: Test
+Entities:
+  - Entity: insert HUD here
+    TagComponent:
+      Tag: blue square
+    TransformComponent:
+      Position: [0, 3, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0, 0.261982679, 1, 1]
+      Texture Transform: [0, 0, 1, 1]
+  - Entity: insert HUD here
+    TagComponent:
+      Tag: green square
+    TransformComponent:
+      Position: [1, 1, 1]
+      Rotation: [0, 0, 0]
+      Scale: [2, 2, 1]
+    SpriteRendererComponent:
+      Color: [0, 1, 0.43921569, 0.443137258]
+      Texture Transform: [0, 0, 1, 1]
+  - Entity: insert HUD here
+    TagComponent:
+      Tag: empty
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+  - Entity: insert HUD here
+    TagComponent:
+      Tag: white square
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      Texture Transform: [0, 0, 1, 1]
+  - Entity: insert HUD here
+    TagComponent:
+      Tag: Editor Camera
+    TransformComponent:
+      Position: [0.86640358, 1.7575264, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]

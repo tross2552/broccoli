@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "ScriptableEntity.h"
 #include "Broccoli/Math/Math.h"
 #include "Broccoli/Renderer/Camera.h"
 #include "Broccoli/Transform.h"
@@ -57,29 +56,6 @@ namespace brcl
 			MyCamera(aspectRatio) {}
 		CameraComponent(const Matrix4x4& projection) :
 			MyCamera(projection) {}
-	};
-
-	struct ScriptComponent
-	{
-		ScriptableEntity* instance;
-		bool m_Enabled;
-
-		ScriptableEntity* (*InstantiateScript)();
-		void (*DestroyScript)(ScriptComponent*);
-
-		template <typename T>
-		void Bind()
-		{
-			InstantiateScript = []()
-			{
-				return static_cast<ScriptableEntity*>(new T());
-			};
-			DestroyScript = [](ScriptComponent* component)
-			{
-				delete component->instance;
-				component->instance = nullptr;
-			};
-		}
 	};
 
 }

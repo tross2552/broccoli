@@ -198,6 +198,31 @@ namespace brcl
 		ImGui::ShowDemoWindow();
 
 		ImGui::Begin("Scene Hierarchy");
+
+		if (ImGui::Button("Test Serializer"))
+		{
+			ImGui::OpenPopup("Test Serializer");
+		}
+
+		if (ImGui::BeginPopup("Test Serializer"))
+		{
+			if (ImGui::MenuItem("Test Serialize"))
+			{
+				SceneSerializer serializer(m_AppLayer->m_ActiveScene);
+				serializer.Serialize("assets/scenes/Test.scene");
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::MenuItem("Test Deserialize"))
+			{
+				SceneSerializer serializer(m_AppLayer->m_ActiveScene);
+				serializer.Deserialize("assets/scenes/Test.scene");
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+		
 		if (ImGui::TreeNode("Active Scene"))
 		{
 			

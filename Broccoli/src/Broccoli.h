@@ -19,6 +19,7 @@
 #include "Broccoli/Scene/Components.h"
 #include "Broccoli/Scene/Entity.h"
 #include "Broccoli/Scene/ScriptableEntity.h"
+#include "Broccoli/Scene/SceneSerializer.h"
 
 // RENDERER ----------------
 

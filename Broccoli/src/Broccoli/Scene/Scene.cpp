@@ -1,6 +1,7 @@
 #include "brclpch.h"
 #include "Scene.h"
 
+#include "ScriptableEntity.h"
 #include "Components.h"
 #include "Entity.h"
 #include "Broccoli/Renderer/Renderer2D.h"

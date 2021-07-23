@@ -58,6 +58,7 @@ project "Broccoli"
 		"%{prj.name}/vendor/stb/**.h",
 		"%{prj.name}/vendor/blaze/**.h",
 		"%{prj.name}/vendor/entt/**.hpp"
+
 	}
 	
 	includedirs
@@ -79,7 +80,8 @@ project "Broccoli"
 		"GLFW",
 		"ImGui",
 		"opengl32.lib",
-		"Broccoli/vendor/openblas/libopenblas.lib"
+		"Broccoli/vendor/openblas/libopenblas.lib",
+		"YAML"
 	}
 	
 	defines

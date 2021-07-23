@@ -6,7 +6,6 @@
 
 namespace brcl
 {
-	struct TagComponent;
 
 	class Entity
 	{
