@@ -26,6 +26,7 @@ namespace brcl
 		
 
 	private:
+		Entity m_ScriptDemo;
 		Entity m_CameraEntity;
 		std::shared_ptr<Scene> m_ActiveScene;
 		

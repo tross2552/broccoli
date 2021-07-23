@@ -51,7 +51,7 @@ namespace brcl
 
 		m_Registry.view<ScriptComponent>().each([=](ScriptComponent& script)
 		{
-			if(script.m_Enabled) script.instance->OnUpdate(deltaTime);
+			if(script.Enabled) script.instance->OnUpdate(deltaTime);
 		});
 		
 		//render quads
@@ -64,6 +64,12 @@ namespace brcl
 			auto& transform = view.get<TransformComponent>(entity).MyTransform;
 
 			renderer2d::BeginScene(camera, transform);
+
+			m_Registry.view<ScriptComponent>().each([=](ScriptComponent& script)
+			{
+				if (script.Enabled) script.instance->OnRender();
+			});
+			
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto spriteEntity : group)

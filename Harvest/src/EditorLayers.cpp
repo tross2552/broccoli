@@ -4,20 +4,42 @@
 namespace brcl
 {
 
+	class MovingQuadsScript : public ScriptableEntity
+	{
+		void OnRender() override
+		{
+			
+			static float rotation = 0.0f;
+			rotation += 0.01f;
+			Transform quad;
+			Vector4 color(1.0f);
+
+
+			const int tiles = 8;
+			const float tilescale = 0.5f;
+			quad.SetScale(tilescale * 0.9f);
+			for (int i = 0; i < tiles; i++)
+			{
+				for (int j = 0; j < tiles; j++)
+				{
+					for(int k = 0; k < tiles; k++)
+					{
+						quad.SetRotation({ sin(rotation) * j / (tiles), sin(rotation) * i / (tiles), sin(rotation) * (i + j) / (2 * tiles) });
+						quad.SetPosition(Vector3({ -(float)tiles / 2 + i  ,  -(float)tiles / 2 + j  ,  -0.1f + k*tilescale }) * tilescale);
+						renderer2d::DrawQuad(quad, color * Vector4({ (float)i / tiles, (float)j / tiles, 1.0f, (float)(i + j) / (2 * tiles) }));
+					}
+					
+				}
+
+			}
+		}
+	};
+
 	class CameraController : public ScriptableEntity
 	{
 	public:
 		
-		void OnCreate()
-		{
-			auto& transform = GetComponent<TransformComponent>().MyTransform;
-			transform.SetPosition(Vector3{ 1.0f,1.0f,0.0f });
-		}
-
-		void OnDestroy()
-		{
-		}
-		void OnUpdate(Timestep deltaTime)
+		void OnUpdate(Timestep deltaTime) override
 		{
 			auto& transform = GetComponent<TransformComponent>().MyTransform;
 
@@ -88,6 +110,10 @@ namespace brcl
 		m_CameraEntity.AddComponent<CameraComponent>(16.0f/9.0f);
 		m_CameraEntity.AddComponent<ScriptComponent>().Bind<CameraController>();
 
+		m_ScriptDemo = m_ActiveScene->CreateEntity("Editor Camera"); //todo: add way to avoid serialization
+		m_ScriptDemo.AddComponent<ScriptComponent>().Bind<MovingQuadsScript>();
+		
+
 		m_ActiveScene->OnPlay();
 
 		m_AspectRatio = ((float)fBufferSpec.Width) / fBufferSpec.Height;
@@ -101,38 +127,13 @@ namespace brcl
 	{
 		BRCL_TRACE("Editor: Update ({0}) ", deltaTime.ToString());
 		
-		m_CameraEntity.GetComponent<ScriptComponent>().m_Enabled = m_Focused;
+		m_CameraEntity.GetComponent<ScriptComponent>().Enabled = m_Focused;
 		m_CameraEntity.GetComponent<CameraComponent>().MyCamera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
-		
-
 		
 		m_Framebuffer->Bind();
 
 		renderer2d::ResetStats();
-		
 		m_ActiveScene->OnUpdate(deltaTime);
-		
-		/*
-		static float rotation = 0.0f;
-		rotation += 0.01f;
-		Transform quad;
-		Vector4 colorInv = 1.0f - m_Color;
-		colorInv[3] = 1.0f;
-		
-		
-		const int tiles = 20;
-		const float tilescale = 0.5f;
-		quad.SetScale(tilescale * 0.9f);
-		for (int i = 0; i < tiles; i++)
-		{
-			for (int j = 0; j < tiles; j++)
-			{
-				quad.SetRotation({ sin(rotation) * j / (tiles), sin(rotation) * i / (tiles), sin(rotation) * (i+j) / (2*tiles) });
-				quad.SetPosition(Vector3({ -(float)tiles/2 + i, -(float)tiles/2 + j, -0.1f })*tilescale);
-				renderer2d::DrawQuad(quad, m_Color * Vector4({ (float)i / tiles, (float)j / tiles, 1.0f, (float)(i + j) / (2 * tiles) }));
-			}
-
-		}*/
 
 		m_Framebuffer->Unbind();
 		
@@ -453,7 +454,7 @@ namespace brcl
 			ImGui::SetNextItemOpen(true, ImGuiCond_Once);
 			if (ImGui::TreeNode((void*)(intptr_t)4, "Script Component"))
 			{
-				ImGui::Text(script.m_Enabled ? "Script enabled" : "Script disabled");
+				ImGui::Text(script.Enabled ? "Script enabled" : "Script disabled");
 				ImGui::TreePop();
 			}
 		}

@@ -10,7 +10,7 @@ namespace brcl
 	struct ScriptComponent
 	{
 		ScriptableEntity* instance;
-		bool m_Enabled;
+		bool Enabled = true;
 
 		ScriptableEntity* (*InstantiateScript)();
 		void (*DestroyScript)(ScriptComponent*);
@@ -47,6 +47,7 @@ namespace brcl
 		virtual void OnCreate() {}
 		virtual void OnDestroy() {}
 		virtual void OnUpdate(Timestep ts) {}
+		virtual void OnRender() {}
 	
 	private:
 		Entity m_Entity;
