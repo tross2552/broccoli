@@ -35,7 +35,7 @@ namespace brcl
 		
 		bool m_Focused;
 
-		float m_ZoomLevel = 1.0f;
+		float m_ZoomLevel = 2.0f;
 		float m_AspectRatio;
 	};
 

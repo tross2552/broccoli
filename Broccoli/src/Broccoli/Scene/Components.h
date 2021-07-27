@@ -2,6 +2,7 @@
 #include "Broccoli/Math/Math.h"
 #include "Broccoli/Renderer/Camera.h"
 #include "Broccoli/Transform.h"
+#include "Broccoli/Renderer/Texture.h"
 
 namespace brcl
 {

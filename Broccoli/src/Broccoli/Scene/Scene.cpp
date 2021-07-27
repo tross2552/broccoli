@@ -75,6 +75,7 @@ namespace brcl
 			for (auto spriteEntity : group)
 			{
 				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(spriteEntity);
+				
 				renderer2d::DrawQuad(transform, sprite.ColorVector);
 			}
 

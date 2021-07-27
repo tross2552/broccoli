@@ -10,7 +10,7 @@ uniform mat4 u_ViewProjection;
 
 out vec4 v_Color;
 out vec2 v_TexCoord;
-out float  v_TexSlot;
+flat out float  v_TexSlot;
 
 void main()
 {
@@ -31,7 +31,7 @@ uniform vec4 u_TexParams;
 
 in vec4 v_Color;
 in vec2 v_TexCoord;
-in float  v_TexSlot;
+flat in float  v_TexSlot;
 in vec4 v_TexOffset;
 
 void main()

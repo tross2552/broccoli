@@ -44,44 +44,45 @@ namespace brcl
 			auto& transform = GetComponent<TransformComponent>().MyTransform;
 
 			bool rotateFlag = Input::IsKeyPressed(Input::KeyCode::LEFT_SHIFT);
+			constexpr float speed = 6.0f;
 			
 			if (Input::IsKeyPressed(Input::KeyCode::W))
 			{
 				BRCL_CORE_INFO("UP UP UP UP !!!!!!!");
-				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime);
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime * speed);
 				else transform.SetRotation(transform.GetRotation() + Vector3({ -1.0f,0.0f,0.0f }) * deltaTime);
 			}
 
 			if (Input::IsKeyPressed(Input::KeyCode::A))
 			{
 				BRCL_CORE_INFO("LEFT LEFT LEFT LEFT !!!!!!!");
-				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime);
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime * speed);
 				else transform.SetRotation(transform.GetRotation() + Vector3({ 0.0f,-1.0f,0.0f }) * deltaTime);
 			}
 
 			if (Input::IsKeyPressed(Input::KeyCode::S))
 			{
 				BRCL_CORE_INFO("DOWN DOWN DOWN DOWN !!!!!!!");
-				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime);
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime * speed);
 				else transform.SetRotation(transform.GetRotation() + Vector3({ 1.0f,0.0f,0.0f }) * deltaTime);
 			}
 
 			if (Input::IsKeyPressed(Input::KeyCode::D))
 			{
 				BRCL_CORE_INFO("RIGHT RIGHT RIGHT RIGHT !!!!!!!");
-				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime);
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime * speed);
 				else transform.SetRotation(transform.GetRotation() + Vector3({ 0.0f,1.0f,0.0f }) * deltaTime);
 			}
 
 			if (Input::IsKeyPressed(Input::KeyCode::R))
 			{
-				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 0.0f, -1.0f }) * deltaTime);
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 0.0f, -1.0f }) * deltaTime * speed);
 				else transform.SetRotation(transform.GetRotation() + Vector3({ 0.0f,0.0f,-1.0f }) * deltaTime);
 			}
 
 			if (Input::IsKeyPressed(Input::KeyCode::F))
 			{
-				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 0.0f, 1.0f }) * deltaTime);
+				if (!rotateFlag) transform.SetPosition(transform.GetPosition() + Vector3({ 0.0f, 0.0f, 1.0f }) * deltaTime * speed);
 				else transform.SetRotation(transform.GetRotation() + Vector3({ 0.0f,0.0f,1.0f }) * deltaTime);
 			}
 
