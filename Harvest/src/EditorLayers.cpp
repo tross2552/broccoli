@@ -15,7 +15,7 @@ namespace brcl
 			Vector4 color(1.0f);
 
 
-			const int tiles = 8;
+			const int tiles = 45;
 			const float tilescale = 0.5f;
 			quad.SetScale(tilescale * 0.9f);
 			for (int i = 0; i < tiles; i++)
@@ -111,8 +111,8 @@ namespace brcl
 		m_CameraEntity.AddComponent<CameraComponent>(16.0f/9.0f);
 		m_CameraEntity.AddComponent<ScriptComponent>().Bind<CameraController>();
 
-		//m_ScriptDemo = m_ActiveScene->CreateEntity("Editor Camera"); //todo: add way to avoid serialization
-		//m_ScriptDemo.AddComponent<ScriptComponent>().Bind<MovingQuadsScript>();
+		m_ScriptDemo = m_ActiveScene->CreateEntity("Editor Camera"); //todo: add way to avoid serialization
+		m_ScriptDemo.AddComponent<ScriptComponent>().Bind<MovingQuadsScript>();
 		
 
 		m_ActiveScene->OnPlay();

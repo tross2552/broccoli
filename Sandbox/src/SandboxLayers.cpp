@@ -26,6 +26,11 @@ namespace Sandbox
 		m_Scene->OnPlay();
 
 		m_AspectRatio = (float)fBufferSpec.Width / fBufferSpec.Height;
+
+		
+		m_audioDevice->Init();
+		m_audioSource->LoadClip("assets/audio/music.wav");
+		m_audioSource->Start();
 		
 	}
 

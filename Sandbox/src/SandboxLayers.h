@@ -21,6 +21,8 @@ namespace Sandbox
 
 	private:
 		std::shared_ptr<brcl::Framebuffer> m_Framebuffer;
+		std::unique_ptr<brcl::AudioDevice> m_audioDevice = brcl::AudioDevice::Create();
+		std::unique_ptr<brcl::AudioSource> m_audioSource = brcl::AudioSource::Create();
 
 		std::shared_ptr<brcl::Scene> m_Scene;
 		brcl::Entity m_Player;

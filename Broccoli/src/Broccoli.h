@@ -34,3 +34,9 @@
 #include "Broccoli/Renderer/Texture.h"
 #include "Broccoli/Renderer/VertexArray.h"
 #include "Broccoli/Renderer/Framebuffer.h"
+
+//AUDIO ---------------
+
+#include "Broccoli/Audio/AudioDevice.h"
+#include "Broccoli/Audio/AudioSource.h"
+#include "Broccoli/Audio/AudioClip.h"
