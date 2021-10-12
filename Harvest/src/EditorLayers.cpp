@@ -111,8 +111,8 @@ namespace brcl
 		m_CameraEntity.AddComponent<CameraComponent>(16.0f/9.0f);
 		m_CameraEntity.AddComponent<ScriptComponent>().Bind<CameraController>();
 
-		m_ScriptDemo = m_ActiveScene->CreateEntity("Editor Camera"); //todo: add way to avoid serialization
-		m_ScriptDemo.AddComponent<ScriptComponent>().Bind<MovingQuadsScript>();
+		//m_ScriptDemo = m_ActiveScene->CreateEntity("Editor Camera"); //todo: add way to avoid serialization
+		//m_ScriptDemo.AddComponent<ScriptComponent>().Bind<MovingQuadsScript>();
 		
 
 		m_ActiveScene->OnPlay();
@@ -165,6 +165,9 @@ namespace brcl
 	{
 		static auto renderdebug = renderer2d::GetStats();
 		renderdebug = renderer2d::GetStats();
+
+		static auto physicsdebug = SimplePhysicsEngine2D::GetStats();
+		physicsdebug = SimplePhysicsEngine2D::GetStats();
 		
 		ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
@@ -190,11 +193,18 @@ namespace brcl
 		
 		ImGui::PopStyleVar();
 
-		ImGui::Begin("Render Stats");
+		ImGui::Begin("Stats");
+		
+		ImGui::Text("Renderer");
 		ImGui::Text("Draw Calls: %d", renderdebug.DrawCalls);
 		ImGui::Text("Quads: %d", renderdebug.QuadCount);
 		ImGui::Text("Vertices: %d", renderdebug.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", renderdebug.GetTotalIndexCount());
+
+		ImGui::Text("Physics");
+		ImGui::Text("Rigid Bodies: %d", physicsdebug.RigidBodies);
+		ImGui::Text("Circles: %d", physicsdebug.Circles);
+		ImGui::Text("Boxes: %d", physicsdebug.Boxes);
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();

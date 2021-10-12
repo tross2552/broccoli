@@ -21,6 +21,12 @@
 #include "Broccoli/Scene/ScriptableEntity.h"
 #include "Broccoli/Scene/SceneSerializer.h"
 
+//PHYSICS ------------------
+
+#include "Broccoli/Physics/SimplePhysicsEngine2D.h"
+#include "Broccoli/Physics/PhysicsWorld.h"
+#include "Broccoli/Physics/Collision.h"
+
 // RENDERER ----------------
 
 #include "Broccoli/Renderer/Renderer.h"

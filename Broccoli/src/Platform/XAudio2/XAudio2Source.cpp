@@ -9,13 +9,13 @@ namespace brcl
 
 		IXAudio2SourceVoice* pSourceVoice;
 		hr = XAudio2Device::GetEngine()->CreateSourceVoice(&pSourceVoice, (WAVEFORMATEX*)&m_Clip->GetData().wfx);
-		BRCL_CORE_ASSERT(FAILED(hr), "XAudio2 Error: Failed to play file");
+		BRCL_CORE_ASSERT(!FAILED(hr), "XAudio2 Error: Failed to play file");
 
 		hr = pSourceVoice->SubmitSourceBuffer(&m_Clip->GetData().buffer);
-		BRCL_CORE_ASSERT(FAILED(hr), "XAudio2 Error: Failed to play file");
+		BRCL_CORE_ASSERT(!FAILED(hr), "XAudio2 Error: Failed to play file");
 
 		hr = pSourceVoice->Start(0);
-		BRCL_CORE_ASSERT(FAILED(hr), "XAudio2 Error: Failed to play file");
+		BRCL_CORE_ASSERT(!FAILED(hr), "XAudio2 Error: Failed to play file");
 	}
 
 	void XAudio2Source::Stop()

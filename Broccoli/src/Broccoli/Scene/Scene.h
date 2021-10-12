@@ -1,6 +1,8 @@
 #pragma once
 #include <entt.hpp>
 
+#include "Broccoli/Math/Math.h"
+
 namespace brcl
 {
 
@@ -14,11 +16,18 @@ namespace brcl
 		friend class EditorImGuiLayer;
 		
 	public:
-		Scene() = default;
+		Scene();
 		~Scene() = default;
+
+		static Scene* GetActiveScene() //todo: scene manager
+		{
+			return s_ActiveScene;
+		}
 
 		Entity CreateEntity(const std::string& name);
 		void DestroyEntity(Entity entity);
+
+		void SetTransform(entt::entity handle, Vector3 position);
 
 		void OnPlay();
 		void OnPause();
@@ -35,6 +44,8 @@ namespace brcl
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
 		std::vector<entt::entity> m_EntitiesToBeRemoved;
+
+		static Scene* s_ActiveScene;
 	};
 
 	

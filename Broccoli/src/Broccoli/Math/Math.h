@@ -15,6 +15,26 @@ namespace brcl
 	typedef blaze::StaticMatrix<float, 3, 3> Matrix3x3;
 	typedef blaze::StaticMatrix<float, 4, 4> Matrix4x4;
 
+	inline float Distance(Vector2 a, Vector2 b)
+	{
+		return blaze::l2Norm(b - a);
+	}
+
+	inline float Distance(Vector3 a, Vector3 b)
+	{
+		return blaze::l2Norm(b - a);
+	}
+
+	inline float Dot(Vector2 a, Vector2 b)
+	{
+		return blaze::dot(a, b);
+	}
+
+	inline float Dot(Vector3 a, Vector3 b)
+	{
+		return blaze::dot(a, b);
+	}
+
 	inline Matrix2x2 Identity2x2()
 	{
 		return blaze::IdentityMatrix<float>(2);

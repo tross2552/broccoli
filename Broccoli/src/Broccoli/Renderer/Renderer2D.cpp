@@ -41,7 +41,7 @@ namespace brcl::renderer2d
 		int32_t TexturesUsed;
 		unsigned int QuadsDrawn;
 
-		DebugStats stats;
+		RenderDebugStats2D stats;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -226,7 +226,7 @@ namespace brcl::renderer2d
 		s_Data->stats.QuadCount++;
 	}
 
-	DebugStats GetStats()
+	RenderDebugStats2D GetStats()
 	{
 		return s_Data->stats;
 	}

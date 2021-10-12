@@ -4,6 +4,7 @@
 #include "Broccoli/Events/ApplicationEvent.h"
 #include "Broccoli/Renderer/Renderer.h"
 #include "Broccoli/Renderer/Renderer2D.h"
+#include "Broccoli/Physics/SimplePhysicsEngine2D.h"
 
 namespace brcl
 {
@@ -20,7 +21,8 @@ namespace brcl
 		m_Window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
 		renderer::Init();
-		renderer2d::Init();
+		renderer2d::Init(); //todo: observer pattern
+		SimplePhysicsEngine2D::Init(); //todo: fix inconsistency
 		
 	}
 	Application::~Application()

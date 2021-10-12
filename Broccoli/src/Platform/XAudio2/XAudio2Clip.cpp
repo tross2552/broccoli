@@ -36,11 +36,11 @@ namespace brcl
 			NULL);
 
 		if (INVALID_HANDLE_VALUE == hFile)
-			BRCL_CORE_ASSERT(,"XAudio2 Error: Invalid file handle");
-			
+			BRCL_CORE_ASSERT(0, "XAudio2 Error: Invalid file handle");
 
-		if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, 0, NULL, FILE_BEGIN))
-			BRCL_CORE_ASSERT(,"XAudio2 Error: Invalid file pointer");
+
+		if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, 0, nullptr, FILE_BEGIN))
+			BRCL_CORE_ASSERT(0, "XAudio2 Error: Invalid file pointer");
 			
 
 
@@ -51,7 +51,7 @@ namespace brcl
 		DWORD filetype;
 		ReadChunkData(hFile, &filetype, sizeof(DWORD), dwChunkPosition);
 		if (filetype != fourccWAVE)
-			BRCL_CORE_ASSERT(,"XAudio2 Error: Invalid file format {0}", filetype);
+			BRCL_CORE_ASSERT(0,"XAudio2 Error: Invalid file format {0}", filetype);
 
 		FindChunk(hFile, fourccFMT, dwChunkSize, dwChunkPosition);
 		ReadChunkData(hFile, &m_Data.wfx, dwChunkSize, dwChunkPosition);
@@ -72,7 +72,7 @@ namespace brcl
 	{
 		HRESULT hr = S_OK;
 		if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, 0, NULL, FILE_BEGIN))
-			BRCL_CORE_ASSERT(,"XAudio2 File Error: Invalid file pointer");
+			BRCL_CORE_ASSERT(0,"XAudio2 File Error: Invalid file pointer");
 
 		DWORD dwChunkType;
 		DWORD dwChunkDataSize;
@@ -85,10 +85,10 @@ namespace brcl
 		{
 			DWORD dwRead;
 			if (0 == ReadFile(hFile, &dwChunkType, sizeof(DWORD), &dwRead, NULL))
-				BRCL_CORE_ASSERT(,"XAudio2 File Error: Read error");
+				BRCL_CORE_ASSERT(0,"XAudio2 File Error: Read error");
 
 			if (0 == ReadFile(hFile, &dwChunkDataSize, sizeof(DWORD), &dwRead, NULL))
-				BRCL_CORE_ASSERT(, "XAudio2 File Error: Read error");
+				BRCL_CORE_ASSERT(0, "XAudio2 File Error: Read error");
 
 			switch (dwChunkType)
 			{
@@ -96,12 +96,12 @@ namespace brcl
 				dwRIFFDataSize = dwChunkDataSize;
 				dwChunkDataSize = 4;
 				if (0 == ReadFile(hFile, &dwFileType, sizeof(DWORD), &dwRead, NULL))
-					BRCL_CORE_ASSERT(, "XAudio2 File Error: Read error");
+					BRCL_CORE_ASSERT(0, "XAudio2 File Error: Read error");
 				break;
 
 			default:
 				if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, dwChunkDataSize, NULL, FILE_CURRENT))
-					BRCL_CORE_ASSERT(, "XAudio2 File Error: Read error");
+					BRCL_CORE_ASSERT(0, "XAudio2 File Error: Read error");
 			}
 
 			dwOffset += sizeof(DWORD) * 2;
@@ -116,7 +116,7 @@ namespace brcl
 			dwOffset += dwChunkDataSize;
 
 			if (bytesRead >= dwRIFFDataSize)
-				BRCL_CORE_ASSERT(, "XAudio2 File Error: Read error");
+				BRCL_CORE_ASSERT(0, "XAudio2 File Error: Read error");
 
 		}
 	}
@@ -126,12 +126,12 @@ namespace brcl
 		HRESULT hr = S_OK;
 		if (INVALID_SET_FILE_POINTER == SetFilePointer(hFile, bufferOffset, NULL, FILE_BEGIN))
 		{
-			BRCL_CORE_ASSERT(,"XAudio2 File Error: Invalid file pointer");
+			BRCL_CORE_ASSERT(0,"XAudio2 File Error: Invalid file pointer");
 			return;
 		}
 		DWORD dwRead;
 		if (0 == ReadFile(hFile, buffer, bufferSize, &dwRead, NULL))
-			BRCL_CORE_ASSERT(, "XAudio2 File Error: Read error");
+			BRCL_CORE_ASSERT(0, "XAudio2 File Error: Read error");
 	}
 	
 }

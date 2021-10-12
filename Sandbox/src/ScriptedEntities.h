@@ -16,24 +16,27 @@ namespace Sandbox
 
 		void OnUpdate(brcl::Timestep deltaTime) override
 		{
-			auto& transform = GetComponent<brcl::TransformComponent>().MyTransform;
+			auto& rb = GetComponent<brcl::RigidBodyComponent>();
 			constexpr float speed = 2.0f;
 
 			if (brcl::Input::IsKeyPressed(brcl::Input::KeyCode::W))
-				transform.SetPosition(transform.GetPosition() + brcl::Vector3({ 0.0f, 1.0f, 0.0f }) * deltaTime * speed);
+				rb.SetVelocity(GetHandle(), { 0.0f, speed });
 
-			if (brcl::Input::IsKeyPressed(brcl::Input::KeyCode::A))
-				transform.SetPosition(transform.GetPosition() + brcl::Vector3({ -1.0f, 0.0f, 0.0f }) * deltaTime * speed);
+			else if (brcl::Input::IsKeyPressed(brcl::Input::KeyCode::A))
+				rb.SetVelocity(GetHandle(), { -speed, 0.0f });
 
-			if (brcl::Input::IsKeyPressed(brcl::Input::KeyCode::S))
-				transform.SetPosition(transform.GetPosition() + brcl::Vector3({ 0.0f, -1.0f, 0.0f }) * deltaTime * speed);
+			else if (brcl::Input::IsKeyPressed(brcl::Input::KeyCode::S))
+				rb.SetVelocity(GetHandle(), { 0.0f, -speed });
 
-			if (brcl::Input::IsKeyPressed(brcl::Input::KeyCode::D))
-				transform.SetPosition(transform.GetPosition() + brcl::Vector3({ 1.0f, 0.0f, 0.0f }) * deltaTime * speed);
+			else if (brcl::Input::IsKeyPressed(brcl::Input::KeyCode::D))
+				rb.SetVelocity(GetHandle(), { speed, 0.0f });
 
+			else
+				rb.SetVelocity(GetHandle(), { 0.0f,0.0f });
+			
 			if (brcl::Input::IsKeyPressed(brcl::Input::KeyCode::X))
 			{
-				transform.SetPosition({ 0.5f, 4.0f, 0.0f });
+				GetComponent<brcl::TransformComponent>().MyTransform.SetPosition({ 0.5f, 4.0f, 0.0f });
 			}
 		}
 	};

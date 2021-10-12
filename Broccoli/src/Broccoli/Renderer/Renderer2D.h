@@ -6,7 +6,7 @@
 namespace brcl::renderer2d
 {
 
-	struct DebugStats
+	struct RenderDebugStats2D
 	{
 		unsigned int DrawCalls = 0;
 		unsigned int QuadCount = 0;
@@ -29,7 +29,7 @@ namespace brcl::renderer2d
 	void DrawQuad(const Matrix4x4& transform, std::shared_ptr<Texture2D> texture, const Vector4& textureParameters = { 0.0f, 0.0f, 1.0f, 1.0f });
 	void DrawQuad(const Matrix4x4& transform, std::shared_ptr<Texture2D> texture, const Vector4& color, const Vector4& textureParameters);
 
-	DebugStats GetStats();
+	RenderDebugStats2D GetStats();
 	void ResetStats();
 
 	

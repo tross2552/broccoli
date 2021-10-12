@@ -43,6 +43,8 @@ namespace brcl
 		{
 			return m_Entity.GetComponent<T>();
 		}
+
+		entt::entity GetHandle() const { return m_Entity; }
 		
 		virtual void OnCreate() {}
 		virtual void OnDestroy() {}
